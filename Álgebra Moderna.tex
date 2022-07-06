@@ -1,0 +1,3613 @@
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{upgreek}
+\usepackage{accents}
+\usepackage[shortlabels]{enumitem}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{tikz}		% Tener números dentro de cículos (\circled).
+\usepackage{xfrac}		% Fracciones en diagonal (\sfrac).
+\usepackage{lmodern}    % Eliminar warning de Font shape.
+\usepackage[bookmarks=true,
+			bookmarksnumbered=false,
+			bookmarksopen=false,
+			colorlinks=true,
+			allcolors=blue,
+			urlcolor=blue]{hyperref}
+
+
+\setcounter{section}{-1}
+
+% Definición de circled.
+\newcommand*{\circled}[2][]{\tikz[baseline=(C.base)]{
+	\node[inner sep=0pt] (C) {\vphantom{1g}#2};
+	\node[draw, circle, inner sep=1pt, yshift=1pt]
+		at (C.center) {\vphantom{1g}};}}
+		
+\newtheoremstyle{break}
+  {\topsep}{\topsep}%
+  {\itshape}{}%
+  {\bfseries}{}%
+  {\newline}{}%
+\theoremstyle{break}
+		
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{example}[theorem]{Ejemplo}
+\newtheorem{definition}[theorem]{Definición}
+\newtheorem{proposition}[theorem]{Proposición}
+\newtheorem{task}[theorem]{Ejercicio}
+
+\begin{document}\pagenumbering{arabic}
+\begin{titlepage}
+\centering
+\includegraphics[width=0.15\textwidth]{/Users/pedrors/Desktop/DGIIM/Latex/UGR}\par\vspace{1cm}
+{\scshape\LARGE Universidad de Granada \par}
+\vspace{1cm}
+\vspace{1.5cm}
+{\huge\bfseries Álgebra Moderna\par}
+\vspace{2cm}
+{\Large\itshape Pedro Ramos Suárez\par}
+\vfill
+Doble Grado de Ingeniería Informática y Matemáticas
+\vfill
+{\large \today\par}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Información de la asignatura}
+
+\begin{itemize}
+\item Profesor: José Gómez Torrecillas.
+\item Tutorías: Martes y Miércoles, 9:00 - 12:00, Despacho 36.
+\item Evaluación:
+\begin{itemize}
+\item 40\% entrega de ejercicios.
+\item 30\% exposición de ejercicios.
+\item 30\% examen final.
+\end{itemize}
+\end{itemize}
+
+\newpage
+
+\section{Repaso}
+
+\begin{definition}[Anillo]
+$A$ conjunto. \\
+$(A, +, 0)$ grupo abeliano (en ocasiones diremos ``grupo aditivo''). \\
+$(A, \cdot, 1)$ monoide $\rightarrow$ algo menos que un grupo:
+\begin{itemize}
+\item $\cdot$ es asociativa: $(a \cdot b) \cdot c = a \cdot (b \cdot c)$.
+\item $1$ es el neutro de $\cdot$: $a \cdot 1 = 1 \cdot a = a$.
+\item $\cdot$ no es necesariamente conmutativa.
+\item $a \in A$ no tiene por qué tener inverso.
+\item Propiedad distributiva:
+$\begin{cases}
+(a + b) \cdot c = a \cdot c + b \cdot c \\
+c \cdot (a + b) = c \cdot a + c \cdot b
+\end{cases}$
+\end{itemize}
+
+\underline{Ejemplos}: $\mathbb{Z}, \mathbb{Q}, \mathbb{R}, \mathbb{C}, \mathbb{Z}_{n}, ...$.
+
+Se dice que $A$ es conmutativo si $\cdot$ es conmutativo, esto es, si $a \cdot b = b \cdot a \hspace{0.5cm} \forall a, b \in A$.
+\end{definition}
+
+\begin{definition}[Ideales y anillos cociente o factor]
+Sea $A$ un anillo (no necesariamente conmutativo). Un ideal $I$ de $A$ es un subgrupo aditivo de $A$ tal que $\forall x \in I$ y $\forall a \in A$, se tiene $ax, xa \in I$.
+
+\underline{Nota}: $I$ es un subgrupo aditivo de $A$ si $I \neq \emptyset, I \subseteq A$ y $\forall a, b \in I$, $a-b \in I$.
+
+Consideramos el grupo aditivo $\sfrac{A}{I}$, en el que podemos considerar el producto $(a + I) (b + I) = ab + I$, $\forall (a + I), (b + I) \in \sfrac{A}{I}$.
+
+La operación está bien definida, esto es, es independiente del representante escogido: si $a + I = a' + I$, $b + I = b' + I$, entonces $ab - a'b' = ab - a'b + a'b - a'b' = (a - a')b + a'(b - b') \in I \Rightarrow ab + I = a'b' +I$.
+
+El neutro para este producto es $1 + \sfrac{A}{I}$, donde $1$ es el neutro para el producto de $A$.
+
+La suma en $\sfrac{A}{I}$ estaba definida por $(a + I) + (b + I) = a + b + I$.
+
+Teníamos también la aplicación proyección:
+$$\pi: A \to \sfrac{A}{I}$$
+$$a \mapsto a + I$$
+que verifica:
+\begin{itemize}
+\item $\pi(a) \pi(b) = \pi(ab)$.
+\item $\pi(a) + \pi(b) = \pi(a+b)$.
+\item $\pi(1) = 1 + I$.
+\end{itemize}
+$\Rightarrow \pi$ es un homomorfismo de anillos.
+\end{definition}
+
+\begin{theorem}[Isomorfía]
+Sea $f: A \to B$ un homomorfismo de anillos. Entonces el núcleo $Ker f = \{a \in A / f(a) = 0\}$ es un ideal de $A$ y la imagen $Im f = \{f(a) / a \in A\}$ es un subanillo de $B$. Si $I \in Ker f$ es un ideal, entones existe un único homomorfismo de anillos $\bar{f}: \sfrac{A}{I} \to B$ tal que $\bar{f}(a + I) = f(a), \forall a \in A$.
+
+Además, $\bar{f}$ es inyectivo $\iff I  = Ker f$, en cuyo caso $\bar{f}$ es un isomorfismo de anillos $\bar{f}: \sfrac{A}{Ker f} \to Im f$.
+\end{theorem}
+
+\begin{definition}[Homomorfismo de anillos]
+Sean $A, B$ dos anillos. Una aplicación $f: A \to B$ se dice un homomorfismo de anillos si para todo $a, a' \in A$ se tiene:
+\begin{itemize}
+\item $f(a + a') = f(a) + f(a')$.
+\item $f(aa') = f(a) f(a')$.
+\item $f(1) = 1$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Anillos primos]
+Dos ideales $I, J$ de un anillo $A$ se dicen primos entre sí (o coprimos) si $I + J = A$, esto es, si:
+$$I + J = \{a + b / a \in I, b \in J\} = A$$
+Equivalentemente, si $\exists x \in I, \exists y \in J$ tales que $x + y = 1$.
+\end{definition}
+
+\underline{Nota}: $I + J$, el ideal suma, es el menor ideal que contiene a $I \cup J$.
+
+\subsection*{Ingredientes para el Teorema Chino del Resto}
+Sean $A, A_{1}, ..., A_{t}$ anillos y $f_{i}: A \to A_{i}, i \in \{1, ..., t\}$ homomorfismos de anillos. Recordemos que $Im f_{i} \subseteq A_{i}$ es un subanillo, $\forall i$. Tomamos el anillo producto $Im f_{1} \times ... \times Im f_{t}$ y definimos:
+$$f: A \to Im f_{1} \times ... \times Im f_{t}$$
+$$x \mapsto f(x) = (f_{1}(x), ..., f_{t}(x))$$
+Es fácil demostrar que $f$ es un homomorfismo de anillos.
+
+Calculamos ahora el núcleo de $f$:
+$$Ker f = \{x \in A / f(x) = 0\} \Rightarrow (x \in Ker f \iff f_{i}(x) = 0, \forall i \in \{1, ..., t\})$$
+$$\Rightarrow (x \in Ker f \iff x \in \bigcap_{i=1}^{t} Ker f_{i} = Ker f)$$
+En otras palabras, $I = \bigcap_{i=1}{t} Ker f_{i} = Ker f$.
+
+Por el Teorema de Isomorfía, sabemos que:
+$$\begin{aligned}
+\exists ! \bar{f}: \sfrac{A}{I} \to Im f_{1} \times ... \times f_{t} & \text{ homomorfismo de anillos} \\
+x + I \mapsto (f_{1}(x), ..., f_{t}(x)) &
+\end{aligned}$$
+que además es inyectivo.
+
+El Teorema Chino del Resto nos dirá si $\bar{f}$ es también sobreyectiva ya que garantizará que $\bar{f}$ sea biyectiva bajo ciertas condiciones.
+
+\begin{lemma}
+Sean $I, J, K$ ideales de un anillo $A$. Entones:
+$$I + J = I + K = A \iff I + (J \cap K) = A$$
+\end{lemma}
+
+\begin{proof}
+\circled{$\Rightarrow$} $I + J = I + K = A \iff 1 = x + y = x' + z$, con $x, x' \in I, y \in J, z \in K$ \\
+$\Rightarrow 1 = x + y = x + y \cdot 1 = x + y (x' + z) = x + yx' + yz$, con $x + yx' \in I, yz \in J \cap K$ \\
+$\Rightarrow A = I + (J \cap K)$.
+
+\circled{$\Leftarrow$} $A = I + J \cap K \subseteq I + J \subseteq A \Rightarrow I + J = A$. \\
+$A = I + J \cap K \subseteq I + K \subseteq A \Rightarrow I + K = A$.
+\end{proof}
+
+\begin{lemma}
+$I_{1}, ..., I_{t} (t \geq 2)$ ideales de un anillo $A$. Entonces:
+$$I_{1} + I_{i} = A, \forall i \in \{2, ..., t\} \iff I_{1} + \bigcap_{i = 2}^{t} I_{i} = A$$
+\end{lemma}
+
+\begin{proof}
+Inducción sobre $t$.
+\begin{itemize}
+\item Caso $t = 2$ ya demostrado.
+\item Supuesta la implicación ``$\Rightarrow$'' cierta para $t$, veamos que es cierta para $t + 1$. \\
+Llamamos $I = I_{1}, J = \bigcap_{i = 2}^{t} I _{i}, K = I_{t+1}$. \\
+Tomemos $I + J = A, I + K = A$ (hipótesis de inducción), por el lema anterior tenemos que $I + J \cap K = A \Rightarrow I + \bigcap_{i=2}^{t+1} I_{i} = A$.
+
+La implicación ``$\Leftarrow$'' se razona de forma análoga al lema anterior.
+\end{itemize}
+\end{proof}
+
+\begin{theorem}[Teorema Chino del Resto]
+Llamando $I_{i} = Ker f_{i}, \forall i \in \{1, ..., t\}$, tenemos que:
+$$\bar{f} \text{ es un isomorfismo } \iff I_{i} + I_{j} = A, \forall i \neq j$$
+\end{theorem}
+
+\begin{proof}
+Teníamos $I = \bigcap_{i=1}^{t} I_{i}, \bar{f}: \sfrac{A}{I} \to Im f_{1} \times ... \times f_{t}$.
+
+\circled{$\Rightarrow$} Dado $i \in \{1, ..., t\}$, tomamos $x \in A$ tal que $f_{i}(x) = 1$ y $f_{j}(x) = 0, \forall i \neq j$, que debe existir pues, al ser $\bar{f}$ isomorfismo, para cada $(y_{1}, ..., y_{t}) \in Im f_{1} \times ... \times f_{t}, \exists (x + I) \in \sfrac{A}{I}$ tal que $\bar{f}(x + I) = f(x) = (y_{1}, ..., y_{t})$.
+
+Por lo tanto, tenemos $x-1 \in I_{i}$, pues $f_{i}(x - 1) = 0$, y $x \in \bigcap_{j \neq i} I_{j}$. Consideramos $1 = 1 - x + x \in I_{i} + \bigcap_{j \neq i} I_{j} \Rightarrow I_{i} + \bigcap_{j \neq i} I_{j} = A \underset{\text{(lema)}}{\Rightarrow} I_{i} + I_{j} = A, \forall i \neq j$.
+
+\circled{$\Leftarrow$} Un elemento de $Im f_{1} \times ... \times Im f_{t}$ es de la forma $(f_{1}(b_{1}), ..., f_{t}(b_{t})$, con $b_{i} in A, \forall i \in \{1, ..., t\}$.
+
+Para cada $i \in \{1, ..., t\}$, tomamos $1 = a_{i} + p_{i}$, con $a_{i} \in I_{i}, p_{i} \in \bigcap_{j \neq i} I_{j}$, que existen como resultado del lema anterior. \\
+Llamamos $x = \sum_{i = 1}^{t} b_{i}p_{i}$. Tenemos $f(x) = (f_{1}(x), ..., f_{t}(x))$, luego:
+$$f_{j}(x) = f_{j} (\sum_{i=1}^{t} b_{i} p_{i}) = \sum_{i=1}^{t} f_{j} (b_{i} p_{i}) = \sum_{i \neq j} f_{j}(b_{i}) \underset{= 0}{\underline{f_{j}(p_{i})}} + f_{j}(b_{j} f_{j}(p_{j}) =$$
+$$= f_{j} (b_{j} p_{j}) = f_{j} (b_{j} (1 - a_{j})) = f_{j}(b_{j}) - \underset{= 0}{\underline{f_{j}(b_{j} a_{j})}} = f_{j} (b_{j})$$
+
+De este modo, hemos encontrado un elemento $x \in A$ tal que \\ $f(x) = (f_{1}(b_{1}), ..., f_{t}(b_{t})) \Rightarrow f$ sobreyectiva $\Rightarrow \bar{f}$ sobreyectiva.
+\end{proof}
+
+\subsection*{Caso particular}
+
+$A = K[X]$ anillo de polinomios sobre un cuerpo $K, A_{i} = K, \forall i \in \{1, ..., t\},$ $\alpha_{1}, ..., \alpha_{t} \in K$.
+
+Definimos $\mathcal{X}_{i}: K[X] \to K, \mathcal{X}_{i} (g) = g(\alpha_{i})$, que es un homomorfismo de anillos. Es evidente que $Im \mathcal{X}_{i} = K, \forall i$.
+
+Definimos entonces $\mathcal{X}: K[X] \to K^{t}, \mathcal{X}(g) = (g(\alpha_{1}), ..., g(\alpha_{t}))$. Se tiene que $Ker \mathcal{X}_{i} = <x - \alpha_{i}>$.
+
+\underline{Notación}: Si $A$ es un anillo conmutativo (como en el caso del anillo de polinomios) y $a \in A$, se denota por $<a> = \{ba / b \in A\}$ el ideal principal generado por $a$.
+
+\underline{Recordatorio}: $Ker \mathcal{X}_{i} = \{g \in A = K[X] / \mathcal{X}_{i}(g) = g(\alpha_{i}) = 0\}$, esto es, $Ker \mathcal{X}_{i}$ es el conjunto de los polinomios que se anulan en $\alpha_{i}$. Para calcular $Ker \mathcal{X}_{i}$, hay que buscar el polinomio mónico de menor grado contenido en $Ker \mathcal{X}_{i}$. En el caso anterior, $x - \alpha_{i}$ es mónico, de grado 1 y contenido en $Ker \mathcal{X}_{i}$, luego hemos acabado. En general, esto no tiene por qué ser siempre así, si fuese $a \notin K$ (por ejemplo, en $\mathbb{Z}[X]$, si definimos $\mathcal{X}_{i}$ como $\mathcal{X}_{i}(g) = g(i)$, donde $i$ es la unidad imaginaria, tenemos que $\mathcal{X}_{i}: \mathbb{Z}[X] \to \mathbb{C}$ y $Ker \mathcal{X}_{i} \neq <x-i>$, porque no tiene sentido escribir $<x-i>$ como ideal de $\mathbb{Z}[X]$ ya que $i \notin \mathbb{Z}$. En este caso, $Ker \mathcal{X}_{i} = <x^{2} +1>)$.
+
+En consecuencia, $I = \bigcap_{i=1}^{t} <x - \alpha_{i}> = <p(x)>$, donde $p(x)$ es el polinomio $p(x) = \text{mcm}\{x-\alpha_{1}, ..., x-\alpha_{t}\}$.
+
+El TCR nos dice que $\bar{\mathcal{X}}: \sfrac{K[X]}{<p(x)>} \to K^{t}$ es un isomorfismo si, y sólo si, $\text{mcd}\{x-\alpha_{i}, x-\alpha_{j}\} = 1, \forall i \neq j \iff \alpha_{i} \neq \alpha_{j}, \forall i \neq j$.
+
+\underline{Nota}: \begin{itemize}
+\item $<p_{1}(x)> \cap <p_{2}(x)> = <\text{mcm}\{p_{1}(x), p_{2}(x)\}>$.
+\item $<p_{1}(x)> + <p_{2}(x)> = <\text{mcd}\{p_{1}(x), p_{2}(x)\}>$.
+\end{itemize}
+
+\underline{Nota}: En realidad ya sabíamos que $\forall (y_{1}, ..., y_{t}) \in K^{t}, \exists g(x) \in K[X]$ tal que $g(\alpha_{i}) = y_{i}, \forall i \in \{1, ..., t\} \iff \alpha_{i} \neq \alpha_{j}, \forall i \neq j$ (interpolación en nodos distintos). En tal caso, $p(x) = \prod_{i=1}^{t}(x - \alpha_{i}) \Rightarrow p(x)$ es de grado $t$.
+
+En consecuencia, en $\frac{K[X]}{I} = \frac{K[X]}{<p(x)>}$ habrá un único representante de cada clase de grado menor que $t$ ($\Rightarrow$ si $\alpha_{i} \neq \alpha_{j}$, se tiene que $\forall (y_{1}, ..., y_{t}) \in K^{t}, \exists ! g(x) \in K[X]$ de grado menor que $t$ y tal que $g(\alpha_{i}) = y_{i}, \forall i$).
+
+Sean entonces $\alpha_{1}, ..., \alpha_{t} \in K$, con $\alpha_{i} \neq \alpha_{j}, \forall i \neq j$. Consideramos $\bar{\mathcal{X}}: \frac{K[X]}{<p(x)>} \to K^{t}$ isomorfismo de anillos. Además, $\frac{K[X]}{<p(x)>}$ también es un espacio vectorial sobre $K$, pues es el espacio vectorial cociente del espacio vectorial $K[X]$ sobre el subespacio vectorial $<p(x)>$.
+
+Concretamente, dado $\alpha \in K$ y dado $g + <p(x)> \in \frac{K[X]}{<p(x)>}$, definíamos:
+$$\alpha \cdot (g + <p(x)>) = \alpha g + <p(x)> \equiv (\alpha + <p(x)>)(g + <p(x)>)$$
+
+Básicamente, estamos diciendo que la multiplicación por escalares de la estructura de espacio vectorial se hereda del producto interno del anillo.
+
+Tenemos entonces que $\bar{\mathcal{X}}$ es un homomorfismo de espacios vectoriales (es lineal), pues sabemos que $\bar{\mathcal{X}}(f + g) = \bar{\mathcal{X}}(f) + \bar{\mathcal{X}}(g)$ (ya que la suma es la misma, al haber la misma estructura de grupo aditivo adyacente a las estructuras de espacio vectorial y de anillo), y por otra parte,
+$$\bar{\mathcal{X}}(\alpha(g + <p(x)>) = \bar{\mathcal{X}}((\alpha + <p(x)>)(g + <p(x)>)) =$$
+$$= (\alpha, ..., \alpha)(g(\alpha_{1}), ..., g(\alpha_{t})) = (\alpha g(\alpha_{1}), ..., \alpha g(\alpha_{t})) = \alpha \bar{\mathcal{X}}(g + <p(x)>)$$
+
+\underline{Notación}: $\underset{\text{Clase de equivalencia}}{x} = x + <p(x)> \in \frac{K[X]}{<p(x)>}$.
+
+Una K-base de $\frac{K[X]}{<p(x)>}$ es $\{1 + <p(x)>, x + <p(x)>, ..., x^{t-1} + <p(x)>\} = \{1, x, x^{2}, ..., x^{t-1}\}$. \\
+Tomamos en $K^{t}$ la k-base canónica. \\
+Sabemos que en $\frac{K[X]}{<p(x)>}$ hay un único representante de cada clase de grado menor que $t$. Para encontrarlo, definimos $L_{i} = \frac{g_{i}(x)}{g_{i}(\alpha_{i}}$, con $g_{i}(x) = \prod_{i \neq j} (x - \alpha_{j})$, que verifica que $\mathcal{X} (L_{i}(\alpha_{1}), ..., L_{i}(\alpha_{t})) = (0, 0, ..., 0, \overset{(i)}{1}, 0, ..., 0) = e_{i}$. \\
+A los $L_{i}$ se les denomina ``interpoladores de Lagrange''. \\
+Dado entonces $(y_{1}, ..., y_{t}) \in K^{t}$, el polinomio $g(x) = \sum_{i=1}^{t} y_{i}L_{i}(x)$ satisface $g(\alpha_{i}) = y_{i}, \forall i \in \{1, ..., t\}$. \\
+$\Rightarrow$ La interpolación es un caso particular del Teorema Chino del Resto.
+
+Tenemos $\{1, x, ..., x^{t-1}\}$ base de $\frac{K[X]}{<p(x)>}$ y $\{e_{1}, ..., e_{t}\}$ base de $K^{t}$. La matriz de $\bar{\mathcal{X}}$ en estas bases (por filas) es:
+\begin{equation*}
+M =
+\begin{pmatrix}
+1 & 1 & ... & 1 \\
+\alpha_{1} & \alpha_{2} & ... & \alpha_{t} \\
+\alpha_{1}^{2} & \alpha_{2}^{2} & ... & \alpha_{t}^{2} \\
+\vdots & \vdots & \ddots & \vdots \\
+\alpha_{1}^{t-1} & \alpha_{2}^{t-1} & ... & \alpha_{t}^{t-1}
+\end{pmatrix}
+\end{equation*}
+Es invertible, por se la matriz de un isomorfismo de e.v. \\
+$\bar{\mathcal{X}}$ es lineal y biyectiva (pues es isomorfismo de anillos), luego $\bar{\mathcal{X}}$ es isomorfismo de espacios vectoriales.
+
+\subsection*{Aplicación: Transformada Discreta de Fourier}
+
+Supongamos que $K$ contiene una raíz n-ésima primitiva de la unidad (como es el caso de $\mathbb{C}, \forall n$, pero no de $\mathbb{R}$, salvo $n=2$), esto es, $\exists w \in K$ tal que $w^{n} = 1$ y $1, w, w^{2}, ..., w^{n-1}$ son distintos. Esto implica que $car K \nmid n$, ya que $1, w, ..., w^{n-1}$ son las raíces del polinomio $x^{n} - 1 \in K[X]$.
+
+Tomamos entonces $\alpha_{j} = w^{j}, \forall j \in \{0, ..., n-1\}$ y definimos:
+\begin{equation*}
+M = A_{w} = 
+\begin{pmatrix}
+1 & 1 & ... & 1 \\
+\alpha_{0} & \alpha_{1} & ... & \alpha_{n-1} \\
+\alpha_{0}^{2} & \alpha_{1}^{2} & ... & \alpha_{n-1}^{2} \\
+\vdots & \vdots & \ddots & \vdots \\
+\alpha_{0}^{n-1} & \alpha_{1}^{n-1} & ... & \alpha_{n-1}^{n-1}
+\end{pmatrix}
+=
+\end{equation*}
+\begin{equation*}
+=
+\begin{pmatrix}
+1 & 1 & ... & 1 \\
+w^{0} & w^{1} & ... & w^{n-1} \\
+\vdots & \vdots & \ddots & \vdots \\
+(w^{0})^{n-1} & (w^{1})^{n-1} & ... & (w^{n-1})^{n-1}
+\end{pmatrix}
+= (w^{ij})
+\end{equation*}
+
+Como $w^{j} \neq 1, \forall 0 < j < n$ y $w^{j}$ es raíz de $x^{n-1} = (x-1)(x^{n-1} + ... + 1) \Rightarrow (w^{j} - 1)(w^{(n-1)j} + ... + w^{j} + 1) = 0 \Rightarrow w^{(n-1)j} + .. + w^{j} + 1 = 0$. \\
+En consecuencia, $\sum_{k = 0}^{n-1} w^{ik} = 0, \forall i \in \{1, ..., n-1\}$. \\
+Como además, $w^{n} = 1 \Rightarrow w^{-i} = w^{n}w^{-i} = w^{n-i}$, y por lo tanto se tiene:
+\begin{itemize}
+\item Si $i > j$: $\sum_{k = 0}^{n-1} w^{k(i-j)} = 0$, pues $i-j \in \{1, ..., n-1\}$.
+\item Si $i < j$: $\sum_{k = 0}^{n-1} w^{k(i-j)} = \sum_{k = 0}^{n-1} w^{nk} w^{k(i-j)} = \sum_{k = 0}^{n-1} w^{k(n +(i-j))} = 0$, pues $n + (i-j) \in \{1, ..., n-1\}$.
+\item Si $i = j: \sum_{k = 0}^{n-1} w^{k(i-j)} = \sum_{k=0}^{n-1} 1 = n$.
+\end{itemize}
+
+En resumen,
+\begin{equation*}
+\begin{pmatrix}
+w^{i} & w^{2i} & ... & w^{(n-1)i}
+\end{pmatrix}
+\begin{pmatrix}
+w^{-j} \\
+w^{-2j} \\
+\vdots \\
+w^{-(n-1)j}
+\end{pmatrix}
+= n \delta_{ij}
+\end{equation*}
+
+En conclusión, $A_{w} A_{w^{-1}}^{T} = n I_{n} \Rightarrow A_{w}^{-1} = \frac{1}{n} A_{w^{-1}}^{T}$.
+
+Por otra parte, teníamos $\bar{\mathcal{X}}: \frac{K[X]}{<p(x)>} \to K^{n},  \bar{\mathcal{X}}(g + <p(x)>) = \mathcal{X}(g)$, con $\mathcal{X}(g) = (g(w^{0}), g(w^{1}), ..., g(w^{n-1})) = (g(1), g(w), ..., g(w^{n-1}))$, y sabíamos que  $\bar{\mathcal{X}}$ era un isomorfismo.
+
+Dado entonces $y = (y_{0}, ..., y_{n-1}) \in K^{n}, \bar{\mathcal{X}}^{-1}(y)$ es el único polinomio (en realidad, clase de equivalencia $\equiv$ único representante de grado menor que $n$) de grado menor que $n$ tal que  $\mathcal{X}(g) = y$, o lo que es lo mismo,  $\bar{\mathcal{X}}(g + <p(x)>) = y$ ó $g(w^{i}) = y_{i}, \forall i$.
+
+Resumiendo:  $\bar{\mathcal{X}}$ evaluar,  $\bar{\mathcal{X}}^{-1}$ interpolar.
+
+Si tenemos entonces $y = (y_{0}, ..., y_{n-1}) \in K^{n}$, el polinomio interpolador de esos datos en los nodos $1, w, ..., w^{n-1}$ viene dado por $\hat{y} = \sum_{j = 0}^{n-1} \hat{y}_{j}x^{j}$, donde $(\hat{y}_{0}, ..., \hat{y}_{n-1}) = (y_{0}, ..., y_{n-1}) \frac{1}{n} A_{w^{-1}}^{T}$. \\
+Explícitamente, $\hat{y}_{j} = \frac{1}{n} \sum_{k=0}^{n-1} y_{k} w^{-jk}$.
+
+\underline{Caso particular}: $K = \mathbb{C} \rightarrow$ la suposición anterior de que existe una raíz n-ésima de 1 es cierta, $\forall n$. \\
+Entonces $w = e^{\sfrac{2\pi}{n}}$, de modo que $\hat{y}_{j} = \frac{1}{n} \sum_{k=0}^{n-1} y_{k} e^{\sfrac{-2\pi ijk}{n}}$, que es la transformada de Fourier de $y$.
+
+\underline{Interpretación}: Tenemos $f$ función $2\pi$-periódica, y la conocemos en $[0, 2\pi]$, esto es, tenemos $f:[0, 2\pi] \to \mathbb{C}$. \\
+Tomamos como muestra $y_{j} = f(\frac{2\pi j}{n}), \forall j \in \{0, ..., n-1\}$, y tomamos $g: [0, 2\pi] \to \mathbb{C}$ dada por $g(t) = \sum_{k=0}^{n-1} \hat{y}_{k}e^{itk}$. \\
+Evaluando esta función en los nodos tenemos que $g(\frac{2\pi j}{n}) = \sum_{k=0}^{n-1} \hat{y}_{k} e^{\sfrac{2\pi ijk}{n}} = y_{j} = f(\frac{2\pi j}{n}), \forall j \in \{0, ..., n-1\}$.
+
+\underline{Nota}: A $\hat{y} = (\hat{y}_{0}, ..., \hat{y}_{n-1})$ se le denomina ``espectro'' de $f$.
+
+\underline{Nota}:
+$$\sum_{k=0}^{n-1} \hat{y}_{k} e^{\sfrac{2\pi ijk}{n}} = \sum_{k=0}^{n-1} (\sum_{l=0}^{n-1} \frac{1}{n} y_{l} e^{\sfrac{-2\pi ilk}{n}}) e^{\sfrac{2\pi ijk}{n}} = \frac{1}{n} \sum_{l=0}^{n-1} y_{l} \sum_{k=0}^{n-1} e^{\sfrac{2\pi ik(j-l)}{n}} =$$
+$$= \frac{1}{n} \sum_{l=0}^{n-1} y_{l} \sum_{k=0}^{n-1} w^{k(j-l)} = \frac{1}{n} \sum_{l=0}^{n-1} y_{l} n \delta_{l} = y_{j}$$
+Esto es general (y esperable, pues es el polinomio interpolador):
+$$\hat{y} = \sum_{j=0}^{n-1} \hat{y}_{j} x^{j} \Rightarrow \hat{y} (w^{l}) = \sum_{j=0}^{n-1} (\frac{1}{n} \sum_{k=0}^{n-1} y_{k} w^{-jk}) w^{lj} = y_{l}$$
+
+\newpage
+
+\section{Módulos}
+
+\begin{definition}[Módulos]
+Sean $M, N$ grupos aditivos. Definimos $Ad(M,N) =$ \\ $=\{f: M \to N \text{ homeomorfismos}\}$. Entonces $Ad(M, N)$ es un grupo aditivo con la suma dada para cada $f, g \in Ad(M, N)$, por $f+g: M \to N, (f + g)(m) = f(m) + g(m), \forall m \in M$.
+
+Definimos $End(M) = Ad(M,M)$, denominado ``anillo de endomorfismos de $M$''.
+\end{definition}
+
+\begin{proposition}
+$(End(M), +, 0, {\scriptstyle o}, id_{m})$ es un anillo.
+\end{proposition}
+
+\begin{proof}
+Hay que comprobar:
+\begin{itemize}
+\item $f, g \in End(M) \Rightarrow f_{o}g \in End(M)$.
+\item ${\scriptstyle o}$ es asociativa.
+\item $(f + g)_{o}h = f_{o}h + g_{o}h$ y $h_{o}(f+g) = h_{0}f + h_{o}g, \forall f, g, h \in End(M)$.
+\end{itemize}
+\end{proof}
+
+\begin{example}
+$End(\{0\}) = \{0\}$ se llama anillo cero o trivial. Si $M \neq \{0\} \Rightarrow End(M) \neq \{0\}$, pues contiene al menos dos elementos: el cero y la identidad.
+\end{example}
+
+\begin{definition}[A-Módulo]
+Sea $M$ un grupo aditivo, y $A$ un anillo. Una estructura de A-módulo sobre $M$ es un homomorfismo de anillos $\rho: A \to End(M)$.
+\end{definition}
+
+\begin{example}
+$A = \mathbb{Z}$ y $M$ grupo aditivo $\rightarrow$ hay una única estructura de $\mathbb{Z}-$módulo, pues $\rho(1) = \underset{=id_{M}}{1}, \rho(2) = 1 + 1$, etc. $\rightarrow$ todas las imágenes están determinadas $\rightarrow$ además, el núcleo de este homomorfismo dará la característica de $End(M)$.
+\end{example}
+
+\begin{example}
+Sea $K$ un cuerpo y $A=K$. Veamos que un $K-$ espacio vectorial es un $K-$módulo. \\
+Si $V$ es un $K-$espacio vectorial, definimos $\rho: K \to End(V)$ por $\rho(\alpha): V \to V \mid \rho(\alpha)(v) = \alpha v, \alpha \in K, v \in V$. Con esta definición, $\rho$ es un homomorfismo de anillos (ejercicio). En consecuencia, $V$ tiene también la estructura de $K-$módulo.
+\end{example}
+
+Nos podemos preguntar lo contrario, ¿todo $K-$módulo tiene la estructura de espacio vectorial? La respuesta es sí.
+
+\underline{Notación}: En lugar de decir que $M$ tiene una estructura de $A-$módulo, diremos que $M$ es un $A-$módulo.
+
+\underline{Observación}: Sean $X, Y, Z$ conjuntos. Denotamos $Map(X, Y) = \{f: X \to Y \text{ aplicación}\}$. Consideramos $Map(X \times Y, Z) \overset{\mathcal{X}}{\cong} Map(X, Map(Y, Z))$, pues $\mathcal{X}$ viene dado por $f:X \times Y \to Z$:
+$$\begin{aligned}
+\mathcal{X}(f): X & \to         & Map(Y, Z) &          &    &              &          \\
+                       x & \mapsto & \mathcal{X}(f)(x): & Y & \to         & Z       \\
+                          &               &                            & y & \mapsto & f(x, y)
+\end{aligned}$$
+
+\begin{scriptsize}
+$$\begin{aligned}
+\mathcal{X}^{-1}(f): Map(X, Map(Y, Z) & \to          & Map(X \times Y, Z) &                   &               &              & \\
+                                        g                & \mapsto & \varphi^{-1}(g):      & X \times Y & \to          & Z       \\
+                                                          &               &                               & (x, y)          & \mapsto & \varphi^{-1}(g)(x, y) = g(X)(y)
+\end{aligned}$$
+\end{scriptsize}
+
+Se comprueba que efectivamente $\mathcal{X}^{-1}$ es la inversa de $\varphi	$.
+
+Consideramos la observación anterior que en lugar de conjuntos tenemos grupos aditivos $M, N, L$. \\
+Se tiene entonces $Ad(M, Ad(N, L)) \subseteq Map(M, Map(N, L))$. Pero sabemos además que $\varphi^{-1}: Map(M, Map(N, L)) \to Map(M \times N, L)$ es una biyección. \\
+Se puede comprobar que $Im(\varphi^{-1}_{\mid_{Ad(M, Ad(N, L))}}) = Biad(M \times N, L)$, donde $b \in Biad(M \times N, L)$ si $b$ es biaditiva, esto es, si:
+$$\forall m, m' \in M, n, n' \in N
+\begin{cases}
+b(m + m', n) = b(m, n) + b(m', n) \\
+b(m, n + n') = b(m, n) + b(m', n)
+\end{cases}$$
+
+Si $A$ es un anillo, entonces podemos considerar:
+$$\begin{aligned}
+Biad(A \times M, M) & \overset{\varphi}{\to} & Ad(A, Ad(M, M)) \\
+\underset{\text{Noción de A-módulo en muchos textos}}{?} & \underset{\varphi^{-1}}{\leftarrow} & \overset{\bigcup \mid}{Ring(A, End(M))}
+\end{aligned}$$
+
+\begin{proposition}
+Dados un grupo aditivo $M$ y un anillo $A$, se tiene una correspondencia biyectiva entre:
+\begin{itemize}
+\item Los homomorfismos de anillos, $\rho: A \to End M$.
+\item Las aplicaciones $\cdot: A \times M \to M$ que satisfacen:
+\begin{enumerate}[label=\alph*)]
+\item $(a + a') \cdot m = a \cdot m + a' \cdot m, \forall a, a' \in A, \forall m \in M$.
+\item $a \cdot (m + m') = a \cdot m + a \cdot m', \forall a \in A, \forall m \in M$.
+\item $(aa') \cdot m = a \cdot (a' \cdot m), \forall a, a' \in A, \forall m \in M$.
+\item $1 \cdot m = m, \forall m \in M$.
+\end{enumerate}
+\end{itemize}
+\end{proposition}
+
+\begin{proof}
+Tomamos la biyección $Map(A, Map(M, M)) \overset{\psi}{\underset{\psi^{-1}}{\leftrightarrows}} Map(A \times M, M)$. Para dos anillos $R, S$, llamo $Ring(R, S) = \{\varphi: R \to S$ homomorfismo de anillos $\}$. Consideramos $Ring(A, End M) \subseteq Map(A, Map(M, M))$ y tomamos $Im(\psi^{-1}_{\mid_{Ring(A, EndM)}})$, que serán las aplicaciones $\varphi \in Map(A \times M, M)$ que satisfacen $a), ..., d)$. \circled{$\star$}
+
+Análogamente, se comprueba que si $\varphi \in Map(A \times M, M)$ verifica $a), b), c),$ $d)$, entonces $\psi(\varphi) \in Ring(A, End M)$. En conclusión, ambos conjuntos son biyectivos. Esta biyección corresponde a la fórmula $a \cdot m = \rho(a)(m)$.
+
+En resumen, podemos ver un $A-$módulo como un homomorfismo de anillos $\rho: A \to End M$, o como una acción de $A$ sobre $M$.
+\end{proof}
+
+\begin{task}[\circled{$\star$}]
+Si $\rho \in Ring(A, End M) \Rightarrow \psi^{-1}(\rho)$ verifica $a), b), c), d)$. Por ejemplo, para $c)$ vemos que dados $a, a' \in A, m \in M$ se cumple que $(a a') \cdot m = a \cdot (a' \cdot m)$. Llamamos $\psi^{-1}(\rho)(a, m) = a \cdot m$. Como $\psi^{-1}(\rho)(a, m) = \rho(a)(m) \Rightarrow a \cdot m = \rho(a)(m)$. \\
+Consideramos $(a a') \cdot m = \rho(a a')(m) = (\rho(a) \cdot \rho(a'))(m) = \rho(a)(\rho(a')(m)) = \rho(a)(a' \cdot m) = a \cdot (a' \cdot m)$.
+\end{task}
+
+\underline{Nota}: $\cdot$ es una acción de $A$ sobre $M$ (por la izquierda).
+
+\underline{Notación}: Se suele abreviar $am = a \cdot m$.
+
+\begin{example}
+Como ya se adelantó, si $K$ es un cuerpo, es lo mismo un $K-$módulo que un $K-$espacio vectorial.
+\end{example}
+
+\begin{example}[Módulo regular]
+$A$ es un $A-$módulo, tomando
+$$\begin{aligned}
+\lambda: & A & \to & EndA & & & \\
+& a & \mapsto & \lambda(a): & A \to & A \\
+& & & & a' & \mapsto & aa'
+\end{aligned}
+\Rightarrow \lambda(a)(a') = a a' ) a \cdot a'$$
+$\Rightarrow$ Eso da coherencia a la notación anterior, pues en el caso $M = A$ es lo mismo.
+\end{example}
+
+\subsection*{Restricción de escalares}
+Sea $\varphi: R \to S$ un homomorfismo de anillos y sea $M$ un $S-$módulo vía un homomorfismo de anillos $\rho: S \to End M$. Entonces $M$ es también un $R-$módulo vía $\rho_{o}\varphi: R \to End M$ (que es homomorfismo de anillos).
+$$\underset{\underset{\rho_{o}\varphi}{\longrightarrow\longrightarrow\longrightarrow}}{R \overset{\varphi}{\to} S \overset{\rho}{\to} End M}$$
+
+Equivalentemente, si $r \in R$ y $m \in M$, definimos $r \cdot m = (\rho_{o}\varphi)(r)(m) = \rho(\varphi(r))(m) = \varphi(r) \cdot m$.
+
+\begin{definition}[{$K[X]-$}módulos (K cuerpo)]
+Sea $M$ un $K[X]-$módulo, esto es, $M$ es un grupo aditivo y tenemos un homomorfismo de anillos $\rho: K[X] \to End M$. \\
+Podemos ver $K$ como subanillo de $K[X]$. En consecuencia, la aplicación inclusión $i: K \hookrightarrow K[X]$ es un homomorfismo de anillos. Por restricción de escalares, deducimos que $M$ es también un $K-$módulo $\rightarrow K-$espacio vectorial.
+
+Veamos como actúa $\rho$. Tomamos $\rho(x) \in End M$. Veamos que $\rho(x)$ es lineal: dado $m \in M, \alpha \in K$, tenemos que $\rho(x) (\alpha m) = x \cdot (\alpha m) \underset{\alpha \cong i(\alpha) \in K[X]}{=} x \cdot (\alpha \cdot m) = (xa) \cdot m \underset{\text{el anillo de polinomios es conmutativo}}{=} (\alpha x) \cdot m = \alpha \cdot (x \cdot m) = \alpha \rho(x) (m)$.
+
+De este modo, $\rho(x) \in End_{K} (M) \rightarrow$ endomorfismo $K-$lineal. En consecuencia, ya tenemos $\rho$ completamente caracterizado:
+$$\text{Si } \sum_{i} p_{i}x^{i} \Rightarrow \rho(p) = \rho(\sum_{i} p_{i}x^{i}) \underset{\rho \text{ lineal}}{=} \sum_{i} \rho(p_{i} x^{i}) \underset{p \text{ lineal}}{=} \sum_{i} p_{i} \rho(x^{i}) =$$
+$$\underset{\rho \text{ homomorfismo de anillos}}{=} \sum_{i} p_{i} \rho(x)^{i}$$
+
+En conclusión, $\rho(p)(m) = p(x)(m) = p(x)m$. \\
+Si tengo un $K-$espacio vectorial $V$ y una aplicación lineal $T: V \to V$, podemos definir para cada $p \in K[x]$ y $v \in V, \rho(T)(v) = (\sum_{i} p_{i}T^{i})(v) = \sum_{i} p_{i}T^{i}(v) := p(x) \cdot v \Rightarrow V$ es un $K[x]$-módulo.
+\end{definition}
+
+\begin{example}
+$C^{\infty}(\mathbb{R})$ es un $\mathbb{R}-$espacio vectorial. Tomamos $T = \frac{d}{dt}$, esto es, $T(f) = f'$. Entonces $T \in End_{\mathbb{R}}(C^{\infty}(\mathbb{R}))$. En consecuencia, $C^{\infty}(\mathbb{R})$ es un $\mathbb{R}[x]-$módulo.
+
+$C^{\infty}(\mathbb{R})$ dotado de estructura de $R[X]-$módulo a través del endomorfismo lineal $T: C^{\infty}(\mathbb{R}) \to C^{\infty}(\mathbb{R}), T(f) = f'$, para $f \in C^{\infty}(\mathbb{R})$.
+$$sint \in C^{\infty}(\mathbb{R})$$
+$$X sint = T(sint) = cost$$
+$$X^{2} sint = X(X sint) = X cost = -sint = -1 sint$$
+$$(X^{2} + 1) sint = 0$$
+En un $A-$módulo $M$, puede pasar que $am = 0$ con $a \neq 0, m \neq 0$.
+
+\underline{Ejemplo}: En el $\mathbb{Z}-$modulo $\mathbb{Z}_{4}$ ocurre que $\bar{2} \cdot \bar{2} = \bar{0}$.
+\end{example}
+
+\begin{definition}[Módulos abstractos]
+Sean $A$ un anillo, $M$ un $A-$módulo ($_{A}M$), $\varphi: A \to End(M)$ homomorfismo de anillos. \\
+$Ker \varphi$ es un ideal de $A$ y el Primer Teorema de Isomorfía nos dice que:
+$$\frac{A}{Ker \varphi} \overset{\sim}{\to} Im \varphi \subseteq End(M) \Rightarrow M \text{ es un } \frac{A}{Ker \varphi}-\text{modulo}$$
+De hecho, $(a + Ker \varphi)m = \varphi(a)m$.
+$$Ker \varphi = \{a \in A \mid \varphi(a) = 0\} = \{a \in A \mid \varphi(a)(m) = 0\} =$$
+$$= \{a \in A \mid am = 0\} = Ann_{A}(M)$$
+$Ann_{A}(M) \equiv$ ``Anulador de $M$''.
+$$(a + Ann_{A}(M)) \cdot m = am$$
+\end{definition}
+
+\begin{task}
+$T: V \to V$ aplicación $K-$lineal.
+$$Ann_{K[X]}(V) = <\mu(x)>$$
+Demostrar que si $dim_{K}V < \infty \Rightarrow \mu(x) \neq 0$ (polinomio mínimo de $T$).
+\end{task}
+
+\begin{definition}[Submódulo]
+Un submódulo de un módulo $_{A}M$ es un subgrupo aditivo $N$ de $M$ tal que:
+$$an \in N, \forall a \in A, \forall m \in N$$
+Los submódulos del módulo regular $A$ se llaman ideales a izquierda de $A$.
+\end{definition}
+
+\underline{Observación}: Todo ideal es un ideal a izquierda. \\
+Si $A$ es conmutativo, los ideales y los ideales a izquierda son los mismos.
+
+\begin{example}
+Tomo $A = M_{2}(K)$ con $K$ cuerpo. 
+\begin{equation*}
+M_{2}(K) = \{
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+: a, b, c, d \in K\}
+\end{equation*}
+\begin{equation*}
+\{
+\begin{pmatrix}
+0 & b \\
+0 & d
+\end{pmatrix}
+: b, d \in K\} \text{ es un ideal a izquierda, pero no es un ideal.}
+\end{equation*}
+\end{example}
+
+\begin{example}
+$V \overset{T}{\to}V, K-$lineal $\rightarrow_{K[X]}V$. \\
+$W$ es un $K[X]-$submódulo si $W$ es un $K-$espacio vectorial y además:
+$$T(w) = Xw \in W, \forall w \in W$$
+$W$ es $T-$invariante. \\
+$W$ es $K[X]-$submódulo $\iff W$ es $K-$subespacio de $V$ tal que $T(W) \subseteq W$.
+\end{example}
+
+\begin{definition}
+$A$ anillos, $_{A}M$ módulo.
+$$\mathcal{L}(_{A}M) \equiv \text{ Conjunto de los submódulos de } M$$
+\end{definition}
+
+\begin{definition}[Submódulo cíclico]
+Dado $_{A}M$ y $m \in M$. Es claro que $Am = \{am: a \in A\}$ es un submódulo de $_{A}M$ llamado submódulo cíclico generado por $m$.
+\end{definition}
+
+\begin{example}
+$\mathbb{R}[X] \sin t = \{a \sin t + b \sin't + c \sin''t + ...\} = \{a \sin t + b \cos t: a, b \in \mathbb{R}\}$.
+\end{example}
+
+\begin{definition}[Generadores de un submódulo]
+Si $m_{1}, ..., m_{n} \in M, Am_{1} + ... + Am_{n} = \{a_{1}m_{1} + ... + a_{n}m_{n}: a_{1}, ...., a_{n} \in A\}$ es un submódulo generado por $m_{1}, ..., m_{n}$.
+
+Si $M = Am_{1} + ... + Am_{n}$, diremos que $M$ es finitamente generado con generadores $m_{1}, ..., m_{n}$.
+\end{definition}
+
+\begin{definition}[Suma de submódulos]
+Dados $N_{1}, ..., N_{n}$ submódulos de $_{A}M$, defino:
+$$N_{1} + ... + N_{n} = \{m_{1} + ... + m_{n}: m_{i} \in N_{i}, \forall i \in \{1, ..., n\}\}$$
+que es un submódulo de $M$ llamado ``suma'' de $N_{1} + ... + N_{n}$.
+
+\underline{Notación}: $N_{1} + ... + N_{n} = \sum_{i=1}^{n} N_{i} = \sum N_{i}$.
+\end{definition}
+
+\begin{proposition}
+Sean $N_{1}, ..., N_{t}$ submodulos de $_{A}M$. Son equivalentes:
+\begin{enumerate}[label = \alph*)]
+\item Para cada $i \in \{1, ..., t\}, N_{i} \cap \sum_{j \neq i} N_{j} = \{0\}$.
+\item Si $0 = n_{1} + ... + n_{t}, n_{i} \in N_{i} \Rightarrow n_{i} = 0, \forall i \in \{1, ..., t\}$.
+\item Cada $n \in N_{1} + ... + N_{t}$ admite una expresión única como:
+$$n = n_{1} + ... + n_{t} \text{ con } n_{i} \in N_{i}$$
+\end{enumerate}
+\end{proposition}
+ 
+\begin{proof}
+\underline{$a) \Rightarrow b)$}: $0 = n_{1} + ... + n_{t} \Rightarrow$ \\ $\Rightarrow -n_{i} = \sum_{j \neq i} n_{j} \in N_{i} \cap (\sum_{j \neq i} N_{j}) \overset{a)}{=} \{0\} \Rightarrow -n_{i} = 0 \Rightarrow n_{i} = 0$.
+ 
+\underline{$b) \Rightarrow c)$}: Si $n = n_{1} + ... + n_{t} = n_{1}' + ... + n_{t}'$ con $n_{i}, n_{i}' \in N_{i} \Rightarrow 0 = \underset{\in N_{|}}{n_{1} - n_{1}'} + \underset{\in N_{2}}{n_{2} - n_{2}'} + ... + \underset{\in N_{t}}{n_{t} - n_{t}'} \Rightarrow n_{i} = n_{i}', \forall i \in \{1, ..., t\}$.
+ 
+\underline{$c) \Rightarrow a)$}: Si $n \in N_{i} \cap \sum_{j \neq i} N_{j} \Rightarrow n = \sum_{j \neq i} n_{j}$ con $n_{j} \in N_{j} \Rightarrow 0 = n - \sum_{j \neq i} n_{j} \overset{c)}{\Rightarrow} n = 0$.
+\end{proof}
+ 
+\begin{definition}[Suma directa interna]
+Si $M = N_{1} + ... + N_{t}$ tal que $N_{1}, ..., N_{t}$ satisfacen $a)$, diré que $M = N_{1} + ... + N_{t}$ es una suma directa interna y usaré la notación $M = N_{1} \dotplus ... \dotplus N_{t}$.
+
+\underline{Nota}: Cualquiera de estos $N_{i}$ puede ser $\{0\}$ ($M + \{0\} = M$).
+
+\underline{Definición}: Si $\{N_{1}, ..., N_{t}\}$ verifican $a)$ y $N_{i} \neq \{0\}, \forall i \in \{1, ..., t\}$, diré que $\{N_{1}, ..., N_{t}\}$ es una familia independiente.
+\end{definition}
+
+\begin{example}:
+$\mathbb{Z}_{6}$ es un $\mathbb{Z}-$módulo, $Z_{6} = \{0, 1, 2, 3, 4, 5\}$. \\
+$N_{1} = \{0, 3\}, N_{2} = \{0, 2, 4\}, N_{1} \cap N_{2} = \{0\} \Rightarrow \{N_{1}, N_{2}\}$ familia independiente.
+$$N_{1} \dotplus N_{2} = \mathbb{Z}_{6}$$
+\end{example}
+
+\subsection*{Módulos acotados sobre un DIP}
+Sean $A$ DIP (Dominio de ideales principales), $_{A}M$ un módulo y \\ $Ann_{A}(M) = <\mu>$ para cierto $\mu \in A$. \\
+Si $\mu \neq 0$, diré que $M$ es acotado. Supongamos que $_{A}M$ es acotado y $\mu \notin \underset{\text{Unidades}}{\mathcal{U}(A)}$ (ya que si $\mu \in \mathcal{U}(A) \Rightarrow M = \{0\}$).
+$$\mu ) p_{1}^{e_{1}} ... p_{t}^{e_{t}}, p_{i} \in A \text{ irreducible y } e_{i} > 0, \forall i \in \{1, ..., t\}$$
+
+Definimos:
+$$q_{i} = \frac{\mu}{p_{i}^{e_{i}}} = p_{1}^{e_{1}}...p_{i-1}^{e_{i-1}} p_{i+1}^{e_{i+1}}...p_{t}^{e_{t}}, i \in \{1, ..., t\}$$
+$$M_{i} = \{q_{i}m: m \in M\} \subseteq M \hspace{1cm} M_{i} \in \mathcal{L}(_{A}M)$$
+Queremos $M = M_{1} \dotplus ... \dotplus M_{t}$ (supongo $t > 1$).
+$$mcd(q_{1}, ..., q_{t}) = 1 \Rightarrow 1 = \sum_{i=1}^{t} q_{i} a_{i} \text{ para ciertos } a_{i} \in A$$
+$m \in M, m = 1 \cdot m = (\sum_{i=1}^{t} q_{i}a_{i}) = \sum_{i=1}^{t} q_{i} a_{i} m \Rightarrow M = M_{1} + ... + M_{t}$.
+
+Veamos que es $\dotplus$:
+$$q_{i} q_{j} \in <\mu> \text{ si } i \neq j \iff (\text{si } m \in M_{i} \Rightarrow q_{j}m = 0 \text{ si } i \neq j) \Rightarrow$$
+$$\Rightarrow M_{i} = \{m \in M: m = q_{i}a_{i}m\}$$
+Si $0 = \sum_{i=1}^{t} m_{i}, m_{i} \in M_{i} \overset{b)}{\Rightarrow} 0 = q_{i}a_{i}0 = m_{j}, \forall j \in \{1, ..., t\} \Rightarrow M = M_{1} \dotplus ... \dotplus M_{t}$.
+
+\begin{proposition}
+Es claro que
+$$M_{i} = \{m \in M: p_{i}^{e_{i}} m = 0\} \Rightarrow Ann_{A} (M_{i}) = <p_{i}^{e_{i}}>$$
+Así, $<\mu> = Ann_{A}(M) = \cap_{i=1}^{t} Ann_{A} (M_{i}) \supset \cap_{i=1}^{t} <p_{i}^{e_{i}}> = <\mu>$.
+\end{proposition}
+
+\underline{Recordatorio}: En un DIP, mcm corresponde con $\cap$.
+
+\begin{definition}[Descomposición primaria]
+Cada $M_{i}$ se llama componente $p_{i}-$primaria de $M$.
+
+La descomposición primaria de $M$ es $M = M_{1} \dotplus ... \dotplus M_{t}$.
+\end{definition}
+
+\begin{task}
+Obtener la descomposición primaria usando $\dotplus$ de $\mathbb{Z}_{8000}$.
+\end{task}
+
+% 08/03/2022
+
+\begin{example}
+$T: V \to V, K-$lineal $\rightarrow V$ es un $K[X]-$módulo. \\
+$W$ es un submodulo de $_{K[X]}V$ es un $K-$subespacio vectorial de $V$ tal que $T(W) \subseteq W$ ($W$ es $T-$invariante).
+
+Si $Ann_{K[X]}(V) \neq \{0\}$, tomo $\mu(x) \in K[X]$ tal que $Ann_{K[X]} = <\mu(X)>$ ($\mu(x)$ polinomio mínimo de $T$).
+
+$$\mu(x) = p_{1}(x)^{e_{1}} ... p_{t}(x)^{e_{t}}, p_{1}, ..., p_{t} \text{ irreducibles en } K[X]$$
+
+La descomposición primaria de $V$ es $V = V_{1} \dotplus ... \dotplus V_{t}$, con $V_{i}$ $T-$invariante y $V_{i} = \{v \in V: p_{i}(x) \cdot v = 0\}$.
+
+\underline{Caso particular}: $dim_{K} V < \infty$ y $\mu(x) = (x - \alpha_{1}) ... (x - \alpha_{t}), \alpha_{1}, ..., \alpha_{t} \in K, \alpha_{i} \neq \alpha_{j}$.
+$$V_{i} = \{v \in V: (x - \alpha_{i}) v = 0\} = \{v \in V: (T - \alpha_{i})(v) = 0\} =$$
+$$= \{v \in V: T(v) = \alpha_{i} v\} = \text{subespacio propio del valor propio } \alpha_{i}$$
+$$\Rightarrow T \text{ es diagonalizable}$$
+
+Si cogemos bases de $V_{1}, ..., V_{t}$ y representamos el endomorfismo con respecto de esas bases, obtenemos una matriz diagonal. Así que si el polinomio mínimo del endomorfismo se factoriza completamente, entonces el endomorfismo es diagonalizable.
+
+El polinomio mínimo del endomorfismo identidad es $(x -1)$.
+
+\underline{Problemas}: 
+\begin{itemize}
+\item ¿Cómo se calcula el polinomio mínimo de un endomorfismo?
+\item Factorización del polinomio.
+\end{itemize}
+\end{example}
+
+\begin{task}
+Sea $V$ espacio vectorial real euclídeo (tiene producto escalar) de $dim < \infty$. \\
+$T: V \to V$ isometría (preserva distancias).
+
+Demostrar que si $W$ es un subespacio $T-$invariante de $V$, entonces su otrogonal $W^{\bot}$ es también $T-$invariante ($\Rightarrow V = W \dotplus W^{\bot}$ como $\mathbb{R}[X]-$módulo).
+
+Como consecuencia, usando el Teorema Fundamental del Álgebra, deducir que admite una base ortonormal con respecto de la cual la matriz de $T$ es diagonal por bloques, con bloques de dimensión 1 ó 2. ¿Qué aspecto tienen esos bloques? ($\pm 1$ los bloques de 1, análogos a los de una rotación los de 2).
+
+\underline{Nota}: En espacios Hilbertianos, tomando $T$ unitaria, tenemos que se puede diagonalizar completamente (utilizando complejos).
+\end{task}
+
+\newpage
+
+\section{Homomorfismos de módulos}
+
+\begin{definition}[Módulo cociente]
+Sea $_{A}M$ módulo y $L \in \mathcal{L}(_{A}M)$. Sé que tengo un grupo cociente $\frac{M}{L}$ aditivo, que deviene un $A-$módulo a través de la acción:
+$$a \cdot (m + L) = am + L, a \in A, m \in M$$
+
+\underline{Nota}: Hay que probar que está bien definido.
+
+Se llama módulo cociente $\sfrac{M}{L}$.
+
+La proyección canónica: $\pi: M \to \sfrac{M}{L}$, dada por $\pi(m) = m+L$ es un homomorfismo de módulos en el siguiente sentido:
+\end{definition}
+
+\begin{definition}[Homomorfismos de módulos]
+Una aplicación $f: M \to N$, con $_{A}M, _{A}N$ módulos, es un homomorfismo de módulos si:
+$$f(m+m') = f(m) + f(m') \hspace{0.5cm} f(am) = af(m) \hspace{0.5cm} \forall m, m' \in M, \forall a \in A$$
+\end{definition}
+
+\begin{proposition}[$1^{er}$ Teorema de Isomorfía]
+$f: M \to N$ homomorfismo de $A-$módulos. Entonces:
+\begin{enumerate}
+\item $Ker f \in \mathcal{L} (_{A}M), Im f \in \mathcal{L}(_{A}N)$.
+\item Para cada $L \in  \mathcal{L} (_{A}M)$ tal que $L \subseteq Ker f$, existe un único homomorfismo de módulos $\bar{f}: \frac{M}{L} \to N$ tal que $\bar{f}(m + L) = f(m), \forall m \in M$.
+\item $\bar{f}$ inyectivo $\iff L = Ker f$, en cuyo caso, $\bar{f}$ da un isomorfismo de $A-$módulos $\frac{M}{Ker f} \cong Im f$.
+\end{enumerate}
+\end{proposition}
+
+\underline{Definición}: Isomorfismo de $A-$módulos $\equiv$ Homomorfismo de $A-$módulos biyectivo.
+
+\begin{example}
+$_{A}M, m \in M$, defino $f: A \to M$ dada por $f(a) = am, \forall a \in A$. \\
+$f$ homomorfismo de $A-$módulos: $Im f = Am, ann_{A} (m) = Ker f = \{a \in A: am = 0\}$, que es un ideal a izquierda de $A$.
+
+El Primer Teorema de Isomorfía nos dice:
+$$\frac{A}{ann_{A}(m)} \cong Am$$
+\end{example}
+
+\begin{example}
+$S = Map(\mathbb{N}, K)$, con $K$ cuerpo. $S$ es un $K-$espacio vectorial. Tomamos $T:S \to S$, con $T(s)(n) = S(n+1), \forall n \in \mathbb{N}, \forall s \in S$. Se tiene que $T$ es $K-$lineal $\Rightarrow S$ es un $K[X]-$módulo, y $(Xs)(n) = T(s)(n) = s(n+1)$.
+
+Sea $f \in K[X], f = f_{0} + f_{1} x + ... + f_{m} x^{m}$, con $f_{i} \in K, \forall i \in \{1, ..., m\}$. Entonces:
+$$(fs)(n) = [(f_{0} + f_{1}x + ... + f_{m}x^{m})s](n) =$$
+$$= f_{0}s(n) + f_{1}s(n+1) + ... + f_{m}s(n+m) = \sum_{i=0}^{m} f_{i}s(n+i)$$
+Supongamos que $ann_{K[X]}(s) \neq <0> \Rightarrow \exists f \in K[X]$ tal que $fs = 0$. Podemos tomar $f$ mónico, sin pérdida de generalidad, en cuyo caso, $s(n+m) = - \sum_{i=0}^{m-1} f_{i} s(n+i), \forall n \in \mathbb{N}$. En particular, $s(m) = -\sum_{i=0}^{m-1} f_{i}s(i)$ (estamos tomando $0 \in \mathbb{N}$). En este caso, a $s$ se le llama sucesión linealmente recursiva.
+
+\underline{Caso particular}: Tomamos $s(0) = s(1) = 1$, y $s(n+2) = s(n) = s(n+1)$ ($\Rightarrow m=2, f_{0} = f_{1} = -1$) $\Rightarrow x^{2} - x - 1 \in ann_{\mathbb{Q}[X]}(s) \rightarrow$ esta es la sucesión de FIbonacci.
+
+Sabemos que $\sfrac{K[X]}{ann_{K[X]}(s)} \cong K[X]s$ (por el teorema de isomorfia). Por tanto, $dim_{K}K[X]s \leq \infty \iff ann_{K[X]}(s) \neq <0> \iff s$ es linealmente recursiva.
+
+De hecho, si $ann_{K[X]}(s) \neq <0> \Rightarrow dim_{K} K[X]s$ es el grado del polinomio que genere a $ann_{K[X]}(s)$.
+
+Al generador de $ann_{K[X]}(s) = <p(x)>$ se le denomina polinomio mínimo de la sucesión $s$. En consecuencia, el grado de $p(x)$ es el número de coeficientes necesarios para determinar recursivamente $s$, y por ello se llama complejidad lineal de $s$. Si $ann_{K[X]}(s) = <0>$, la complejidad de $s$ es infinita.
+
+Supongamos que $s, t$ son sucesiones linealmente recursivas. Entonces \\ $K[X](s+t) \overset{\bigstar}{\subseteq} K[X]s \overset{\bigstar \bigstar} K[X]t$. Como $K[X]s$ y $K[X]t$ tienen dimensión finita, entonces $K[X](s+t)$ tiene dimensión finita $\Rightarrow s + t$ es linealmente recursiva y su complejidad lineal es menor o igual que la suma de las complejidades lineales de $s$ y de $t$.
+
+$\bigstar$ En general, $m, m' \in M \Rightarrow A(m + m') \subseteq Am + Am'$. \\
+$\bigstar \bigstar$ Suma de módulos.
+
+Llamamos ahora $S^{l} = \{s \in S \mid s$ es linealmente recursiva$\} \subseteq S$. Entonces $S^{l}$ es un $K[X]-$submódulo de $S$ (basta ver que es invariante por la acción de $x$.
+\end{example}
+
+\begin{example}
+$T: C^{\infty}(\mathbb{R}) \to C^{\infty}(\mathbb{R}), T(\varphi) = \varphi', \forall \varphi \in C^{\infty}(\mathbb{R})$. Como $T$ es lineal $\Rightarrow C^{\infty}(\mathbb{R})$ es un $\mathbb{R}[X]-$módulo.
+
+Dada $\varphi \in C^{\infty}(\mathbb{R}), ann_{\mathbb{R}[X]}(\varphi) = \{f(x) \in \mathbb{R}[X] \mid f(x) \cdot \varphi = 0\} \Rightarrow$ \\ $ann_{\mathbb{R}[X]}(\varphi) = \{f = \sum_{i=0}^{m} f_{i} \frac{d^{i}}{dt^{i}} \mid f \cdot \varphi = 0\}$.
+
+\underline{Nota}: Estamos viendo $f(x) \in \mathbb{R}[X]$ como un operador diferencial.
+
+En consecuencia, $ann_{\mathbb{R}[X]}(\varphi) \neq <0> \iff \varphi$ satisface una ecuación no trivial diferencial lineal, homogénea y con coeficientes constantes. Por el teorema de isomorfía, tenemos $\frac{\mathbb{R}[X]}{ann_{\mathbb{R}[X]}(\varphi)} \cong R[X]\varphi$ y, siguiendo el análisis del ejemplo anterior, tenemos $dim_{\mathbb{R}} \mathbb{R}[X]\varphi < \infty \iff ann_{\mathbb{R}[X]}(\varphi) \neq <0> \iff \varphi$ satisface una ecuación diferencial del tipo anterior.
+
+Llamamos a este tipo de funciones ``linealmnete diferenciables''. Análogamente al ejemplo anterior, puede obtenerse el polinomio máximo de $\varphi$.
+
+\underline{Caso particular}: $\varphi'' - \varphi' - \varphi = 0 \Rightarrow \varphi(t) = e^{\alpha t}$, con $\alpha = \frac{1 + \sqrt{5}}{2} \rightarrow$ análogo a la sucesión de Fibonacci.
+\end{example}
+
+\begin{definition}[Suma directa externa]
+Sean $_{A}M_{1}, ..., _{A}M_{t}$. El producto cartesiano $M_{1} \times ... \times M_{t}$ es un $A-$módulo con $(m_{1}, ..., m_{t}) + (m_{1}', ..., m_{t}') = (m_{1} + m_{1}', ..., m_{t} + m_{t}')$ (grupo producto) y $a(m_{1}, ..., m_{t}) = (am_{1}, ..., am_{t})$.
+
+Dicho módulo se llama suma directa externa de $M_{1}, ..., M_{t}$. Si $M_{1} = M_{2} = ... = M_{t}$, se emplea la notación $M^{t} = M \times \overset{(t)}{...} \times M$. \\
+En concreto, se puede formar el $A-$módulo $A^{t}$.
+\end{definition}
+
+\begin{task}
+Sea $_{A}M$, y $N_{1} + ... + N_{t} \in \mathcal{L}(_{A}M)$. \\
+Demostrar que existe un homomorfismo sobreyectivo de $A-$módulos $f: N_{1} \oplus ... \oplus N_{t} \to N_{1} + ... + N_{t}$, tal que $f$ es isomorfismo si, y sólo si la suma $N_{1} + ... + N_{t}$ es directa.
+
+\underline{Notación}: $N_{1} \oplus ... \oplus N_{t} \to N_{1} + ... + N_{t}$ denota la suma directa externa de $A-$módulo.
+
+\underline{Nota}: Consideramos $A^{n} = A \oplus \overset{(n)}{...} \oplus A$, y para cada $i \in \{1, ..., n\}$ definimos $e_{i} = (0, ..., 0, \overset{(i)}{1}, 0, ..., 0)$. Entonces $\{e_{i} \mid i \in \{1, ..., n\}\}$ es un sistema de generadores de $a = (a_{1}, ..., a_{n}) = \sum_{i=1}^{n} a_{i} e_{i}$, y la expresión es única.
+\end{task}
+
+\begin{proposition}
+Sea $_{A}M$ un módulo y $m_{1}, ..., m_{n} \in M$. Entones existe un único homomorfismo de módulos $f: A^{n} \to M$ tal que $f(e_{i}) = m_{i}, \forall i \in \{1, ..., n\}$. Como consecuencia, si $M$ es finitamente generado con generadores $\{m_{1}, ..., m_{n}\}$, entonces $M \cong \frac{A^{n}}{L}$, donde $L$ es cierto submódulo.
+\end{proposition}
+
+\begin{proof}
+\begin{itemize}
+\item Unicidad: Si existe una tal $f$, entonces para cada $a \in A^{n}$, se tiene $f(a) = f(\sum_{i} a_{i}e_{i}) = \sum_{i}^{n} a_{i} f(e_{i}) = \sum_{i=1}^{n} a_{i}m_{i}$.
+\item Existencia: Si definimos $f(a) = \sum_{i=1}^{n} a_{i}m_{i}$, lo cual podemos hacer por ser la expresión $a = \sum_{i=1}^{n} a_{i}e_{i}$ única, entonces $f$ verifica el enunciado.
+\item Consecuencia: Si $M = Am_{1} + ... + Am_{n} \Rightarrow f$ sobreyectiva $\Rightarrow$ tomando $L = Kerf$, el teorema nos garantiza que $M \cong \frac{A^{n}}{L}$.
+\end{itemize}
+\end{proof}
+
+\begin{definition}[SEC]
+Consideremos la sucesión:
+$$\{0\} \to L \overset{\alpha}{\to} M \overset{\beta}{\to} N \to \{0\}$$
+
+Esta sucesión es exacta en $L \iff Ker \alpha = \{0\} \iff \alpha$ inyectivo en $M \iff Ker \beta = Im \alpha$; y en $N \iff N = Im \beta \iff \beta$ sobreyectiva.
+
+Se dice que esta sucesión es una sucesión exacta corta (SEC, o SES en inglés) si es exacta en $L, M$ y $N$.
+\end{definition}
+
+\begin{example}
+Si $f: M \to N$ es un homomorfismo de módulos, la sucesión $\{0\} \to Ker f \overset{f}{\to} Im f \to \{0\}$ es una SEC.
+\end{example}
+
+\begin{proposition}
+Sea $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$ una SEC de $A-$módulo. Entonces:
+\begin{enumerate}
+\item Si $M$ es finamente generado (fg) $\Rightarrow N$ es fg.
+\item Si $L$ y $N$ son fg $\Rightarrow M$ es fg.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+\begin{enumerate}
+\item Sea $\{m_{1}, ..., m_{n}\}$ un conjunto de generadores de $M$. Es claro que $\{\varphi(m_{1}), ..., \varphi(m_{n})\}$ genera $N$ (por ser $\varphi$ sobreyectiva).
+
+\item Sea $\{n_{1}, ..., n_{s}\}$ un conjunto de generadores de $N$. Tomemos \\ $\{m_{1}, ..., m_{s}\} \subseteq M$ tales que $\varphi(m_{i}) = n_{i}, \forall i \in \{1, ..., s\}$. \\
+Sea ahora $\{l_{1}, ..., l_{t}\}$ un conjunto de generadores de $L$. Sea $m \in M$. Existe entonces una manera de expresar $\varphi(m) = \sum_{i=1}{s} r_{i}n_{i}$, al ser $\varphi(m) \in N$. Entonces $\varphi(m) = \sum_{i=1}^{s} r_{i}\varphi(m_{i}) = \varphi(\sum_{i=1}^{s} r_{i}m_{i}) \Rightarrow \varphi(m - \sum_{i=1}^{s} r_{i}m_{i}) = 0 \Rightarrow m - \sum_{i=1}^{s} r_{i}m_{i} \in Ker \varphi = Im \psi$. \\
+Existen entonces $b_{1}, ..., b_{t} \in A$ tales que $m - \sum_{i=1}^{t} r-{i}m_{i} =$ \\ $\sum_{j=1}^{t} b_{j} \psi(l_{j}) \Rightarrow m = \sum_{i=1}^{s} r_{i}m_{i} + \sum_{j=1}^{t} b_{j}\psi(l_{j}) \Rightarrow$ \\ $\{m_{1}, ..., m_{s}, \psi(l_{1}), ..., \psi(l_{t})\}$ es un sistema de generadores de $M$.
+\end{enumerate}
+\end{proof}
+
+\begin{example}
+Sea $I$ conjunto infinito y $K$ cuerpo. Consideramos $K^{I} = \{(\alpha_{i})_{i \in I} \mid \alpha_{i} \in K, \forall i\}$, que es un anillo.
+
+Consideramos ahora $K^{(I)} = \{(\alpha_{i})_{i \in I} \mid \alpha_{i} \in K$ y $\alpha_{i} = 0$ salvo para un número finito de índices$\}$. \\
+Entonces $K^{(I)}$ es un ideal de $K^{I}$ pero no es finitamente generado como ideal a izquierda de $K^{I}$.
+
+\underline{Nota}: \circled{$\Rightarrow$} Submódulos de módulos finitamente generados no pueden ser finitamente generados.
+
+\underline{Nota}: $K^{I}$ si es fintamente generado como módulo (pues es cíclico).
+
+\underline{Nota}: En la SEC $\{0\} \to L \to M \to N \to \{0\}$, se tiene
+$$M \text{ fg } \nRightarrow L \text {fg}$$
+\end{example}
+
+\newpage
+
+\section{Módulos Noetherianos y Artinianos}
+
+(Emmy Noether)
+
+\begin{definition}[Noetheriano]
+Un módulo $M$ se dice noetheriano si todo submódulo de $M$ es finitamente generado.
+
+En particular, debe ser $M$ fg.
+
+\underline{Ejemplo}: $K^{I}$ no es noetheriano.
+\end{definition}
+
+% 14/03/2022
+
+\begin{proposition}
+Para un módulo $M$, son equivalentes:
+\begin{enumerate}
+\item $M$ es noetheriano (todo submodulo es finitamente generado).
+\item Cada cadena $L_{1} \subseteq L_{2} \subseteq ... \subseteq L_{n} \subseteq ...$ de submódulos de $M$ se estabiliza, esto es, $\exists m \geq 1$ tal que $L_{m} = L_{n}, \forall n \geq m$ (Condición de cadena ascendente).
+\item Cada subconjunto no vacío de $\mathcal{L}(M)$ tiene un elemento maximal respecto del orden dado por la inclusión.
+\end{enumerate}
+
+Estamos viendo $\mathcal{L}(M)$ ordenado por inclusión.
+\end{proposition}
+
+\begin{proof}
+\underline{1. $\Rightarrow$ 2.}: $L := \cup_{n \geq 1} L_{n} \in \mathcal{L}(M)$, luego $L$ es finitamente generado. Si tomo un conjunto finito $F$ de generadores $L$, como está en $L$ y es finito, tiene que $\exists m \geq 1$ tal que $F \subseteq L_{m} \Rightarrow L \subseteq L_{m} \subseteq L \Rightarrow L = L_{m} \Rightarrow L_{m} = L_{n}, \forall n \geq m$.
+
+\underline{2. $\Rightarrow$ 3.}: Sea $\Gamma \subseteq \mathcal{L}(M)$ no vacío. Si $\Gamma$ no tiene elemento maximal, y tomo $L_{1} \in \Gamma$, existirá $L_{2} \in \Gamma$ tal que $L_{1} \subset L_{2}$ (inclusión estricta). Reiterando el proceso, obtengo una cadena infinita:
+$$L_{1} \subset L_{2} \subset ... \subset L_{n} \subset ... \text{ (inclusiones estrictas)}$$
+Hemos demostrado que (No 3. $\Rightarrow$ No 2.) $\Rightarrow$ (2. $\Rightarrow$ 3.).
+
+\underline{3. $\Rightarrow$ 1.}: Sea $N \in \mathcal{L}(M)$. Tomo $\Gamma$ el conjunto de todos los submodulos finitamente generados de $N$, $\{0\} \in \Gamma \Rightarrow \Gamma \neq \emptyset$. Como to subconjunto no vacío de $\mathcal{L}(M)$ tiene un elemento maximal, $\exists L \in \Gamma, L$ maximal. Afirmo que $L = N$. En caso contrario, tomo $x \in N$ tal que $x \notin L$. Resulta que $L + Ax$ es un submódulo de $N$, y además es finitamente generado, ya que $L$ es finitamente generado al estar en $\Gamma$. Por lo que $L + Ax \in \Gamma$ y $L \neq L + Ax \Rightarrow L$ no es maximal $\Rightarrow$ Contradicción $\Rightarrow L = N$.
+\end{proof}
+
+\begin{proposition}
+Sea $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$ un s.e.c. de módulos.
+$$M \text{ es noetheriano } \iff L \text{ y } N \text{ son noetherianos.}$$
+\end{proposition}
+
+\begin{proof}
+\circled{$\Rightarrow$} $L \cong Im \psi \underset{\text{submódulo}}{\leq} M \Rightarrow$ L es noetheriano (ya que $L$ es noetheriano).
+
+Tomo $N_{1} \subseteq N_{2} \subseteq ... \subseteq N_{n} \subseteq ...$ cadena en $\mathcal{L}(N)$. Tengo $\varphi^{-1}(N_{1}) \subseteq \varphi^{-1}(N_{2}) \subseteq ... \subseteq \varphi^{-1}(N_{n}) \subseteq ...$ cadena en $\mathcal{L}(M)$ (ya que la imagen inversa de un submódulo por un homomorfismo es un submódulo) $\Rightarrow \exists m \geq 1$ tal que $\varphi^{-1}(N_{n}) = \varphi^{-1}(N_{m}), \forall n \geq m \Rightarrow N_{n} = \varphi(\varphi^{-1}(N_{n})) = \varphi(\varphi^{-1}(N_{m})) = N_{m}, \forall n \geq m \Rightarrow N$ es noetheriano.
+
+\circled{$\Leftarrow$} Tomo una cadena en $\mathcal{L}(M)$:
+$$M_{1} \subseteq M_{2} \subseteq ... \subseteq M_{n} \subseteq ...\Rightarrow \varphi(M_{1}) \subseteq \varphi(M_{2}) \subseteq ... \subseteq \varphi(M_{n}) \subseteq ...$$
+en $\mathcal{L}(N)$.
+$$M_{1} \cap Im \psi \subseteq M_{2} \cap Im \psi \subseteq ... \subseteq M_{n} \cap Im \psi \subseteq ...$$
+en $\mathcal{L}(Im \psi)$.
+
+Como $Im \psi \cong L$ y $N$ son noetherianos, $\exists m \geq 1$ tal que $\varphi(M_{n}) = \varphi(M_{m}) \Rightarrow Im \psi \cap M_{n} = Im \psi \cap M_{m}$ para $n \geq m$. \\
+Tomo $x \in M_{n} \Rightarrow \varphi(x) \in \varphi(M_{n}) = \varphi(M_{m})$ tomo $y \in M_{m}$ tal que $\varphi(x) = \varphi(y) \Rightarrow x-y \in Ker \varphi = Im \psi \Rightarrow x - y \in M_{n} \cap Im \psi = M_{m} \cap Im \psi \Rightarrow x - y \in M_{m} \Rightarrow x \in M_{m} \Rightarrow M_{n} \subseteq M_{m} \subseteq M_{n} \Rightarrow M_{n} = M_{m} \Rightarrow M$ es noetheriano.
+\end{proof}
+
+\begin{corollary}
+Dados dos módulos $M_{1}, M_{2}$, entonces:
+$$M_{1} \oplus M_{2} \text{ noetheriano } \iff M_{1}, M_{2} \text{ noetherianos}$$
+\end{corollary}
+
+\begin{proof}
+Tengo la SEC:
+\begin{equation*}
+\begin{aligned}
+0 & \to & M_{1} & \to & M_{1} \oplus M_{2} & \to & M_{2} & \to & 0 \\
+ & \ & m_{1} & \mapsto & (m_{1}, 0) &  & &  &  \\
+ & \ &  &  & (m_{1}, m_{2}) & \mapsto & m_{2} &  &
+\end{aligned}
+\end{equation*}
+\end{proof}
+
+\begin{theorem}
+Sea $A$ un anillo. Cada $A-$módulo finitamente generado es noetheriano si, y sólo si, $_{A}A$ es noetheriano.
+\end{theorem}
+
+\begin{proof}
+\circled{$\Rightarrow$} Obvio, ya que si todos los finitamente generados son noetherianos, $_{A}A$ que es finitamente generado es noetheriano.
+
+\circled{$\Leftarrow$} $_{A}M$ finitamente generado $\Rightarrow \exists$ un homomorfismo sobreyectivo de módulos: $0 \to Ker \to A^{n} \to M \to 0$ para cierto $n$ (el número de generadores). Por la proposición anterior, si $A^{n}$ es noetheriano, también lo es $M$.
+
+Usando inductivamente el corolario, tengo que $A^{n}$ es noetheriano. Para $A$ es hipótesis, y para $A^{n} = A^{n-1} \oplus A$, por lo que, por la proposición, $M$ es noetheriano.
+\end{proof}
+
+\begin{definition}
+$A$ se dice noetheriano a izquierda si $_{A}A$ es noetheriano.
+\end{definition}
+
+\begin{corollary}
+Si $_{A}A$ es noetheriano, son equivalentes para cualquier sucesión exacta corta (SEC):
+$$0 \to L \to M \to N \to 0$$
+
+\begin{enumerate}
+\item $M$ finitamente generado.
+\item $L$ y $N$ finitamente generado.
+\end{enumerate}
+\end{corollary}
+
+\begin{corollary}
+Todo DIP es noetheriano.
+\end{corollary}
+
+% 15/03/2022
+
+\begin{lemma}
+Para un módulo $M$, son equivalentes:
+\begin{enumerate}
+\item Cada cadena $L_{1} \supseteq L_{2} \supseteq \dots \supseteq L_{n} \supseteq \dots$ de submódulos de $M$ se estabiliza, esto es, $\exists m \geq 1$ tal que $L_{n} = L_{m}, \forall n \geq m$.
+\item Cada subconjunto no vacío de $\mathcal{L}(M)$ tiene un elemento minimal.
+\end{enumerate}
+
+\underline{Demostración}: Ejercicio.
+\end{lemma}
+
+\begin{definition}[Módulos artinianos]
+Un módulo $M$ se dice artiniano si satisface $(1)$.
+\end{definition}
+
+\begin{example}
+Sea $A$ un dominio de integridad conmutativo. Si $_{A}A$ es artiniano $\Rightarrow A$ es un cuerpo.
+
+\underline{Demostración:} Ejercicio.
+
+En particular, $\mathbb{Z}$ no es artiniano. $\mathbb{Z}$ si era noetheriano (por el corolario anterior). Por lo que artiniano no implica noetheriano, ni viceversa.
+\end{example}
+
+\begin{task}
+$K$ cuerpo de característica 0. Tomo $K[X]$ anillo de polinomios. Veo $K[X]$ como $K-$e.v. Tengo la aplicación lineal $T: K[X] \to K[X], T(f) = f'$. Eso me da una estructura de $K[X]-$módulo sobre $K[X]$ que no es la de módulo regular.
+
+Demostrar que ese módulo es artiniano y no finitamente generado.
+
+\underline{Consecuencia}: Este no es el $K[X]-$módulo regular.
+\end{task}
+
+\begin{proposition}
+Sea $0 \to L \to M \to N \to 0$ una sec. Entonces $M$ es artiniano $\iff M$ y $N$ artinianos.
+\end{proposition}
+
+\begin{proof}
+Se obtiene siguiendo los pasos de la del caso noetheriano.
+\end{proof}
+
+\begin{task}
+Sea $p$ un número primo.
+$$C_{p^{\infty}} = \{z \in \mathbb{C} \mid z^{p^{n}} = 1 \text{ para algún } n \geq 1\}$$
+
+Comprobar que $C_{p^{\infty}}$ es un subgrupo de $U(1) = \{z \in \mathbb{C} \mid |z| = 1\}$ (circunferencia unidad).
+
+Veo el grupo abeliano $C_{p^{\infty}}$ como un $\mathbb{Z}-$módulo. \\
+Demostrar que $C_{p^{\infty}}$ es artiniano, pero no finitamente generado.
+\end{task}
+
+\newpage
+
+\section{Módulos de Longitud Finita}
+
+\begin{definition}[Serie de composición]
+Sea $M$ un módulo. Una seria de composición de $M$ es una cadena de submódulos:
+$$M = M_{n} \supset M_{n-1} \supset ... \supset M_{1} \supset M_{0} = \{0\}$$
+(inclusiones estrictas) tal que si $M_{i} \supseteq N \supseteq M_{i-1}$, para $N$ submódulo $\Rightarrow N = M_{i}$ ó $N = M_{i-1}, \forall i \in \{1, ..., n\}$. \\
+Es decir, entre cada dos submódulos, no cabe ninguno más.
+
+$n$ es la longitud de la serie.
+\end{definition}
+
+\begin{example}
+Serie de composición de $\mathbb{Z}_{12}$ (como $\mathbb{Z}-$módulo).
+$$M = \mathbb{Z}_{12} = \{0, 1, ..., 11\}$$
+
+$\mathbb{Z}_{12} \supset \underset{\text{Orden 6}}{<2>} \supset \underset{\text{Orden 3}}{<4>} \supset <0> = M_{3} \supset M_{2} \supset M_{1} \supset M_{0}$
+\end{example}
+
+\begin{definition}[Módulo simple]
+Un módulo se dice simple si $M \supset \{0\}$ es una serie de composición.
+
+En la definición de Serie de composición, si $M_{i} \supseteq N \supseteq M_{i-1}$, para $N$ submódulo $\Rightarrow N = M_{i}$ ó $N = M_{i-1}, \forall i \in \{1, ..., n\} \Rightarrow \frac{M{i}}{M_{i-1}}$ es simple $\forall i \in \{1, ..., n\}$.
+
+Para un módulo $M$, todas sus series de composición tienen los mismos factores $\frac{M_{i}}{M_{i-1}}$, pero pueden cambiar de orden, obteniendo series distintas.
+\end{definition}
+
+\begin{proposition}
+Un módulo no nulo admite una serie de composición si, y sólo si, es noetheriano y artiniano.
+\end{proposition}
+
+\begin{proof}
+\circled{$\Rightarrow$} Sea $M = M_{n} \supset M_{n-1} \supset ... \supset M_{1} \supset M_{0} = \{0\}$ s.c. (serie de composición). Razonamos por inducción sobre $n$.
+\begin{itemize}
+\item $n = 1 \Rightarrow M$ simple $\Rightarrow M$ noetheriano y artiniano.
+\item $n > 1 \Rightarrow M_{n-1}$ admite una serie de composición de longitud $n-1$, $M_{n-1} \supset ... \supset M_{1} \supset M_{0} = \{0\}$, por lo que $M_{n-1}$ es noetheriano y artiniano (hipótesis de inducción).
+$$0 \to \underset{\text{noetheriano y artiniano}}{M_{n-1}} \to M_{n} \to \underset{\text{noetheriano y artiniano}}{\frac{M_{n}}{M_{n-1}}} \to 0 \text{ sec}$$
+Por lo que $M_{n}$ es noetheriano y artiniano.
+\end{itemize}
+
+\circled{$\Leftarrow$} $M$ artiniano $\Rightarrow$ contiene al menos un submódulo simple, $M_{1}$. Hay $M_{2} \supset M_{1}$ tal que $\frac{M_{2}}{M_{1}}$ es simple. \\
+Reiteramos el proceso, y tenemos $\{0\} \subset M_{1} \subset M_{2} \subset ...$. Como $M$ es noetheriano, esta cadena termina cuando lleguemos a $M$, es decir, tenemos:
+$$\{0\} \subset M_{1} \subset M_{2} \subset ... \subset M_{n-1} \subset M_{n} = M$$
+\end{proof}
+
+% 16/03/2022
+
+\begin{corollary}
+Dada SER $0 \to L \to M \to N \to 0, L$ y $N$ admiten una serie de composición $\iff M$ admite serie de composición.
+\end{corollary}
+
+\begin{corollary}
+Dos módulos $M_{1}, M_{2}$ admiten serie de composición $\iff M_{1} \oplus M_{2}$ admite serie de composición.
+\end{corollary}
+
+\begin{theorem}[Jordan-Hölder]
+Supongamos que $M$ módulo admite series de composición:
+$$\{0\} = M_{0} \subset M_{1} \subset ... \subset M_{n} = M$$
+$$\{0\} = N_{0} \subset N_{1} \subset ... \subset N_{k} = M$$
+
+Entonces $n = k$ y además existe una permutación $\sigma: \{1, ..., n\} \to \{1, ..., n\}$ tal que $\frac{M_{i}}{M_{i-1}} \cong \frac{N_{\sigma(i)}}{N_{\sigma(i)-1}}, i \in \{1, ..., n\}$.
+\end{theorem}
+
+\begin{proof}
+Por inducción sobre $n$.
+\begin{itemize}
+\item $n = 1 \Rightarrow M$ simple $\Rightarrow m = 1$. Sólo hay una permutación, y por tanto $\frac{M}{\{0\}} \cong \frac{M}{\{0\}}$.
+\item Si $n > 1 \Rightarrow M$ no es simple $\Rightarrow m > 1$. Distinguimos dos casos:
+\begin{enumerate}[label=\underline{Caso \alph*}:]
+\item Si $N_{m-1} = M_{n-1}$:
+\begin{equation*}
+M_{n} = N_{m} \supset M_{n-1} = N_{m-1} \supset
+\begin{cases}
+M_{n-2} \supset ... \supset M_{1} \\
+N_{m-2} \supset ... \supset N_{1}
+\end{cases}
+\supset \{0\}
+\end{equation*}
+Por inducción $m-1 = n-1$ y $\exists \sigma: \{1, ..., n-1\} \to \{1, ..., m-1\}$ tal que $\frac{M_{i}}{M_{i-1}} \cong \frac{N_{i}}{N_{i-1}}, i \in \{1, ..., n-1\} \Rightarrow n = m$ y amplio $\sigma(m) = n$.
+
+\item Si $N_{m-1} \neq M_{n-1}$:
+\begin{equation*}
+M_{n} = N_{m} \supset
+\begin{cases}
+M_{n-1} \supset ... \subset M_{1} \\
+N_{m-1} \supset ... \supset N_{1}
+\end{cases}
+\supset \{0\}
+\end{equation*}
+Entonces $M_{n-1} + N_{m-1} = M$, ya que $M_{n-1} \subset M_{n-1} + N_{m-1} \subseteq M$.
+
+Tomo $N_{m-1} \cap M_{n-1} \subset M$, por lo que admite una serie de composición.
+$$\{0\} = L_{0} \subset \dots \subset L_{k} = N_{m-1} \cap M_{n-1}$$
+Usamos el Teorema de Isomorfía:
+$$\frac{M}{N_{m-1}} = \frac{M_{n-1} + N_{m-1}}{N_{m-1}} \cong \frac{M_{n-1}}{N_{m-1} \cap M_{n-1}}$$
+Como $\frac{M}{N_{m-1}}$ es simple, entonces $\frac{M_{n-1}}{N_{m-1} \cap M_{n-1}}$ es simple.
+
+Podemos construir otra serie de composición:
+\begin{scriptsize}
+\begin{equation*}
+M_{n} = N_{m} \supset
+\begin{cases}
+M_{n-1} \\
+N_{m-1}
+\end{cases}
+\supset L_{k} = M_{n-1} \cap N_{m-1} \supset L_{k-1} \supset \dots \supset L_{1} \supset \{0\}
+\end{equation*}
+\end{scriptsize}
+
+Por inducción, $n-1 = k+1$ y $\exists \tau: \{1, ..., n-1\} \to \{1, ..., n-1\}$ tal que $\frac{L_{i}}{L_{i-1}} \cong \frac{M_{\tau(i)}}{M_{\tau(i)-1}}, i \in \{1, \dots, n-2\}$, y $\frac{M_{n-1}}{L_{n-2}} \cong \frac{M_{\tau(n-1)}}{M_{\tau(n-1)-1}}$.
+
+Volvemos a tener:
+$$\frac{M}{N_{m-1}} = \frac{N_{m-1} + M_{n-1}}{M_{n-1}} \cong \frac{N_{m-1}}{N_{m-1} \cap M_{n-1}}$$
+Como $\frac{M}{N_{m-1}}$ es simple, $\frac{N_{m-1}}{N_{m-1} \cap M_{n-1}}$ es simple.
+
+Volvemos a aplicar inducción, y tenemos $m-1 = n-1$ y $\exists \rho: \{1, \dots, n-1\} \to \{1, \dots, n-1\}$ tal que $\frac{L_{i}}{L_{i-1}} \cong \frac{N_{\rho(i)}}{N_{\rho(i)-1}},$ \\ $i \in \{1, \dots, n-2\}$.
+
+$$\frac{N_{n-1}}{L_{n-2}} \cong \frac{N_{\rho(n-1)}}{N_{\rho(n-1)-1}}$$
+
+Defino $\sigma: \{1, \dots, n\} \to \{1, \dots, n\}$ como:
+\begin{small}
+\begin{equation*}
+\sigma(i) =
+\begin{cases}
+\rho \tau^{-1} (i) & \text{ si } i \in \{1, \dots, n-1\} \text{ y } \tau^{-1}(i) \in \{1, \dots, n-2\} \\
+n & \text{ si } i \in \{1, \dots, n-1\} \text{ y } \tau^{-1}(i) = n-1 \\
+\rho(n-1) & \text{ si } i = n
+\end{cases}
+\end{equation*}
+\end{small}
+y $\frac{M_{i}}{M_{i-1}} \cong \frac{N_{\sigma(i)}}{N_{\sigma(i)-1}}$.
+\end{enumerate}
+\end{itemize}
+\end{proof}
+
+\begin{definition}
+Un módulo $M$ se dice de longitud finita si admite una serie de composición o si es $\{0\}$. \\
+La longitud de $M$, notación $l(M)$ es la de cualquiera de sus series de composición si $M \neq \{0\}$, ó $l(\{0\}) = 0$.
+\end{definition}
+
+\begin{task}
+Sea $M$ de longitud finta. Demostrar:
+\begin{enumerate}
+\item Si $0 \to L \to M \to N \to 0$ sucesión exacta corta, entonces
+$$l(M) = l(N) + l(L)$$
+\item Si $U, V \in \mathcal{L}(M)$, entonces 
+$$l(U + V) = l(U) + l(V) - l(U \cap V)$$
+\end{enumerate}
+\end{task}
+
+\begin{example}
+\begin{itemize}
+\item $l(\mathbb{Z}_{12}) = 3$.
+\item $l(\mathbb{Z}_{13}) = 1$.
+\item $l(\mathbb{Z}_{n}) =$ suma de los exponentes de su descomposición en primos.
+\end{itemize}
+
+¿Cuántas series de composición distintas tienen?
+\begin{itemize}
+\item $\mathbb{Z}_{12} \rightarrow 3$.
+\item $\mathbb{Z}_{4} \rightarrow 1$.
+\end{itemize}
+
+Si $n = p_{1}^{e_{1}} \dots p_{t}^{e_{t}}$:
+$$\mathbb{Z}_{n} \cong \mathbb{Z}_{p_{1}^{e_{1}}} \oplus \dots \oplus \mathbb{Z}_{p_{t}^{e_{t}}}$$
+\end{example}
+
+% 17/03/2022
+
+\begin{definition}
+Sea $_{A}M$ un módulo, y $\mathcal{L}(M)$ el conjunto de todos los submódulos de $M$. \\
+Dado $\Gamma_{A} \subseteq \mathcal{L}(M), \cap_{N \in \Gamma} N \in \mathcal{L}(M)$.
+\end{definition}
+
+\underline{Nota}: Puede ocurrir que $\cap_{N \in \Gamma} N \notin \Gamma$.
+
+\underline{Ejemplo}: $\cap_{n \in \mathbb{Z}, n \neq 0} n \mathbb{Z} = \{0\}$.
+
+\begin{definition}[Zócalo]
+El zócalo de $M$ es el menor submódulo de $M$ que contiene a todos los submódulos simples de $M$. \\
+Si $M$ no contiene ningún simple, definimos su zócalo como $\{0\}$.
+
+En ambos casos, usaremos la notación $Soc(M)$.
+\end{definition}
+
+\begin{example}
+Si $V$ es un $K-$espacio vectorial, $Soc(V) = V$ (los simples de un e.v. son los de dimensión 1, y si tiene que contener a todas las rectas, tiene que contener a todo el espacio).
+\end{example}
+
+\begin{example}
+$Soc(\mathbb{Z}) = \{0\}$ ($\mathbb{Z}$ no tiene submódulos simples, los submódulos de $\mathbb{Z}$ son de la forma $n\mathbb{Z}$, y $mn\mathbb{Z}$ es un submódulo de este).
+\end{example}
+
+\begin{example}
+Si $A$ es un DI que no es un cuerpo, $Soc(A) = \{0\}$ (los submódulos de $A$ distintos de $\{0\}$ son ideales que contienen un elemento de 0, por lo que también contienen al cuadrado de este elemento [...]).
+\end{example}
+
+\underline{Ejercicio}: Demostrar este último ejemplo.
+
+\begin{proposition}
+Sea $M$ de longitud finita ($\Rightarrow$ noetheriano y artiniano). Existen submódulos simples $S_{1}, \dots, S_{n}$ de $M$ tal que:
+$$Soc(M) = S_{1} \dotplus \dots \dotplus S_{n}$$
+Además, si existe otra descomposición $Soc(M) = T_{1} \dotplus \dots \dotplus T_{m},$ con $T_{i} \in \mathcal{L}(M)$, entonces $n = m$ y, tras reordenación, $S_{i} \cong T_{i}, i \in \{1, ..., n\}$.
+\end{proposition}
+
+\begin{proof}
+Sea $\Gamma$ el conjunto de todos los submódulos de $M$ de la forma $S_{1} \dotplus \dots \dotplus S_{t}$, con $S_{i} \in \mathcal{L}(M)$ simple. \\
+Si $M \neq \{0\}$, entonces $\Gamma$ es no vacío, ya que $M$ contiene algún simple, y como es noetheriano, contiene un elemento $S_{1} \dotplus \dots \dotplus S_{n} \in \Gamma$ maximal. \\
+$S_{1} \dotplus \dots \dotplus S_{n} \subseteq Soc(M)$, ya que todos ellos son simples y, al ser $Soc(M)$ un submódulo, la suma directa también pertenece.
+
+Sea $S \in \mathcal{L}(M)$ simple.
+\begin{equation*}
+S \cap (S_{1} \dotplus \dots \dotplus S_{n}) =
+\begin{cases}
+\{0\} \rightarrow \circled{1} \\
+S \rightarrow \circled{2}
+\end{cases}
+\end{equation*}
+
+\circled{1} $\Rightarrow S \dotplus S_{1} \dotplus \dots \dotplus S_{n} \in \Gamma \Rightarrow S_{1} \dotplus \dots \dotplus S_{n}$ no es maximal. \\
+\circled{2} $\Rightarrow S \subseteq S_{1} \dotplus \dots \dotplus S_{n}$, y teníamos $S_{1} \dotplus \dots \dotplus S_{n} \subseteq Soc(M) \Rightarrow S_{1} \dotplus \dots \dotplus S_{n} = Soc(M)$.
+
+Para la segunda parte, tenemos:
+$$\{0\} \subset S_{1} \subset S_{1} \dotplus S_{2} \subset \dots \subset S_{1} \dotplus \dots \dotplus S_{n} = Soc(M)$$
+es una serie de composición, ya que $\frac{S_{1} \dotplus \dots \dotplus S_{n}}{S_{1} \dotplus \dots \dotplus S_{i-1}} \cong S_{i}$. Hay otra serie de composición para $T_{i}$. Aplicamos Jordan-Hölder.
+\end{proof}
+
+\begin{definition}
+Suponemos $M$ de longitud finita. Decimos que $M$ es semi-simple si:
+$$M = \{0\} \text{ ó } Soc(M) = M \text{ si } M \neq \{0\}$$
+\end{definition}
+
+\begin{task}
+$A$ DIP, $I$ ideal de $A$ (no cuerpo). Demostrar que:
+$$\frac{A}{I} \text{ es de longitud finita }\iff I \neq <0>$$
+
+¿Puedo deducir quién es la longitud de $\frac{A}{I}$ de un generador de $I$?
+\end{task}
+
+\newpage
+
+\section{Estructura de módulos de longitud finita sobre un DIP}
+
+Durante todo el tema, $A$ es un DIP (Dominio de Integrales Principales).
+
+\begin{lemma}
+Un módulo $_{A}M$ es de longitud finita $\iff _{A}M$ es finitamente generado y acotado ($Ann(_{A}M) \neq 0$).
+\end{lemma}
+
+\begin{proof}
+Suponemos $M \neq \{0\}$.
+
+\circled{$\Rightarrow$} $_{A}M$ longitud finita $\Rightarrow _{A}M$ finitamente generado (Longitud finita $\Rightarrow$ Noetheriano + Artiniano, Noetheriano $\Rightarrow$ finitamente generado) $\Rightarrow M = Am_{1} + \dots + Am_{n}, m_{i} \in M$.
+$$<\mu> = Ann_{A}(M) = \bigcap_{i=1}^{n} ann_{A}(m_{i})^{\bigstar} \hspace{0.2cm} (A \text{ conmutativo}).$$
+$$ann_{A}(m_{i}) = <f_{i}>, f_{i} \in A$$
+$$\bigstar = \bigcap_{i=1}^{n} <f_{i}> \Rightarrow \mu = mcm(f_{1}, \dots, f_{n})$$
+
+Queremos ver que $f_{i} \neq 0, \forall i \in \{0, \dots, n\}$.
+$$M \supseteq Am_{i} \cong \frac{A}{<f_{i}>} \Rightarrow l(Am_{i}) < \infty \overset{A \text{ no cuerpo}}{\Rightarrow} <f_{i}> \neq 0 \Rightarrow$$
+$$\Rightarrow \mu \neq 0 \Rightarrow M \text{ acotado.}$$
+
+\circled{$\Leftarrow$} Como $M$ es fintamente generado $\Rightarrow M = Am_{1} + \dots + Am_{n}$. Veo que cada $Am_{i}$ es de longitud finita usando el mismo razonamiento que en el apartado anterior:
+$$0 \neq <\mu> = \bigcap_{i=1}^{n}<f_{i}> \Rightarrow <f_{i}> \neq 0$$
+$\Rightarrow Am_{i} \cong \frac{A}{<f_{i}>}$ es de longitud finita.
+$$Am_{1} \oplus \dots \oplus Am_{n} \rightarrow Am_{1} + \dots + Am_{n} \text{ epimorfismo } \Rightarrow$$
+$$\Rightarrow Am_{1} + \dots Am_{n} \text{ tiene long finita}$$
+\end{proof}
+
+\underline{Nota}: $l(_{A}M) < \infty \Rightarrow <\mu> = Ann_{A}(M) \neq <0> \Rightarrow M = M_{1} \dotplus \dots \dotplus M_{t}$ descomposición primaria, $M_{i} =$ componente $p_{i}-$primaria que viene de $\mu = p_{1}^{e_{1}} \dots p_{t}^{e_{t}}$ descomposición completa ($M_{i} = \{m \in M \mid p_{i}^{e_{i}}m = 0\})$. \\
+$M_{i}$ finitamente generado. ¿Se puede desomponer como $\dotplus$ de submodulos indescomponibles?
+
+% 21/03/2022
+
+\begin{corollary}[Resumen]
+
+$A$ DIP, $_{A}M$ acotado, $<\mu> = Ann_{A} (M), \mu \neq 0$. \\
+$M \neq \{0\}, \mu = p_{1}^{e_{1}} \dots p_{t}^{e_{t}}, p_{i} \in A$ irreducibles.
+$$M = M_{1} \dotplus \dots \dotplus M_{t}$$
+$M_{i} = \{q_{i}m: m \in M\} = \{m \in M: p_{i}^{e_{i}}m = 0\} = \{m \in M: a_{i}q_{i}m=m\}$.
+$$q_{i} = \frac{\mu}{p_{i}^{e_{i}}} \hspace{1cm} \sum_{i=1}^{t} a_{i}q_{i} = 1$$
+\end{corollary}
+
+\begin{definition}
+$_{A}M$ $p-$primario si $Ann_{A}(M) = <p^{e}> (p \in A$ irreducible).
+\end{definition}
+
+Queremos ver como es la estructura de módulos primarios para módulos de longitud finita.
+
+\underline{Observación}: Vamos a suponer que $_{A}M$ es $p-$primario con $l(_{A}M < \infty$. Entonces $Ann_{A}(M) = <p^{t}>$ (una potencia de $p$). Si tomamos $m \in M, m \neq 0$, entonces $ann_{A}(M)$ está generado por un elemento de $A$, pero también sabemos que $ann_{A}(m) \supseteq Ann_{A}(M) = <p^{t}>$. Entonces $ann_{A}(m) = <p^{r}>$, con $r \leq t$.
+
+\underline{Nota}: $<f> \subseteq <g> \iff g \mid f$.
+
+$M = Am_{1} + \dots + Am_{n} \Rightarrow <p^{t}> = ann_{A}(m_{1}) \cap \dots \cap ann_{A}(m_{n}) = <p^{r_{1}}> \cap \dots \cap <p^{r_{n}}>, r_{i} \leq t \Rightarrow <p^{t}> = ann_{A}(m_{i})$ para algún $i$.
+
+\begin{corollary}
+Si un módulo es $p-$primario y tiene longitud finita, entonces $\exists x \in M$ tal que $Ann_{A}(M) = ann_{A}(x)$.
+\end{corollary}
+
+\begin{lemma}
+$_{A}M$ módulo con $l(M) < \infty$, $M$ $p-$primario. Para $m \in M, m \neq 0$:
+$$Am \text{ simple } \iff ann_{A}(m) = <p>$$
+
+Como consecuencia:
+$$Soc(M) = \{m \in M: pm = 0\}$$
+\end{lemma}
+
+\begin{proof}
+\circled{$\Rightarrow$} $Am \cong \frac{A}{ann_{A}(m)}$
+
+Si $Am$ es simple $\Rightarrow ann_{A}(m)$ es ideal maximal, y $ann_{A}(m) \supseteq Ann_{A}(M) =$ \\ $= <p^{t}> \Rightarrow ann_{A}(m) = <p>$.
+
+\underline{Recordatorio}: Los ideales maximales de un DIP están generados por los elementos. irreducibles del DIP.
+
+\circled{$\Leftarrow$} Si $ann_{A}(m) = <p> \Rightarrow Am \cong \frac{A}{<p>}$ simple.
+
+Por último, nos queda ver la consecuencia. Para ello, tomamos $Soc(M) = S_{1} \dotplus \dots \dotplus S_{n}$, con $S_{i}$ simple, y $m \in Soc(M)$. Entonces:
+$$ann_{A}(M) \supseteq Ann_{A}(S_{1} \dotplus \dots \dotplus S_{n}) = Ann_{A}(S_{1}) \cap \dots \cap Ann_{A}(S_{n})$$
+y como $S_{i}$ es simple, tenemos $Ann_{A}(S_{i}) = ann_{A}(s_{i})$, con $s_{i} \in S_{i}$. Como $S_{i}$ es simple, $S_{i} = AS_{i} \Rightarrow AS_{i} \cong \frac{A}{ann_{A}(S_{i})}$, y como $AS_{i}$ es simple, entonces $ann_{A}(S_{i})$ es maximal, y por tanto $ann_{A}(S_{i}) = <p>$ y, por tanto:
+$$ann_{A}(m) \supseteq <p> \Rightarrow p \cdot m = 0$$
+
+Tomo ahora $m \in M, m \neq 0$ tal que $p \cdot m = 0$. Esto significa que $<p> \subseteq ann_{A}(m) \Rightarrow <p> \overset{\bigstar}{=} ann_{A}(m) \Rightarrow Am \cong \frac{A}{ann_{A}(m)} = \frac{A}{<p>} \Rightarrow Am$ simple $\Rightarrow Am \subseteq Soc(M) \Rightarrow m \in Soc(M)$.
+
+$\bigstar p$ irreducible y $ann_{A}(m)$ es ideal y no es el total $\Rightarrow <p> = ann_{A}(m)$.
+\end{proof}
+
+\begin{proposition}
+Sea $M$ módulo $p-$primario con $l(M) < \infty$. Tomamos $x \in M$ tal que $Ann_{A}(M) = ann_{A}(x)$. \\
+Entonces el submódulo cíclico $Ax$ es un sumando directo (interno) de $M$. Es decir, $M = Ax + N$ ($N$ es otro elemento).
+\end{proposition}
+
+\begin{proof}
+Por inducción sobre $l(M)$.
+\begin{itemize}
+\item Si $l(M) = 1 \Rightarrow M$ es simple $\Rightarrow M = Ax$.
+\item Si $l(M) > 1$ y $Ax = M$, no hay nada que demostrar. Supongo que $Ax \neq M$. \\
+Vamos a demostrar que $\exists y \in M$ tal que $y \notin Ax$ y $ann_{A}(y) = <p>$.
+
+$\frac{M}{Ax}$ es un módulo finitamente generado, $l(\frac{M}{Ax}) < \infty$. Entonces contiene algún simple $S \subseteq \frac{M}{Ax}$. Tomo $s \in S$ tal que $S = As$.
+$$<p^{t}> = Ann_{A}(M) \subseteq Ann_{A}(\frac{M}{Ax}) \subseteq Ann_{A}(S) = ann_{A}(s)$$
+$$\Rightarrow ann_{A}(s) = <p>$$
+Tomo $z \in M$ tal que $s = z + Ax \Rightarrow pz \in Ax \Rightarrow pz = ax$ para cierto $a \in A$. Afirmo que $p \mid a$. De lo contrario, por Bezout tenemos $1 = ua + vp$ para ciertos $u, v \in A$. Así, $x = uax + vpx = upz + vpx = p(uz + vx)$. Tenemos $uz + vx \in M$, y $M$ es un módulo primario, por lo que $ann_{A}(uz + vx) = <p^{t'}>$, para algún $t' \leq t$. Deduzco que $p^{t'-1}x = 0$, ya que $x = p(uz + vx)$. Por tanto, $p^{t-1}x = 0$, pero $ann_{A}(x) = <p^{t}>$. Acabamos de encontrar un exponente más pequeño que anula a $x$ (contradicción). Por tanto, $p \mid a$.
+
+% 22/03/2022
+
+Otra forma de ver que $p \mid a$ es: $p^{t-1}ax = p^{t}z = 0 \Rightarrow p^{t-1}a \in ann_{A}(x) = <p^{t}> \Rightarrow a = pa'$. \\
+Así tengo $pz = pa'x \Rightarrow p(z - a'x) = 0$. Llamo $y = z-a'x \neq 0$ y $py = 0 \Rightarrow ann_{A}(y) = <p>$.
+
+$Ay$ es simple, e $y \notin Ax \Rightarrow Ay \cap Ax = \{0\}$. Entonces $Ax \cong \frac{Ax}{Ay \cap Ax} \cong \frac{Ax + Ay}{Ay} = A(x + Ay) \subseteq \frac{M}{Ay}$.
+\begin{scriptsize}
+$$<p^{t}> = ann_{A}(x) = Ann_{A}(A(x + Ay)) \supseteq Ann_{A}(\frac{M}{Ay}) \supseteq Ann_{A}(M) = <p^{t}>$$
+\end{scriptsize}
+$\frac{M}{Ay}$ y $x + Ay$ satisfacen $Ann_{A}(\frac{M}{Ay}) = <p^{t}> = ann_{A}(x + Ay)$. Entonces $l(\frac{M}{Ay}) < l(M) \Rightarrow$ Inducción.
+
+$$\frac{M}{Ay} = \frac{Ax + Ay}{Ay} \underset{\star}{\dotplus} \frac{N}{Ay} = \frac{Ax + Ay + N}{Ay}$$
+para cierto $N \in \mathcal{L}(M)$ tal que $N \supseteq Ay$. Esto sólo es posible si $M = Ax + Ay + N = Ax + N$.
+
+Sólo nos queda ver que es suma directa, es decir, que $Ax \cap N = \{0\}$. Para ello, consideramos $Ax \cap N \subseteq (Ax + Ay) \cap N = Ay$ (por $\star$). Entonces $Ax \cap N = Ax \cap N \cap Ay = Ax \cap Ay = \{0\}$.
+\end{itemize}
+\end{proof}
+
+\begin{theorem}
+$M \neq \{0\}$ $p-$primario de longitud finita. Entonces existen $x_{1}, \dots, x_{n} \in M$ no nulos tales que:
+$$M = Ax_{1} \dotplus \dots \dotplus Ax_{n}$$
+y $Ann_{A}(M) = ann_{A}(x_{1}) \subseteq ann_{A}(x_{2}) \subseteq \dots \subseteq ann_{A}(x_{n})$.
+
+Además, si $y_{1}, \dots, y_{m} \in M$ no nulos son tales que:
+$$M = Ay_{1} \dotplus \dots \dotplus Ay_{m}$$
+y $Ann_{A}(M) = ann_{A}(y_{1}) \subseteq ann_{A}(y_{2}) \subseteq \dots \subseteq ann_{A}(y_{m})$, entonces $n = m$ y $ann_{A}(y_{i}) = ann_{A}(x_{i})$.
+\end{theorem}
+
+\begin{proof}
+\begin{itemize}
+\item \underline{Existencia}: Tomo $x_{1} \in M$ tal que \\ $Ann_{A}(M) = ann_{A}(x_{1})$. La proposición anterior me dice que $Ax_{1} \dotplus N = M$ para cierto submódulo $N$ de $M$. \\
+Es claro que $Ann_{A}(N) = \supseteq Ann_{A}(M) = <p^{t}> \Rightarrow Ann_{A}(N) = <p^{t'}>$ con $t' \leq t$, y $l(N) < l(M)$. Por inducción sobre $l(M)$, tengo $x_{2}, \dots, x_{n} \in N$ tales que $Ann_{A}(N) = ann_{A}(x_{2}) \subseteq \dots \subseteq ann_{A}(x_{n})$ y $N = Ax_{2} \dotplus \dots \dotplus Ax_{n} \Rightarrow M = Ax_{i} \dotplus Ax_{2} \dotplus \dots \dotplus Ax_{n}$, y $Ann_{A}(M) = ann_{A}(x_{1}) \subseteq ann_{A}(x_{2}) \subseteq \dots \subseteq ann_{A}(x_{n})$.
+\item \underline{Unicidad}: Hacemos inducción sobre $l(M)$.
+\begin{itemize}
+\item Si $l(M) = 1 \Rightarrow M = Ax_{1} = Ay_{1} \Rightarrow n = 1 = m$.
+\item Si $l(M) > 1$, entonces $M$ no es simple. Tomamos $\frac{M}{pM}$ ($pM = \{pm: m \in M\}$). 
+$$Ann_{A}(\frac{M}{pM}) = <p>\Rightarrow Soc(\frac{M}{pM}) = \frac{M}{pM}$$
+$\Rightarrow \frac{M}{pM}$ es semisimple.
+
+Tenemos un homomorfismo de módulos $M \to \frac{Ax_{1}}{Apx_{1}} \oplus \dots \oplus \frac{Ax_{n}}{Apx_{n}}$ dado por $\sum_{i=1}^{n} a_{i} x_{i} \mapsto (a_{1}x_{1} + Apx_{1}, \dots, a_{n} x_{n} + Apx_{n})$, que es sobreyectivo y cuyo núcleo es $pM$.
+$$\frac{M}{pM} \cong \frac{A}{Apx_{1}} \oplus \dots \oplus \frac{A}{Apx_{n}}$$
+y cada $\frac{A}{Apx_{i}}$ es simple $\Rightarrow n = l(\frac{M}{pM})$.
+
+Razonando de manera análoga con $y_{1}, \dots, y_{m} \Rightarrow m = l(\frac{M}{pM}) \Rightarrow m = n$.
+
+Si $pM = \{0\}$, entonces todos los  $ann_{A}(x_{i}) = <p> = ann_{A}(y_{i})$.
+
+Si $pM \neq \{0\}$, entonces $pM = Apx_{1} \dotplus \dots \dotplus Apx_{n} = Apx_{1} \dotplus \dots \dotplus Apx_{r}$, para cierto $r \leq n$. Así, $ann_{A}(x_{i}) = <p> \iff i > r$. \\
+Para cualquier $i \leq r, ann_{A}(px_{i}) = <p^{t_{i}-1}>$ si $ann_{A}(x_{i}) = <p^{t_{i}}>$. Como consecuencia:
+$$ann_{A}(px_{1}) \subseteq ann_{A}(px_{2}) \subseteq \dots \subseteq ann_{A}(px_{r})$$
+Razonando de forma análoga para $y_{i}$, llegamos a que \\ $ann_{A}(py_{i}) = <p^{s_{i}-1}>$ si $ann_{A}(y_{i}) = <p^{s_{i}}>$ con $s_{i} > 1$, donde $ann_{A}(y_{i}) = <p> \iff i > s$.
+$$pM = Apy_{1} \dotplus \dots \dotplus Apy_{s}$$
+pero $l(pM) < l(M) \overset{\text{indución}}{\Rightarrow} s = r$ y $s_{i} - 1 = r_{i} - 1$ para $i \in \{1, \dots, r\}$. \\
+Como sé que para $i > n, ann_{A}(x_{i}) = ann_{A}(y_{i}) = <p>$, y hemos terminado.
+\end{itemize}
+\end{itemize}
+\end{proof}
+
+% 23/03/2022
+
+\underline{Observación}: Si $A = \mathbb{Z}$, $M$ grupo abeliano y $x \in M$, entonces $ann_{\mathbb{Z}}(x) = n\mathbb{Z}, n$ = orden$(x)$.
+
+Si $A = K[X], V \overset{R}{\to} >V, dim_{K}V < \infty, v \in V, ann_{K[X]}(v) = <f(x)>$. Si $f(x)$ tiene grado $n$, entonces $\{v, Tv, T^{2}v, \dots, T^{n-1}v\}$ es linealmente independiente, pero $\{v, Tv, T^{2}v, \dots, T^{n}v\}$ es linealmente dependiente.
+
+\begin{example}
+$U(\mathbb{Z}_{8}) = \{1, 3, 5, 7\}$.
+\begin{itemize}
+\item $ord(1) = 1$.
+\item $ord(3) = 2 \hspace{0.5cm} (3^{2} = 9 = 1)$.
+\item $ord(5) = 2$.
+\item $ord(7) = 2$.
+\end{itemize}
+$U(\mathbb{Z}_{8}) = <3> \dotplus <5>$. (no son ideales, son subgrupos generados por).
+
+\underline{Ejercicio}: Calcular para $U(\mathbb{Z}_{16})$.
+\end{example}
+
+\begin{example}
+$dim_{K} V = 3, T: V \to V,$ polinomio mínimo$(T) = (X - \lambda)^{2}, \lambda \in K$. \\
+$\Rightarrow \exists v_{1}, v_{2} \in V$ tal que $V = K[X]v_{1} \dotplus K[X]v_{2}$ con $ann_{K[X]}v_{1} = <(X - \lambda)^{2}>$, y además, $K[X]v_{1}$ tiene dimensión 2, por lo que $ann_{K[X]} v_{1} = <(X - \lambda)^{2}> \subset <X - \lambda> = ann_{K[X]}v_{2}$. 
+
+Si $dim_{K} V = 4$, entonces tendríamos dos posibilidades: que $ann{K[X]}v_{2} = <(X-\lambda)^{2}>$ (dim 2), o que hubiese otro $v_{3}$ tal que $V = K[X]v_{1} \dotplus K[X]v_{2} \dotplus K[X]v_{3}$, y $ann_{K[X]}v_{3}$ tuviese dimensión 1.
+\end{example}
+
+\begin{corollary}
+$A$ DIP, $A$ no es un cuerpo. Si $M$ es un $A-$módulo de longitud finita \\ $p-$primario, entonces:
+$$M \cong C_{1} \oplus \dots \oplus C_{n}$$
+con $C_{i}$ cíclico.
+
+Si:
+$$M \cong D_{i} \oplus \dots \oplus D_{m}$$
+con $D_{i}$ cíclico, entonces $n=m$ y, tras reordenación, $D_{i} \cong C_{i},$ \\ $\forall i \in \{1, \dots, n\}$.
+\end{corollary}
+
+\begin{proof}
+De $M \cong C_{1} \oplus \dots \oplus C_{n}$ obtengo que $x_{1}, \dots, x_{n} \in M$ tal que $M = Ax_{1} \dotplus \dots \dotplus Ax_{n}$ con $ann_{A}(x_{1}) \subseteq ann_{A}(x_{2}) \subseteq \dots \subseteq ann_{A}(x_{n})$.
+
+De $M \cong D_{1} \oplus \dots \oplus D_{m}$ obtengo $y_{1}, \dots, y_{m} \in M$ tal que $M = Ay_{1} \dotplus \dots \dotplus Ay_{m}$ con $ann_{A}(y_{1}) \subseteq ann_{A}(y_{2}) \subseteq \dots \subseteq ann_{A}(y_{m})$.
+
+$\Rightarrow n = m$ y $ann(x_{i}) = ann_{A}(y_{i}), i \in \{1, \dots, n\}$, y:
+$$C_{i} \cong Ax_{i} \cong \frac{A}{ann_{A}(x_{i})} = \frac{A}{ann_{A}(y_{i})} \cong Ay_{i} \cong D_{i}$$
+\end{proof}
+
+\begin{definition}[Indescomponible]
+Un módulo $M$ se dice indescomponible si $M \cong L \oplus N \Rightarrow L = \{0\}$ ó $N = \{0\}$.
+\end{definition}
+
+\begin{task}
+Razonar que, en el corolario, cada $C_{i}$ es indescomponible.
+\end{task}
+
+\begin{example}
+$M$ grupo abeliano, $l(M) < \infty$ y $p-$primario ($p$ primo) \\
+$\overset{\text{Corolario}}{\Rightarrow} M \cong C_{1} \oplus \dots \oplus C_{n}, C_{i}$ cíclico, $l(C_{i}) < \infty, p$-primario. \\
+$\Rightarrow M \cong \mathbb{Z}_{p^{m_{1}}} \oplus \dots \oplus \mathbb{Z}_{p^{m_{n}}}$, para $m_{1}, \dots, m_{n}$ enteros positivos. \\
+$(\Rightarrow M$ es finito de cardinal $p^{m_{1} + \dots + m_{n}})$.
+\end{example}
+
+\begin{theorem}[Teorema de estructura de módulos de longitud finita sobre un DIP]
+$A$ DIP, $_{A}M \neq \{0\}, l(M) < \infty$. Existen irreducibles distintos $p_{1}, \dots, p_{r} \in A$ y enteros positivos $n_{1}, \dots, n_{r}; e_{i1} \geq \dots \geq e_{in_{i}}, i \in \{1, \dots, r\}$ determinados por $M$ tal que:
+$$M = \dotplus_{i=1}^{r} (\dotplus_{j=1}^{n_{i}} Ax_{ij})$$
+para $x_{ij} \in M$ adecuados que verifican que:
+$$ann_{A}(x_{ij}) = <p_{i}^{e_{ij}}>, i \in \{1, \dots, r\}, j \in \{1, \dots, n_{i}\}$$
+Estos parámetros determinan $M$ salvo isomorfismo.
+\end{theorem}
+
+% 24/03/2022
+
+\begin{theorem}[Anterior]
+$A$ DIP, $_{A}M \neq \{0\}$, $l(M) < \infty, <\mu> = Ann_{A}(M), 0 \neq \mu \in A$. \\
+$\mu = p_{1}^{e_{1}} \dots p_{r}^{e_{r}}, p_{i} \in A$ irreducibles, $e_{i} \geq 1$.
+$$M = M_{1} \dotplus \dots \dotplus M_{r}, M_{i} \hspace{0.1cm} p_{i}-\text{primario}$$
+$M_{i} = \dotplus_{j=1}^{n_{i}} Ax_{ij}$, tal que $ann_{A} (x_{ij}) = <p_{i}^{e_{ij}}>$, donde \\ $e_{i} = e_{i1} \geq \dots \geq e_{in_{i}} \geq 1$.
+$$M = \dotplus_{i=1}^{r} (\dotplus_{j=1}^{n_{i}} Ax_{ij}) \hspace{0.3cm}$$
+Esta descomposición es única.
+\end{theorem}
+
+\begin{proof}
+\underline{Unicidad}: Si $M = N_{1} \dotplus \dots \dotplus N_{t}$ con $N_{i}$ $s_{i}-$primario para $s_{1}, \dots, s_{t} \in A$ irreducibles, entonces:
+$$<\mu> = Ann_{A}(M) = \bigcap_{i=1}^{t} Ann(N_{i}) = \bigcap_{i=1}^{t} <s_{i}^{f{i}}> = <s_{1}^{f_{1}} \dots s_{t}^{f_{t}}>$$
+$\mu$ es asociado (se diferencian en multiplicar por una unidad) con \\ $s_{1}^{f_{1}} \dots s_{t}^{f_{t}} \overset{\text{tras reordenación}}{\Rightarrow} t=r$ y $s_{i} = p_{i}, f_{i} = e_{i}, i \in \{1, \dots, r\}$.
+$$N_{i} \subseteq \{m \in M: p_{i}^{e_{i}}m = 0\} = M_{i} \Rightarrow N_{i} = M_{i}, \forall i \in \{1, \dots, r\}$$
+\end{proof}
+
+\begin{definition}
+Descomposición cíclica primaria de $M$: $M = \dotplus_{i=1}^{r} (\dotplus_{j=1}^{n_{i}} Ax_{ij}) \hspace{0.3cm}$. \\
+Divisores elementales de $M$: $\{p_{i}^{e_{ij}}\}$.
+\end{definition}
+
+\begin{example}
+$A = \mathbb{Z}, M$ grupo abeliano de longitud finita.
+$$M = \dotplus_{i=1}^{r} (\dotplus_{j=1}^{n_{i}} \mathbb{Z} x_{ij}), x_{ij} \in M$$
+$\mu = p_{1}^{e_{1}} \dots p_{r}^{e_{r}} \in \mathbb{Z}$.
+$$M \cong \oplus_{i=1}^{r} (\oplus_{j=1}^{n_{i}} \mathbb{Z}_{p_{i}^{e_{ij}}})$$
+$\Rightarrow M$ finito de cardinal $m = \prod_{i=1}^{r} \prod_{j=1}^{n_{i}} p_{i}^{e_{ij}} = p_{1}^{f_{1}} \dots p_{r}^{f_{r}}, f_{i} = \sum_{j=1}^{n_{1}} e_{ij} \Rightarrow \mu \mid m$.
+
+Si $m = 12 \Rightarrow m = 2^{2} \cdot 3 \Rightarrow M \cong
+\begin{cases}
+\mathbb{Z}_{4} \oplus Z_{3} \cong Z_{12} \\
+\mathbb{Z}_{2} \oplus Z_{2} \oplus Z_{3} \cong Z_{2} \oplus Z_{6}
+\end{cases}$.
+\end{example}
+
+\begin{example}
+$A = K[X], V$ $K[X]-$módulo de longitud finita $\Rightarrow T: V \to V$ $K-$lineal y $V$ dimensión finita.
+$$V = \dotplus_{i=1}^{r} (\dotplus_{j=1}^{n_{i}} K[X] x_{ij})$$
+$K[X]x_{ij}$ de dimensión finita $\Rightarrow V$ tiene dimensión finita.
+
+$V_{ij} = K[X] x_{ij} \subseteq V$ y $T(V_{ij}) \subseteq V_{ij}$. Entonces $minpol(T \mid_{V_{ij}}) = p_{i}^{e_{ij}} \Rightarrow \exists x_{ij}$ tal que $\{x_{ij}, Tx_{ij},  \dots\}$ (hasta $T$ elevado al grado de $p_{i}^{e_{ij}}$) es base de $V_{ij}$, ya que es cíclico.
+
+\underline{Caso particular}: $T: V \to V, dim_{K}V = n, minpol(T) = (x-\lambda)^{n}, \lambda \in K$. \\
+$\exists v \in V$ tal que $B = \{v, (T-\lambda)v, \dots, (T-\lambda)^{n-1}v\}$ es $K-$base de $V$.
+
+$T(T - \lambda)^{i}v = (T - \lambda + \lambda) (T - \lambda)^{i} v = (T - \lambda)^{i+1} v + \lambda (T - \lambda)^{i}v$.
+
+Entonces la matriz de la base es (escrita por filas):
+\begin{equation*}
+M_{B}(T) =
+\begin{pmatrix}
+\lambda & 1 & 0 & 0 & \dots & 0 \\
+0 & \lambda & 1 & 0 & \dots & 0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & 0 & \dots & 1 \\
+0 & 0 & 0 & 0 & \dots 	& \lambda
+\end{pmatrix}
+= \mathcal{J}_{n}(\lambda) \rightarrow \text{ Bloque de Jordan}
+\end{equation*}
+
+Si le aplico eso al caso general, obtengo que $\mu = (x-\lambda_{1})^{e_{i}} \dots (x-\lambda_{r})^{e_{r}}$, tomo en cada $V_{ij} = K[X]x_{ij}$ la base $\{x_{ij}, (T-\lambda)x_{ij}, \dots, (T-\lambda)^{e_{ij}-1}x_{ij}\}$ y obtengo ``uniendo ordenadamente'' las bases, obtengo una base de $V$, llámese $B$, tal que $M_{B}(T)$ es una diagonal por bloques:
+\begin{equation*}
+M_{B}(T) =
+\begin{pmatrix}
+\mathcal{J}_{e_{11}}(\lambda_{1}) \\
+ & \ddots \\
+ &  & \mathcal{J}_{e_{1n_{1}}}(\lambda_{1}) & \\
+ & & & \ddots \\
+ & & & & \mathcal{J}_{e_{r1}}(\lambda_{r}) \\
+ & & & & & \ddots \\
+ & & & & & & \mathcal{J}_{e_{rn_{r}}}(\lambda_{r})
+\end{pmatrix}
+\end{equation*}
+\end{example}
+
+% 28/03/2022
+
+\begin{example}
+$B \in M_{n}(\mathbb{R}), y = (y_{1}, \dots, y_{n}) \in C^{\infty}(\mathbb{R})^{n} = C^{\infty}(\mathbb{R}) \times \dots \times C^{\infty}(\mathbb{R})$. \\
+\circled{1} $y' = yB$.
+
+Soluciones de \circled{1}: $M = \{y \in C^{\infty}(\mathbb{R})^{n} \mid y' = yB\}$ es un subespacio vectorial de $C^{\infty}(\mathbb{R}^{n})$. \\
+$C^{\infty}(\mathbb{R})^{n}$ es un $\mathbb{R}[X]-$módulo, y $M$ es un $\mathbb{R}[X]-$submódulo de $C^{\infty}(\mathbb{R})^{n}$, ya que si $y \in M$, entonces $Xy = y' = yB \in M$. Además, tenemos que $dim_{\mathbb{R}}M < \infty \Rightarrow _{\mathbb{R}[X]}M$ tiene una descomposición cíclica primaria.
+
+Si $x \in \mathbb{R}^{n}$, pongo $y = xe^{tB}, y' = xet^{B}B = yB$. \\
+\underline{Recordatorio}: $x \in M_{n}(\mathbb{C}), e^{x} = \sum\limits_{m \geq 0} \frac{x^{m}}{m!}$. \\
+¿Cómo se calcula $e^{tB}$? Tomo $J$ la forma canónica de Jordan de B vista como matriz de $M_{n}(\mathbb{C})$. Entonces $\exists P \in GL_{n}(\mathbb{C})$ tal que $P^{-1}BP = J$, y por tanto:
+$$e^{tB} = e^{tP^{-1}JP} = P^{-1}e^{tJ}P$$
+$e^{tJ}$ si se ``saben'' calcular.
+\end{example}
+
+\begin{example}[Subejemplo]
+Vamos a ver que ocurre si $n = 2$. $B \in M_{2}(\mathbb{R})$. \\
+$\mu$ = polinomio mínimo de $B$ (sobre $\mathbb{C}$).
+\begin{enumerate}
+\item [Caso 1.] $\mu = (x - \lambda_{1})(x - \lambda_{2})$, con $\lambda_{1}, \lambda_{2} \in \mathbb{R}$ distintos ó $\mu = x - \lambda$. \\
+En este caso $J$ es una matriz diagonal:
+$$J =
+\begin{pmatrix}
+\lambda_{1} & 0 \\
+0 & \lambda_{2}
+\end{pmatrix}$$
+y entonces:
+$$e^{tJ} =
+\begin{pmatrix}
+e^{t\lambda_{1}} & 0 \\
+0 & e^{t\lambda_{2}}
+\end{pmatrix}$$
+\item [Caso 2.] $\mu = (x - \lambda)^{2}$, con $\lambda \in \mathbb{R}$. En este caso:
+$$J =
+\begin{pmatrix}
+\lambda & 1 \\
+0 & \lambda
+\end{pmatrix}
+\Rightarrow tJ = 
+\begin{pmatrix}
+t\lambda & t \\
+0 & t\lambda
+\end{pmatrix}
+=
+\begin{pmatrix}
+t\lambda & 0 \\
+0 & t\lambda
+\end{pmatrix}
++
+\begin{pmatrix}
+0 & t \\
+0 & 0
+\end{pmatrix}$$
+y entonces:
+$$e^{tJ} =
+e^{
+\begin{pmatrix}
+t\lambda & 0 \\
+0 & t\lambda
+\end{pmatrix}
++
+\begin{pmatrix}
+0 & t \\
+0 & 0
+\end{pmatrix}
+} \overset{\star}{=} e^{
+\begin{pmatrix}
+t\lambda & 0 \\
+0 & t\lambda
+\end{pmatrix}
+} e^{
+\begin{pmatrix}
+0 & t \\
+0 & 0
+\end{pmatrix}
+} =$$
+$$ =
+\begin{pmatrix}
+e^{t\lambda} & 0 \\
+0 & e^{t\lambda}
+\end{pmatrix}
+\begin{pmatrix}
+1 & t \\
+0 & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+e^{t\lambda} & te^{t\lambda} \\
+0 & e^{t\lambda}
+\end{pmatrix}$$
+
+$\star$ porque las matrices conmutan.
+\item [Caso 3.] $\mu = (x - z)(x - \bar{z})$, $z \in \mathbb{C} \setminus \mathbb{R}$. En este caso:
+$$J =
+\begin{pmatrix}
+z & 0 \\
+0 & \bar{z}
+\end{pmatrix}$$
+y entonces:
+$$e^{tJ} =
+\begin{pmatrix}
+e^{tz} & 0 \\
+0 & e^{t\bar{z}}
+\end{pmatrix}$$
+Alternativamente (si no queremos usar números complejos) $\mu = x^{2} + bx + c \in \mathbb{R}[X]$ irreducible. Llamamos $\alpha = \sqrt{c - \frac{b^{2}}{4}}, \beta = -\frac{b}{2}$. \\
+$V = \mathbb{R}^{2}, T: \mathbb{R}^{2} \to \mathbb{R}^{2}, Tv = vB$. \\
+Tomo $v \in \mathbb{R}^{2}$ no nulo, y tengo la $\mathbb{R}-$base de $V$ $\{-\beta v, (T - \alpha)v\}$. Entonces:
+$$T(-\beta v) = -\beta(T - \alpha)v - \alpha \beta v$$
+$$T(T - \alpha)v = (T^{2} - \alpha T)v \overset{T^{2} = -bI - cI}{=} \alpha(T - \alpha)v - \beta^{2}v$$
+En esta base:
+$$c = M_{T} =
+\begin{pmatrix}
+\alpha & -\beta \\
+\beta & \alpha
+\end{pmatrix}
+=
+\begin{pmatrix}
+\alpha & 0 \\
+0 & \alpha
+\end{pmatrix}
++
+\begin{pmatrix}
+0 & -\beta \\
+\beta & 0
+\end{pmatrix}$$
+y estas matrices conmutan. Además, $\exists Q \in GL_{2}(\mathbb{R})$ tal que \\ $c = Q^{-1}BQ$, por lo que:
+$$e^{tc} = e^{
+\begin{pmatrix}
+t\alpha & 0 \\
+0 & t\alpha
+\end{pmatrix}
+} e^{
+\begin{pmatrix}
+0 & -t\beta \\
+t\beta & 0
+\end{pmatrix}
+} =
+\begin{pmatrix}
+e^{\alpha t} & 0 \\
+0 & e^{\alpha t}
+\end{pmatrix}
+\begin{pmatrix}
+\cos \beta t & - \sin \beta t \\
+\sin \beta t & \cos \beta t
+\end{pmatrix}$$
+\end{enumerate}
+\end{example}
+
+\begin{task}
+Sucesión $c_{k} = \cos k \nu, \nu \in \mathbb{R}$ fijo.
+$$c_{k} = \frac{e^{ik\nu} + e^{-ik\nu}}{2}$$
+Demostrar que $\cos(k+2)\nu = 2 \cos(k + 1) \nu \cos \nu - \cos k \nu, k \geq 0$. Esto implica que $c_{k}$ es linealmente recursiva.
+
+\underline{Nota}: $\cos (k + 2) \nu = \cos ((k+2) \nu)$.
+
+\underline{Pista}: Buscar el polinomio mínimo de $\{c_{k}\}$ en $\mathbb{C}[X]$.
+\end{task}
+
+% 29/03/2022
+
+\underline{Notación}: A partir de ahora, $R$ anillo. $_{R}M$ módulo, $\mathcal{L}(M) = \{$submódulos de $M\}$. Si $\emptyset \neq \Gamma \subset \mathcal{L}(M)$; $\bigcap\limits_{N \in \Gamma}N \in \mathcal{L}(M)$.
+
+\begin{definition}
+Si $X$ es un subconjunto de $M$, el menor (para la inclusión) submódulo de $M$ que contiene a $X$ se llama submódulo generado por $X$.
+
+Es decir, tomamos como $\Gamma$ todos los subconjuntos de $M$ que contiene a $X$, y el submódulo generado por $X$  es su intersección.
+
+Lo denotaremos por $RX$.
+\end{definition}
+
+\begin{lemma}
+$RX = \{\sum\limits_{x \in F} v_{x} x: F \subseteq X$ finito, $v_{x} \in R\} = \star$.
+\end{lemma}
+
+\begin{proof}
+$X \subseteq RX$ por definición $\Rightarrow$ Se cumple $\supseteq$.
+
+Si veo que $\star$ es un submódulo, hemos terminado, ya que $\star$ contiene a $X$; y si vemos que es un submódulo (el menor) que contiene a $X$, tenemos la demostración.
+
+Si $X$ es finito, $X = \{x_{1},  \dots, x_{n}\}$, entonces:
+$$RX = Rx_{1} + \dots + Rx_{n}$$
+La inclusión $\supseteq$ es obvia. Para la inclusión $\subseteq$, tenemos que ver que $Rx_{1} + \dots + Rx_{n} \supseteq \{x_{1}, \dots, x_{n}\}$ y como $RX$ es el menor submódulo que contiene a este conjunto, tenemos la igualdad.
+\end{proof}
+
+\newpage
+
+\section{Álgebra lineal básica sobre un anillo}
+
+\begin{definition}
+$I$ conjunto no vacío. Para cada $i \in I$, tomo un módulo $M_{i}$, y formamos el producto de todos estos módulos:
+$$\prod_{i \in I} M_{i} = \{(m_{i})_{i \in I}: m_{i} \in M_{i}\}$$
+es un $R-$módulo: $(m_{i})_{i \in I} + (m_{i}')_{i \in I} = (m_{i} + m_{i}')_{i \in I}$ y $r(m_{i})_{i \in I} = (rm_{i})_{i \in I}$. \\
+A diferencia del producto cartesiano, estas tuplas no tiene que estar ordenadas.
+
+A este módulo se le llama módulo producto de $\{M_{i}: i \in I\}$.
+\end{definition}
+
+\underline{Observación}: Para cada $j \in I$,
+$$\begin{aligned}
+M_{j} & \overset{L_{j}}{\to} & \prod_{i \in I} M_{i} & \overset{\pi_{j}}{\to} & M_{j} \\
+m_{j} & \mapsto & (0,\dots, 0, m_{j}, 0, \dots, 0) & & & \\
+        &                & (m_{i})_{i \in I} & & \mapsto & m_{j} 
+\end{aligned}$$
+
+$L_{j}$ y $\pi_{j}$ son homomorfismos de $R-$módulos.
+
+\begin{definition}
+Defino $\oplus_{i \in I} M_{i}$ como el submódulo de $\prod_{i \in I}$ que contiene a $L_{j}(M_{j}), \forall j \in I$.
+$$\underset{i \in I}{\oplus} M_{i} = \{(m_{i})_{i \in I}: m_{i} = 0 \text{ salvo un nº finito de } i \}$$
+
+Si definimos $sop(m_{i})_{i \in I} = \{i \in I: m_{i} \neq 0\}$, entonces:
+$$\oplus_{i \in I} M_{i} = \{(m_{i})_{i \in I}: sop(m_{i})_{i \in I} \text{ finito}\}$$
+
+Esto se llama suma directa externa de $\{M_{i}: i \in I\}$.
+\end{definition}
+
+\begin{definition}
+$\{M_{i}: i \in I\} \subseteq \mathcal{L}(M)$. \\
+Puedo construir el submódulo suma $\sum\limits_{i \in I}M_{i}$ como el menor submódulo que contiene a $M_{i}, \forall i \in I$.
+$$\sum_{i \in I} M_{i} = \{ \sum_{i \in F} m_{i} \mid m_{i} \in M_{i}, F \subseteq I \text{ finito}\}$$
+
+Tomo $\theta: \oplus_{i \in I} M_{i} \to \sum\limits_{i \in I} M_{i}$ tal que $\theta((m_{i})_{i \in I}) = \sum\limits_{i \in I} m_{i}$. Este $\theta$ es un homomorfismo sobreyectivo de $R-$módulos.
+\end{definition}
+
+\begin{proposition}
+Para $\{N_{i}: i \in I\} \subseteq \mathcal{L}(M)$ son equivalentes:
+\begin{enumerate}[label=\circled{\arabic*}]
+\item $\forall j \in I, N_{j} \bigcap \sum\limits_{j \neq i \in I} N_{i} = \{0\}$.
+\item $\forall F \subseteq I$ finito, $\forall j \in F, N_{j} \bigcap \sum\limits_{j \neq i \in F} N_{i} = \{0\}$.
+\item La expresión de cada $m \in \sum\limits_{i \in I} N_{i}$ como $m = \sum\limits_{i \in I} m_{i}, m_{i} \in N_{i}$ es única.
+\item Si $0 = \sum\limits_{i \in I} m_{i}$, con $m_{i} \in N_{i}, \forall i \in I \Rightarrow m_{i} = 0, \forall i \in I$.
+\item $\theta$ es inyectivo (y por tanto, isomorfismo).
+\item Para cada $J_{1}, J_{2} \subseteq I$ con $J_{1} \bigcap J_{2} \neq 0$, se tiene que \\ $(\sum\limits_{i \in J_{1}} N_{i}) \bigcap (\sum\limits_{j \in J_{2}} N_{j}) = \{0\}$. 
+\end{enumerate}
+\end{proposition}
+
+\begin{definition}
+En caso de satisfacerse las condiciones equivalentes anteriores, diré que $\sum\limits_{i \in I} N_{i}$ es una suma directa interna, notación $\underset{i \in I}{\dotplus} N_{i}$.
+\end{definition}
+
+\begin{corollary}
+Si $\{N_{i}: i \in I\} \subseteq \mathcal{L}(M)$ verifica \circled{1}-\circled{6} y $N \in \mathcal{M}$ tal que $N \bigcap \sum\limits_{i \in I} N_{i} = \{0\}$, entonces $\{N_{i}: i \in I\} \bigcup \{N\}$ satisface \circled{1}-\circled{6}.
+\end{corollary}
+
+\begin{definition}
+Si $\{N_{i}: i \in I\} \subseteq \mathcal{L}(M)$ satisface \circled{1}-\circled{6} y $N_{i} \neq \{0\}, \forall i \in I$, diremos que $\{N_{i}: i \in I\}$ es independiente.
+\end{definition}
+
+\underline{Caso particular}: $\forall i \in I$, tomo $M_{i} = R \Rightarrow \oplus_{i \in I} M_{i} = R^{(I)}$, o sea:
+$$R^{(I)} = \{(v_{i})_{i \in I} \in R^{I}: sop((v_{i})_{i \in I}) < \infty\}$$
+
+$R^{(I)}$ módulo libre.
+
+% 30/03/2022
+
+\begin{example}
+$A$ DIP, $_{A}M$ módulo.
+$t(M) = \{m \in M: ann_{A}(m) \neq <0>\}$ es un submódulo de $M$ que se llama submódulo de torsión de $M$.
+
+Supongamos que $t(M) \neq \{0\}$. \\
+$\mathcal{P} =$ conjunto de representantes de las clases de equivalencia (bajo la relación ``ser asociados'') de los irreducibles de $A$. \\
+Para cada $p \in \mathcal{P}$, definimos $M_{p} = \{m \in M: p^{e}m = 0$ para algún $e \geq 1\}$.
+$$M_{p} \subseteq t(M), M_{p} \text{ submódulo}$$
+
+Vamos a ver que todos los $M_{p}$ forman una familia independiente cuya suma directa interna es $t(M)$, es decir, $t(M) = \dotplus_{p \in \mathcal{P}} M_{p}$. \\
+Tomo $m \in t(M)$, entonces $Am$ es finitamente generado, y como $ann_{A}(m) \neq \{0\}$, entonces $Am$ es de longitud finita. Por lo que tiene descomposición primaria:
+$$Am = N_{1} \dotplus \dots \dotplus N_{r}$$
+con $N_{i}$ $p_{i}-$primario. Esto significa que:
+$$m = m_{1} + \dots + m_{r}$$
+de manera única, con $m_{i} \in N_{i} \subseteq M_{p_{i}}, \forall i \in \{1, \dots, r\}$.
+$$M = \sum_{p \in \mathcal{P}} M_{p}$$
+Es fácil ver la unicidad, por lo que:
+$$M = \underset{p \in \mathcal{P}}{\dotplus} M_{p}$$
+
+Los $\{M_{p}: p \in \mathcal{P}\}$ se llaman componentes primarias de $t(M)$.
+\end{example}
+
+\begin{example}[Subejemplo]
+$M = C^{\infty}(\mathbb{R}), M$ $\mathbb{R}[X]-$módulo si $Xf = f'$.
+$$t(M) = \{\text{funciones que satisfacen una EDO con coeficinetes constantes}\}$$
+$$\mathcal{P} = \{\text{lineales, cuadráticos irreducibles}\}$$
+\end{example}
+
+\underline{Nota}: $M_{p}$ no tiene por qué tener dimensión finita.
+
+\begin{example}
+Si tomamos como $M$ las sucesiones en $\mathbb{R}$, y como $X$ la que nos lleva cada término en el siguiente.
+$$(a_{0}, a_{1}, a_{2}, \dots) \mapsto (a_{1}, a_{2}, \dots)$$
+Entonces $t(M)$ son las sucesiones recursivas.
+\end{example}
+
+\begin{definition}
+$I$ conjunto. $R^{(I)} =$ suma directa externa de $I$ copia de $R = \{(r_{i})_{i \in I}: r_{i} \in R$ y $r_{i} = 0$ salvo en un número finito de indices$\} = \{(r_{i})_{i \in I}: r_{i} \in R, sop((r_{i})_{i \in I})$ finito$\}$.
+\end{definition}
+
+\begin{lemma}
+Si $M$ es cualquier $R-$módulo, existe una sucesión exacta de la forma:
+$$0 \to L \to R^{(I)} \overset{\varphi}{\to} M \to 0$$
+para $I$ adecuado.
+\end{lemma}
+
+\begin{proof}
+Tomo $\{m_{i}: i \in I\}$ tal que $M = \sum\limits_{i \in I} Rm_{i}$. \\
+Defino $\varphi: R^{(I)} \to M$ por $\varphi((r_{i})_{i \in I}) = \sum\limits_{i \in I} r_{i}m_{i}$.\\
+Tomamos $L = Ker \varphi \hookrightarrow M$.
+\end{proof}
+
+\begin{lemma}
+Para $\{m_{i}: i \in I\} \subseteq M$, son equivalentes:
+\begin{enumerate}
+\item $\sum\limits_{i \in I} r_{i}m_{i} = 0 \Rightarrow r_{i} = 0, \forall i \in I$.
+\item El homomorfismo de módulos $\varphi: R^{(I)} \to M, \varphi((r_{i})_{i \in I}) = \sum\limits_{i \in I} r_{i}m_{i}$ es inyectiva.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Trivial.
+\end{proof}
+
+\begin{definition}
+Si se satisface $1.$, diré que el conjunto $\{m_{i}: i \in I\}$ es linealmente independiente.
+
+Si ademas, $\{m_{i}: i \in I\}$ son un conjunto de generadores, diré que $\{m_{i}: i \in I\}$ es una base de $M$.
+\end{definition}
+
+\begin{proposition}
+$M$ tiene una base $\iff M \cong R^{(I)}$ para algún $I$.
+\end{proposition}
+
+\begin{proof}
+Para $\Rightarrow$, el isomorfismo es el de $2.$ del lema 7.13.
+\end{proof}
+
+\begin{definition}[Módulo libre]
+Un módulo es libre si tiene una base.
+\end{definition}
+
+\underline{Advertencia}: Hay, en general, muchos módulos que no son libres.
+
+\begin{example}
+Ningún grupo abeliano finito es libre como $\mathbb{Z}-$módulo, ya que si tuviera una base sería isomorfa a $\mathbb{Z}^{(I)}$, que es infinito.
+\end{example}
+
+\begin{example}
+$A$ DIP, $_{A}M$, $t(M)$ nunca es libre. $t(M)$ se conserva por isomorfismos.
+
+Si $A$ DIP, $A^{(I)}$ nunca es de torsión.
+\end{example}
+
+% 31/03/2022
+
+\begin{proposition}
+Sea $M$ un módulo. Existe una sucesión exacta:
+$$\dots \overset{f_{-2}}{\to} F_{-1} \overset{f_{-1}}{\to} F_{0} \overset{f_{0}}{\to} M \to 0$$
+donde $F_{-n}$ es libre para todo $n \in \mathbb{N}$. Esa sucesión se llama resolución libre de $M$.
+\end{proposition}
+
+\begin{proof}
+La demostración consiste en explicar como se construye.
+
+Tomo un conjunto de generadores de $M$, y un homomorfismo de módulos sobreyectivo $F_{0} \overset{p_{0}}{\to} M$.
+$$Ker(p_{0}) = K_{0} \overset{i_{0}}{\to} F_{0} \overset{p_{0}}{\to} M \to 0$$
+Como $K_{0}$ es módulo, existe $F_{-1}$ libre y $p_{-1}$ sobreyectivo tal que:
+$$F_{-1} \overset{p_{-1}}{\to} K_{0} \overset{i_{0}}{\to} F_{0} \overset{p_{0}}{\to} M \to 0$$
+Llamando $f_{1}$ a la composición de $p_{-1}$ y $i_{0}$, tenemos:
+$$F_{-1} \overset{f_{-1}}{\to} F_{0} \overset{p_{0}}{\to} M \to 0$$
+Reiterando el procedimiento, tenemos la sucesión. Nos queda ver que es exacta.
+
+Veamos la exactitud en $F_{-1}$ (ya que en cualquier $F_{-i}$ es igual). Tenemos que ver que se cumple $Im f_{-2} = Ker f_{-1}$. Sabemos que $Im f_{2}$ es la composición de $p_{-2}$ y $i_{-1}$, entonces $Im f_{-2} = Im p_{-2} = K_{-1} = Ker f_{-1}$.
+\end{proof}
+
+\begin{definition}
+Si esta resolución es finita, entonces diré que es una resolución libre finita.
+
+Hay anillos y módulos sobre anillos que no admiten ninguna resolución finita.
+\end{definition}
+
+\begin{definition}
+$M$ módulo se dice finitamente presentado si existe una presentación finita, que no es sino una sucesión exacta de la forma:
+$$F_{-1} \overset{f_{-1}}{\to} F_{0} \overset{f_{0}}{\to} M \to 0$$
+con $F_{-1}, F_{0}$ módulos libres con bases finitas.
+\end{definition}
+
+\begin{task}
+Dar una presentación finita del $\mathbb{Z}-$módulo $\mathbb{Z}_{2} \oplus \mathbb{Z}_{4}$.
+\end{task}
+
+\begin{proposition}
+Una anillo $R$ es noetheriano a izquierda si, y sólo si, todo módulo finitamente generado es finitamente presentado (admite una representación finita).
+\end{proposition}
+
+\begin{proof}
+Sólo vamos a ver una implicación: si $_{R}R$ noetheriano $\Rightarrow$ cada finitamente generado es finitamente generado.
+
+Para ello, $_{R}M$ es finitamente generado. Entonces tenemos:
+$$F_{0} \overset{f_{0}}{\to} M \to 0$$
+Entonces:
+$$K_{0} \to F_{0} \overset{f_{0}}{\to} M \to 0$$
+Y como $K_{0} = Ker f_{0}$ es un submódulo de $F_{0}$, es fintamente generado.
+$$F_{-1} \overset{p_{-1}}{\to} K_{0} \to F_{0} \overset{f_{0}}{\to} M \to 0$$
+$$F_{-1} \overset{f_{-1}}{\to} F_{0} \overset{f_{0}}{\to} M \to 0$$
+\end{proof}
+
+\begin{corollary}
+Todo módulo finitamente generado sobre un DIP es finitamente presentado.
+\end{corollary}
+
+\underline{Nota}: Por el primer teorema de isomorfía:
+$$M \cong \frac{F_{0}}{Im f_{-1}}$$
+ya que $Im f_{-1} = Ker f_{0}$ por la exactitud.
+
+Tomamos $E_{s}, F_{t}$ módulos libres con bases finitas de cardinales $s$ y $t$ respectivamente. Diré que $E_{s}$ tiene rango $s$ (a pesar del problema de Invariance Number Basis, INB. Por ejemplo, es posible que $R \oplus R \cong R$, $R \oplus R$ tiene base de rango 2 y $R$ tiene base de rango 1, aunque es poco común).
+
+Llamamos:
+$$e = \{e_{1}, \dots, e_{s}\}$$
+$$f = \{f_{1}, \dots, f_{t}\}$$
+las bases de $E_{s}$ y $F_{t}$ respectivamente. Sea $\uppsi: E_{s} \to F_{t}$ tal que $\uppsi(e_{i}) = \sum\limits_{j=1}^{t} a_{ij}f_{j}, i \in \{1, \dots, s\}, a_{ij} \in R$.
+$$A_{\uppsi} = (a_{ij})_{\underset{1 \leq j \leq t}{1 \leq i \leq s}} \in M_{s \times t}(R)$$
+donde $M_{s \times t}(R)$ son las matrices de tamaño $s \times t$ con coeficientes en $R$.
+
+Dado $u = \sum\limits_{i=1}^{s} x_{i}e_{i}, x_{i} \in R$, entonces:
+$$\uppsi(u) = \sum\limits_{j=1}^{t} y_{i}f_{j}, y_{j} \in R$$
+Resulta que $x = (x_{1}, \dots, x_{s}) = u_{e}, y = (y_{1}, \dots, y_{t}) = \uppsi(u)_{f}$:
+$$y = x A_{\uppsi}$$
+Hay que hacer esta operación por filas.
+
+$$\uppsi(u)_{f} = u_{e} A_{\uppsi}$$
+La aplicación:
+$$\begin{aligned}
+E_{s} & & \overset{\uppsi}{\to} & & F_{t} \\
+()_{e} \downarrow & & =\searrow & & ()_{f} \downarrow \\
+R^{s} & & \overset{A_{\uppsi}}{\to} & & R^{t}
+\end{aligned}$$
+
+Si tenemos tres módulos libres:
+$$\begin{aligned}
+E_{s} & & \overset{\uppsi}{\to} & & F_{t} & & \overset{\varphi}{\to} & & G_{r} \\
+()_{e} \downarrow & & & & ()_{f} \downarrow & & & & ()_{g} \downarrow \\
+R^{s} & & \overset{A_{\uppsi}}{\to} & & R^{t} & & \overset{A_{\varphi}}{\to} & & R^{r}
+\end{aligned}$$
+Y tenemos:
+$$R^{s} \overset{A_{\varphi_{o}\uppsi}}{\to} R^{r}$$
+donde:
+$$A_{\varphi_{o}\uppsi} = A_{\varphi} A_{\upphi}$$
+
+\begin{example}
+Sea $T: V \to V$ homomorfismo de $K-$espacios vectoriales, $dim_{K}V < \infty$. \\
+Tengo que $_{K[X]}V$ es un módulo finitamente presentado. Queremos una presentación finita.
+
+% 04/04/2022
+
+Tomamos una $K-$ base $\{v_{1}, \dots, v_{n}\}$ de $V$ (notemos que no existe base de $V$ como $K[X]-$módulo). Entonces:
+$$T(v_{i}) = \sum_{j=1}^{n} b_{ij} v_{j}, i \in \{1, \dots, n\}, b_{ij} \in M_{n}(k)$$
+Tomo $F_{n}$ un $K[X]-$módulo libre con base $\{f_{1}, \dots, f_{n}\}$ y defino $\upphi: F_{n} \to V$, $\upphi(f_{i}) = v_{i}, i \in \{1, \dots, n\}, \upphi$ es un homomorfismo de $K[x]-$módulos sobreyectivo.
+$$F_{n} \overset{\upphi}{\to} V \to 0$$
+$$X f_{i} - \sum\limits_{j=1}^{n} b_{ij}f_{j} \in Ker \upphi, i \in \{1, \dots, n\}$$
+Afirmo que $\{Xf_{i} - \sum\limits_{j=1}^{n} b_{ij}f_{j}: i \in \{1, \dots, n\}\}$ es un conjunto de generadores de $Ker \upphi$.
+
+Dado $x \in F_{n}, x = \sum\limits_{i=1}^{n} p_{i}(x) f_{i}$, con $p_{i}(x) \in K[x]$. Si $x \neq 0$, llamo $w(x) = \sum\limits_{i=1}^{n} \text{deg } p_{i} \geq 0$, donde sólo aparecen los $p_{i} \neq 0$ (quitamos los polinomios de grado 0 porque en muchos casos se les considera de grado $-\infty$).
+$$w(x) = 0 \Rightarrow p_{i} \in K, \forall i$$
+
+Suponemos $x \in Ker \upphi$. Vamos a ver que pasa con su peso ($w(x)$):
+\begin{itemize}
+\item Si $w(x) = 0 \Rightarrow \sum\limits_{i=1}^{n} p_{i} f_{i} = x, p_{i} \in K$.
+$$\sum_{i=1}^{n} p_{i} v_{i} = 0 \Rightarrow p_{i} = 0 \Rightarrow x = 0$$
+\item Si $x \neq 0$ y $x \in Ker \upphi, w(x) \geq 1$. Vamos a demostrar que el conjunto $\{Xf_{i} - \sum\limits_{j=1}^{n} b_{ij}f_{j}: i \in \{1, \dots, n\}\}$ es un sistema de generadores por inducción sobre $w(x)$.
+\begin{itemize}
+\item $w(x) = 1 \Rightarrow \exists$ un único índice $k \in \{1, \dots, n\}$ tal que $p_{k}$ no es constante, y además $p_{k} = aX + b$, con $a, b \in K$.
+$$x = \sum_{i \neq k} p_{i} f_{i} + (aX + b)f_{k} = $$
+$$= \sum_{i \neq k} p_{i}f_{i} + \underset{\in Ker \upphi}{\underline{a(X f_{k} - \sum_{j=1}^{n} b_{kj}f_{j})}} + a\sum_{j=1}^{n} b_{kj}f_{j} + bf_{k}$$
+$$\Rightarrow \sum_{i \neq k} p_{i} f_{i} + a \sum_{j=1}^{n} b_{kj} f_{j} + bf_{k} \in Ker \upphi \Rightarrow$$
+$$\Rightarrow \sum_{i \neq k} p_{i} f_{i} + a \sum_{j=1}^{n} b_{kj} f_{j} + bf_{k} = 0 \Rightarrow$$
+$$\Rightarrow x = a(X f_{k} - \sum_{j=1}^{n} b_{kj}f_{k})$$
+\item Caso general: $w(x) > 1$. Entonces existe algún $k \in \{1, \dots, n\}$ para el que $\text{deg } p_{k} \geq 1$. Así, $p_{k}(x) = q(x)x + b$, con $\text{deg } q(x) = \text{deg } p_{k}(x) - 1, (b \in K)$.
+$$x = \sum_{i \neq k} p_{i}(x)f_{i} + \underset{\in Ker \upphi}{\underline{q(x) (Xf_{k} - \sum_{j=1}^{n} b_{kj} f_{j})}} + q(x) \sum_{j = 1}^{n} b_{kj} f_{j} + bf_{k}$$
+$$\Rightarrow y := \sum_{i \neq k} p_{i}(x) f_{i} + q(x)\sum_{j=1}^{n} b_{kj}f_{j} + bf_{k} \in Ker \upphi \Rightarrow$$
+$$\Rightarrow x = a(Xf_{k} - \sum_{j=1}^{n} b_{kj} f_{j})$$
+Entonces $w(y) \leq w(x) - 1$.
+
+Por inducción, $y$ se escribe como:
+$$\sum \text{polinomios}(Xf_{i} - \sum_{j=1} b_{ij}f_{j})$$
+$\Rightarrow x$ también.
+\end{itemize}
+\end{itemize}
+$$F_{n} \overset{\uppsi}{\to} F_{n} \overset{\upphi}{\to} V \to 0$$
+donde $\uppsi$ está definida por $\uppsi(f_{i}) = Xf_{i} - \sum_{j=1}^{n} b_{ij}f_{j}, i \in \{1, \dots, n\}$, y esa sucesión es exacta.
+$$A_{\uppsi} =
+\begin{pmatrix}
+X-b_{11} & -b_{12} & \dots & -b_{1n} \\
+-b_{21} & X-b_{22} & \dots & -b_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+-b_{n1} & -b_{n2} & \dots & X-b_{nn}
+\end{pmatrix}
+\in M_{n}(K[X]), A_{\uppsi} = XI_{n} - B$$
+con $B = (b_{ij}) \in M_{n}(K)$. \\
+$A_{\uppsi} \equiv$ Matriz característica de $T$.
+\end{example}
+
+\begin{lemma}
+Sea $F$ un $R-$módulo libre y $M \overset{\varphi}{\to} N$ un epimorfismo (sobreyectivo) de $R-$módulos. Para cada homomorfimos de $R-$módulos $F \overset{\alpha}{\to} N$ existe un homomorfismo de módulos $F \overset{\beta}{\to} M$ tal que $\varphi \beta = \alpha$.
+$$\begin{aligned}
+M & \overset{\varphi}{\to} & M & \to & 0 \\
+\beta \uparrow & \hspace{0.2cm} \nearrow \alpha & & & \\
+F & & & &
+\end{aligned}$$
+\end{lemma}
+
+\begin{proof}
+Tomo en $F$ una base $\{e_{i}: i \in I\}$. Como $\varphi$ es sobreyectivo, para cada $\alpha(e_{i})$ existe $m_{i} \in M$ tal que $\varphi(m_{i}) = \alpha(e_{i})$. Ahora, tengo $\beta$ dado por $\beta(e_{i}) = m_{i}$.
+\end{proof}
+
+\begin{proposition}
+Sean $_{R}M, _{R}N$ finitamente presentados y $M \overset{h}{\to} N$ homomorfismo de \\ $R-$módulo:
+$$\begin{aligned}
+E_{s} & \overset{\uppsi}{\to} & F_{t} & \overset{\upphi}{\to} & M & \to & 0 \\
+p \downarrow & & q \downarrow & \searrow & h \downarrow & & & \\
+E_{s'} & \underset{\uppsi'}{\to} & F_{t'} & \underset{\upphi'}{\to} & N & \to & 0
+\end{aligned}$$
+
+Dado $h: M \to N$: \\
+$\exists q$ tal que $\upphi ' q = h \upphi$. \\
+$\exists p$ tal que $\uppsi ' p = q \uppsi$. \\
+Observemos que $Im q\uppsi \subseteq Ker \upphi' = Im \uppsi'$.
+
+% 05/04/2022
+
+Dados $p: E_{s} \to E_{s'}$, y $q: F_{t} \to F_{t'}$, construimos $h$. Para ello, tomo $m \in M$ y $u \in F_{t}$ tal que $m = \upphi(u)$. Quiero definir $h(m) = \upphi'(q(u)) \in N$. Veamos que $h(m)$ es independiente del $u$ elegido. \\
+Para ello, tomamos $v \in F_{t}$ tal que $\upphi(v) = m$. Como $0 = \upphi(v-m) \Rightarrow v-u \in Ker\upphi$ y podemos tomar $x \in E_{s}$ tal que $v-u = \uppsi(x)$.
+$$\upphi'(a(v) - q(u)) = \upphi'(q(v-u)) = \upphi'(q(\uppsi(x)) = \upphi'(\uppsi'(p(x)) = 0(p(x)) = 0$$
+Como $h(m)$ es independiente del $u$ elegido, tenemos que $h$ está bien definida. Es fácil ver que $h$ es un homomorfismo de módulos.
+
+Fijados 4 bases en módulos libres del diagrama, definir $h$ es dar una pareja de matrices $A_{q}$ y $A_{p}$ tales que:
+$$A_{\uppsi} A_{q} = A_{p} A_{\uppsi'}$$
+
+\vspace{0.3cm}
+
+Concretamente, si $f = \{f_{1}, \dots, f_{t}\}$ es base de $F_{t}$ y $f' = \{f_{1}', \dots, f_{t'}'\}$ es base de $F_{t'}$ y $A_{q} = (q_{ij})$, y tomo $m_{i} = \upphi(f_{i}), i \in \{1, \dots, t\}; n_{j} = \upphi'(f'_{j}), j \in \{1, \dots, t'\}$, tengo:
+\begin{enumerate}
+\item $\{m_{1}, \dots, m_{t}\}$ genera $M$ y $\{n_{1}, \dots, n_{t}\}$ genera $N$.
+\item $h(m_{i}) = \sum\limits_{j=1}^{t'} q_{ij} n_{j}$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[Cayley-Hamilton]
+Sea $T: V \to V$ un homomorfismo $K-$lineal, con $dim_{K}V < \infty$. Sea $d(x) \in K[x]$ el polinomio característico de $T$ (tomando una base de $V$, se representa una $T$ con respecto una base y determinante es el polinomio característico). Entonces el polinomio mínimo de $T$ divide a $d(x)$.
+\end{proposition}
+
+\begin{proof}
+Tomo la presentación finita de $_{K[x]}V$ que vimos al final del ejemplo 7.25.
+$$F_{n} \overset{\uppsi}{\to} F_{n} \overset{\upphi}{\to} V \to 0$$
+Tomo $A_{\uppsi}$ y $P$ su matriz adjunta, o sea, la que hace $PA_{\uppsi} = d(x)I_{n}$.
+
+Sea $\delta: F_{n} \to F_{n}$ el homomorfismo que, fijada base $f = \{f_{1}, \dots, f_{n}\}$ de $F_{n}$, tiene como matriz $d(x)I_{n}$ (o sea, $\delta(f_{i}) = d(x)f_{i}$).
+
+$$\begin{aligned}
+F_{n} & \overset{\delta}{\to} & F_{n} & \overset{\pi}{\to} & \frac{F_{n}}{Im \delta} & \to & 0 \\
+p \downarrow & & id \downarrow & & h \downarrow & & & \\
+F_{n} & \underset{\uppsi}{\to} & F_{n} & \underset{\upphi}{\to} & V & \to & 0
+\end{aligned}$$
+Por la proposición anterior, tenemos la existencia de $h$, y $h$ es sobreyectivo, ya que lo es $\upphi$ ($h_{o}\pi = \upphi$).
+$$Ann_{K[X]} (V) \supseteq Ann_{K[X]}(\frac{F_{n}}{Im \delta}) = <d(x)>$$
+La última igualdad se debe a que:
+$$\frac{F_{n}}{Im \delta} \cong \oplus_{i=1}^{n} \frac{K[x] f_{i}}{K[x] d(x) f_{i}} = \oplus_{i=1}^{n} \frac{K[x]}{<d(x)>}$$
+Como $<d(x)> \subseteq Ann_{K[X]}(V)$, el polinomio mínimo de $T$ divide a $d(x)$.
+\end{proof}
+
+% 06/04/2022
+
+\begin{definition}
+Una matriz $A = (a_{ij})_{ij} \in M_{s \times t} (R)$ siremos que es cuasi-diagonal si $a_{ij} = 0, \forall i \neq j$.
+
+A no tiene que ser cuadrada, por ejemplo, $A = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 2 & 0
+\end{pmatrix}$ es casi-diagonal.
+
+Poniendo la notación $d_{i} = a_{ii}, \forall i \in \{1, \dots, m\}$ donde $m = \min\{s, t\}$, denotamos $A = diag_{s \times t}(d_{1}, \dots, d_{m})$.
+\end{definition}
+
+\begin{example}
+$$diag_{3 \times 2}(1, 3) = \begin{pmatrix}
+1 & 0 \\
+0 & 3 \\
+0 & 0
+\end{pmatrix}$$
+$$diag_{2 \times 3}(2, 0) = \begin{pmatrix}
+2 & 0 & 0 \\
+0 & 0 & 0
+\end{pmatrix}$$
+\end{example}
+
+\begin{definition}
+Denotamos por $GL_{n}(R)$ al grupo (bajo el producto) de las matrices invertibles, esto es,
+$$GL_{n}(R) = \{Q \in M_{n}(R) \mid \exists Q^{-1} \in M_{n}(R) \text{ con } QQ^{-1} = Q^{-1}Q = I_{n}\}$$
+\end{definition}
+
+\begin{proposition}
+Sea la presentación finita de $_{R}M$
+$$E_{s} \overset{\uppsi}{\to} F_{t} \overset{\upphi}{\to} M \to 0$$
+Supongamos que existen $P \in GL_{s}(R), Q \in GL_{t}(R)$ y \\ $D = diag_{s \times t}(d_{1}, \dots, d_{n})$, con $n = \min\{s, t\}$ tales que $PA = DQ$.
+
+Si $\{m_{1}, \dots, m_{t}\}$ es el conjunto de generadores de $M$ tal que $m_{i} = \upphi(f_{i}), \forall i \in \{1, \dots, t\}$ y $x_{1} = \sum_{j=1}^{t} q_{ij}m_{j}, \forall i \in \{1, \dots, t\}$, con $Q = (q_{ij})_{ij}$, entonces $M = \dotplus_{i=1}^{t} Rx_{i}, ann_{R}(x_{i}) = Rd_{i}, \forall i \leq m$ y $ann_{R}(x_{i}) = \{0\}, \forall i > m$.
+\end{proposition}
+
+\begin{proof}
+Definimos $\upphi_{1} = \upphi \cdot q, \upphi_{1}(f_{1}) = \upphi(q(f_{1})) \overset{(\star)}{=} \upphi(\sum_{i=1}^{t} q_{ij}f_{j}) = \sum_{j=1}^{t} q_{ij} \upphi(f_{j}) \overset{(\star)}{=} \sum_{j=1}^{t} q_{ij}m_{j} = x_{i}$
+
+$(\star) Q = A_{q}, \upphi(f_{j}) = m_{j}$
+
+Tenemos entonces el diagrama:
+$$\begin{aligned}
+E_{s} & \overset{\uppsi_{1}}{\to} & F_{t} & \overset{\upphi_{1}}{\to} & M & \to & 0 \\
+p \downarrow & & q \downarrow & & id \downarrow & & & & \\
+E_{s} & \underset{\uppsi}{\to} & F_{t} & \underset{\upphi}{\to} & N & \to & 0
+\end{aligned}$$
+con $A_{\uppsi_{1}} = D, A_{p} = P, A_{q} = Q$.
+
+La parte de la izquierda conmuta al ser $PA_{\uppsi} = DQ$. \\
+Tenemos que ver entonces que la sucesión de arriba es exacta para que sea una presentación. Lo más difícil es la exactitud en $F_{t}$, que se consigue empleando que $P$ y $Q$ son invertibles (ejercicio):
+
+Veamos ahora que $M = \dotplus_{i=1}^{t} Rx_{i}$, para lo que empleamos que $\{x_{1}, \dots, x_{t}\}$ es un conjunto de generadores de $M$ ($M = Rx_{1} + \dots + Rx_{t}$, pues $x_{i} = \upphi_{1}(f_{i})$ y $\upphi_{1}$ es sobreyectiva). \\
+Veamos que la suma es directa: tomamos $0 = r_{1}x_{1} + \dots + r_{t}x_{t} = \upphi_{1}(r_{1}f_{1} + \dots + r_{t}f_{t}) \Rightarrow r_{1}f_{1} + \dots + r_{t}f_{t} \in Ker \upphi_{1} = Im \uppsi_{1}$. \\
+Además $Im \uppsi_{1} = R \uppsi_{1}(e_{1}) + \dots + R \uppsi_{1}(e_{s}) \overset{(\star\star)}{=} Rd_{1}f_{1} + \dots + rd_{m}f_{m} = Rd_{1}f_{1} \dotplus \dots \dotplus Rd_{m}f_{m}$.
+
+$(\star\star)$ por ser $A_{\uppsi_{1}} = D = diag_{s \times t}(d_{1}, \dots, d_{m})$.
+
+En consecuencia, $r_{1} \in Rd_{1}, \dots, r_{m} \in Rd_{m}$ y si $t > m, r_{i} = 0, \forall i > m$. Además, para $i \leq m$, tenemos $^{(\star)} r_{i}x_{i} = \upphi_{1}(r_{i}f_{i})$, con $r_{i}f_{i} \in Im \uppsi_{1} = Ker \upphi_{1} \Rightarrow \upphi_{1}(r_{i}f_{i}) = r_{i}x_{i} = 0 \Rightarrow M = \dotplus_{i=1}^{t} Rx_{i}$.
+
+$(\star)$ cada $r_{i}f_{i}$ se puede expresar como $s_{i}d_{i}f_{i}$, con $s_{i} \in R$, al ser $r_{i} \in Rd_{i} \Rightarrow r_{i}f_{i} \in Im \uppsi_{1} = Rd_{1}f_{1} + \dots + Rd_{m}f_{m}$. \\
+Por otra parte, tenemos $M \cong \frac{F_{t}}{Im \uppsi_{1}} = \frac{Rf_{1} \dotplus \dots \dotplus Rf_{t}}{Rd_{1}f_{1} \dotplus \dots \dotplus Rd_{m}f_{m}} \cong \frac{Rf_{1}}{Rd_{1}f_{1}} \oplus \dots \oplus \frac{Rf_{m}}{Rd_{m}f_{m}} \oplus \frac{R}{\{0\}} \oplus \overset{(t-m)}{\dots} \oplus \frac{R}{\{0\}} \overset{(\star \star)}{\cong} \frac{R}{d_{1}} \oplus \dots \oplus \frac{R}{Rd_{m}} \oplus \frac{R}{\{0\}} \oplus \overset{(t-m)}{\dots} \oplus \frac{R}{\{0\}} \Rightarrow$ \\ $\Rightarrow ann_{R}(x_{i}) = Rd_{i}$.
+
+$(\star\star) \frac{Rf_{i}}{Rd_{i}f_{i}} \cong \frac{R}{Rd_{i}}$.
+\end{proof}
+
+\begin{example}[Caso particular]
+$R = \mathbb{Z} \Rightarrow$ siempre existen los $P$ y $Q$ de la proposición.
+
+Si $M$ es un grupo abeliano fintamente generado como $\mathbb{Z}-$módulo $\Rightarrow$ \\ $\Rightarrow \exists d_{1}, \dots, d_{m} \in \mathbb{N}$ tales que
+$$M \cong \underset{\text{parte finita (de torsión)}}{\underline{\mathbb{Z}_{d_{1}} \oplus \dots \oplus Z_{d_{m}}}} \oplus \underset{\text{parte infinita (libre de torsión)}}{\underline{\mathbb{Z}^{t-m}}}$$
+\end{example}
+
+% 07/04/2022
+
+% 19/04/2022
+
+\begin{proposition}[Repaso]
+$$\begin{aligned}
+E_{s} & \overset{\uppsi}{\to} & F_{t} & \overset{\upphi}{\to} & M & \to & 0
+\end{aligned}$$
+\underline{Hipótesis}: $\exists P, Q$ invertibles, $D = diag(d_{1}, \dots, d_{m})$ tal que $PA_{\uppsi} = DQ$. \\
+\underline{Tesis}: Con $m_{i} = \upphi(f_{i}), i \in \{1, \dots, t\}$
+$$x_{i} = \sum_{j=1}^{t} q_{ij}m_{j} (i \in \{1, \dots, t\}), Q = (q_{ij})$$
+tengo $M = \dotplus_{i=1}^{t} Rx_{i}$ y $ann_{R}(x_{i}) = Rd_{i}$ para $i \in \{1, \dots, m\}$, $ann_{r}(x_{i}) = \{0\}$ si $i > m$.
+\end{proposition}
+
+\begin{example}[\underline{Ejercicio típico de examen}]
+$K$ cuerpo, $T: V \to V$, con $dim_{K}V = 3$, base $\{v_{1}, v_{2}, v_{3}\}$ de $V$. \\
+Matriz de $T$ en $\{v_{1}, v_{2}, v_{3}\}$ es $B = \begin{pmatrix}
+1 & -1 & 1 \\
+-1 & -1 & 1 \\
+-1 & 1 & 1
+\end{pmatrix}$.
+
+\underline{Objetivo}: Obtener la descomposición cíclica primaria de $_{K[X]}V$.
+
+Tengo para $A = \begin{pmatrix}
+x-1 & 1 & -1 \\
+1 & x+1 & -1 \\
+1 & -1 & x-1
+\end{pmatrix} \in M_{3}(K[X])$, busco $P, Q$ y $D$. \\
+$v_{i} = \upphi(f_{i})$. 
+$$PA_{\uppsi} = DQ \Rightarrow PA_{\uppsi}Q^{-1} = D$$
+
+Partimos de $A$ y empezamos haciendo operaciones por filas:
+\begin{scriptsize}
+$$\begin{pmatrix}
+x-1 & 1 & -1 \\
+1 & x+1 & -1 \\
+1 & -1 & x-1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & -1 & x-1 \\
+1 & x+1 & -1 \\
+x-1 & 1 & -1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & -1 & x-1 \\
+0 & x+2 & -x \\
+x-1 & 1 & -1
+\end{pmatrix} \sim$$
+$$\sim \begin{pmatrix}
+1 & -1 & x-1 \\
+0 & x+2 & -x \\
+0 & x & -x^{2}+2x-2
+\end{pmatrix} \overset{char K \neq 2}{\sim} \begin{pmatrix}
+1 & -1 & x-1 \\
+0 & 2 & x^{2}-3x+2 \\
+0 & x & -x^{2}+2x-2
+\end{pmatrix} \sim$$
+$$\sim \begin{pmatrix}
+1 & -1 & x-1 \\
+0 & 2 & x^{2}-3x +2 \\
+0 & 0 & -\frac{1}{2}x^{3}+\frac{1}{2}x^{2}+x-2
+\end{pmatrix} \sim \begin{pmatrix}
+1 & -1 & x-1 \\
+0 & 2 & x^{2}-3x +2 \\
+0 & 0 & x^{3}-x^{2}-2x+4
+\end{pmatrix}$$
+\end{scriptsize}
+Utilizamos operaciones por columnas:
+\begin{scriptsize}
+$$\begin{pmatrix}
+1 & -1 & x-1 \\
+0 & 2 & x^{2}-3x +2 \\
+0 & 0 & x^{3}-x^{2}-2x+4
+\end{pmatrix} \overset{c_{2} + c_{1}}{\sim} \begin{pmatrix}
+1 & 0 & x-1 \\
+0 & 2 & x^{2}-3x+2 \\
+0 & 0 & x^{3}-x^{2}-2x+4
+\end{pmatrix} \sim$$
+$$\overset{c_{3} - (x-1)c_{1}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 2 & x^{2}-3x+2 \\
+0 & 0 & x^{3}-x^{2}-2x+4
+\end{pmatrix} \overset{c_{3} - (\frac{x^{2}-3x+2}{2})c_{2}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 2 & 0 \\
+0 & 0 & x^{3}-x^{2}-2x+4
+\end{pmatrix} = D$$
+\end{scriptsize}
+
+Para obtener $Q^{-1}$, tomamos la matriz $Id_{3 \times 3}$, y le realizamos las operaciones por columnas que hemos realizado antes. Para obtener $Q$, podemos directamente realizar las operaciones en sentido opuesto (comenzamos por la última), y cambiando sumas por restas, y tenemos:
+$$Q = \begin{pmatrix}
+1 & 1 & x-1 \\
+0 & 1 & \frac{1}{2}(x^{2}-3x+2) \\
+0 & 0 & 1
+\end{pmatrix}$$
+
+Quiero $x_{1}, x_{2}, x_{3} \in V$ tal que $_{K[X]}V = K[X]x_{1} \dotplus K[X]x_{2} \dotplus K[X]x_{3}$ y que verifican:
+\begin{itemize}
+\item $ann_{K[X]}(x_{1}) = K[X] \Rightarrow x_{1} = 0$.
+\item $ann_{K[X]}(x_{2}) = K[X]2 = K[X] \Rightarrow x_{2} = 0$.
+\item $ann_{K[X]}(x_{3}) = <x^{3}-x^{2}-2x+4>$.
+\end{itemize}
+Del elemento en la posición (3, 3) de $Q$ (que es 1) tenemos que $x_{3} = v_{3}$.
+$$_{K[X]}V = K[X]v_{3}$$
+y por tanto es cíclico (generado por un único elemento).
+
+Queremos la descomposición primaria. Para ello, tiene que ocurrir que $x^{3}-x^{2}-2x+4$ sea irreducible. Vamos a estudiarlo en tres casos particulares:
+\begin{itemize}
+\item $K = \mathbb{Q}$. En este caso, el polinomio no tiene raíces (Álgebra I), y por tanto es irreducible.
+$$_{\mathbb{Q}[X]}V = \mathbb{Q}[X]v_{3}$$
+es la descomposición cíclica primaria. Además, $_{\mathbb{Q}[X]}V$ es simple \\ ($_{\mathbb{Q}[x]}V = \mathbb{Q}[x]v_{3} \cong \frac{\mathbb{Q}[x]}{<\mu>}$ y $<\mu>$ maximal $\Rightarrow _{\mathbb{Q}[X]}V$ simple).
+
+En $_{\mathbb{Q}[X]}V$, tomando la base $\{v_{3}, T(v_{3}), T^{2}(v_{3})\}$, la matriz de $T$ es:
+$$\begin{pmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+-4 & 2 & 1
+\end{pmatrix}$$
+donde hemos usado $T^{3}(v_{3}) = T^{2}(v_{3}) + 2T(v_{3}) - 4v_{3}$. A esta matriz se le llama ``matriz compañera de polinomio mínimo.
+\item $K = \mathbb{R}$. $\mu = x^{3}-x^{2}-2x+4$ no es irreducible. Para ver las raíces, lo estudiamos como una función:
+$$\mu'(x) = 3x^{2}-2x-2 \Rightarrow (\mu'(x) = 0 \iff x = \frac{1 \pm \sqrt{7}}{3})$$
+$\mu(\frac{1+\sqrt{7}}{3}) > 0 \Rightarrow \mu(x)$ tiene una única raíz en $\mathbb{R} \Rightarrow$ \\ $\Rightarrow \mu(x) = (x - \alpha)(x - z)(x - \bar{z})$ para $\alpha \in \mathbb{R}, z \in \mathbb{C} \setminus \mathbb{R}$. \\
+($\mu(x) = (x - \alpha)(x^{2} - 2 Re z x + |z|^{2})$ en $\mathbb{R}[X]$)
+
+Tenemos $_{\mathbb{R}[X]}V = \mathbb{R}[X]v_{3}$. Definimos $u_{1} = (x-\alpha)v_{3} = (T-\alpha)v_{3} \Rightarrow ann_{\mathbb{R}[x]}(u_{1}) = <x^{2} - 2Re(z)x + |z|^{2}>$. Definiendo $u_{2} = (x^{2} - 2Re(z)x + |z|^{2})v_{3} = (T^{2} + 2Re(z)T + |z|^{2})v^{3}$, tenemos $ann_{\mathbb{R}[X]}(u_{2}) = <x-\alpha>$.
+
+% 20/04/2022
+
+En consecuencia, $_{\mathbb{R}[X]}V = \underset{\text{simple}}{\underline{\mathbb{R}[X]u_{1}}} \dotplus \underset{\text{simple}}{\underline{\mathbb{R}[X]u_{2}}} \Rightarrow _{\mathbb{R}[X]}V$ es un módulo semisimple de longitud 2. \\
+Tomamos en $V$ la $\mathbb{R}-$base dada por $\{\mu, Tu_{1}, u_{2}\}$. La matriz de $T$ (por filas) respecto a dicha base es:
+$$\begin{pmatrix}
+0 & 1 & 0 \\
+-|z|^{2} & 2 Re(z) & 0 \\
+0 & 0 & \alpha
+\end{pmatrix} \leadsto \text{ diagonlaización por bloques}$$
+$T^{2}u_{1} = (2 Re(z)T - |z|^{2})u_{1}, Tu_{2} = \alpha u_{2}$.
+\item Si $K = \mathbb{C} \Rightarrow \mu = (x - \alpha)(x - z)(x - \bar{z}), \alpha \in \mathbb{R}, z \in \mathbb{C} \setminus \mathbb{R}$. \\
+Llamamos $w_{1} = (x-z)u_{1} = (T-z)u_{1} \Rightarrow ann_{\mathbb{C}[X]}(w_{1}) = <x-\bar{z}>$. \\
+Seguimos sabiendo que $_{\mathbb{C}[X]}V = \mathbb{C}[X]u_{1} \dotplus \mathbb{C}[X]u_{2}$, pero ahora $\mathbb{C}[X]u_{1}$ puede descomponerse más.
+
+Llamamos $w_{2} = (x-\bar{z})u_{1} = (T-\bar{z})u_{1} \Rightarrow ann_{\mathbb{C}[X]}(w_{2}) = <x-z> \Rightarrow_{\mathbb{C}[X]}V = \mathbb{C}[X]w_{1} \dotplus \mathbb{C}[X]w_{2} \dotplus \mathbb{C}[X]u_{2}$, y como todos son de dimensión 1 $\Rightarrow$ no puede descomponerse más.
+
+En la base $\{w_{1}, w_{2}, u_{2}\}$, la matriz de $T$ es:
+$$\begin{pmatrix}
+z & 0 & 0 \\
+0 & \bar{z} & 0 \\
+0 & 0 & \alpha
+\end{pmatrix} \leadsto \text{ ahora la diagonalización es completa}$$
+\end{itemize}
+
+En un momento dado hemos empleado que $carK \neq 2$. ¿Qué pasaría si fuese $carK = 2$? \\
+Tendríamos:
+$$B = \begin{pmatrix}
+1 & 1 & 1 \\
+1 & 1 & 1 \\
+1 & 1 & 1
+\end{pmatrix} \Rightarrow X - B = \begin{pmatrix}
+x+1 & 1 & 1 \\
+1 & x+1 & 1 \\
+1 & 1 & x+1
+\end{pmatrix}$$
+Por filas, tenemos:
+$$\begin{pmatrix}
+x+1 & 1 & 1 \\
+1 & x+1 & 1 \\
+1 & 1 & x+1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & 1 & x+1 \\
+1 & x+1 & 1 \\
+x+1 & 1 & 1
+\end{pmatrix} \sim$$
+$$\sim \begin{pmatrix}
+1 & 1 & x+1 \\
+0 & x & x \\
+0 & x & x^{2}
+\end{pmatrix} \sim \begin{pmatrix}
+1 & 1 & x+1 \\
+0 & x & x \\
+0 & 0 & x^{2}+2
+\end{pmatrix}$$
+Por columnas, tenemos:
+$$\begin{pmatrix}
+1 & 1 & x+1 \\
+0 & x & x \\
+0 & 0 & x^{2} + x
+\end{pmatrix} \overset{\sim}{c_{2}+c_{1}} \begin{pmatrix}
+1 & 0 & x+1 \\
+0 & x & x \\
+0 & 0 & x^{2}+x
+\end{pmatrix} \sim$$
+$$\overset{c_{3} + (x+1)c_{1}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & x & x \\
+0 & 0 & x^{2}+x
+\end{pmatrix} \overset{c_{3}+c_{2}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & x & 0 \\
+0 & 0 & x^{2}+x
+\end{pmatrix} = D$$
+Sólo las entradas de la diagonal que no son unidades de $K[X]$ producen sumandos en la descomposición de $_{K[X]}V$. En este caso, sólo tendremos 2 sumandos (correspondientes a $x$ y a $x^{2}+x$) $\Rightarrow _{K[X]}V = K[X]x_{2} + K[X]x_{3}$. \\
+Calculamos $Q$ (sólo nos interesan las 2 últimas filas):
+$$\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 1 \\
+0 & 0 & 1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & 0 & x+1 \\
+0 & 1 & 1 \\
+0 & 0 & 1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & 1 & x+1 \\
+0 & 1 & 1 \\
+0 & 0 & 1
+\end{pmatrix} = Q$$
+$$\Rightarrow \begin{cases}
+ann_{K[X]}(x_{2}) = <x> \leadsto x_{2} = v_{2} + v_{3} \\
+ann_{K[X]}(x_{3}) = <x^{2}+x> \leadsto x^{3} = v_{3}
+\end{cases}$$
+Llamamos $y_{1} = (x+1)x_{3} = (T+1)x_{3} \Rightarrow ann_{K[X]}(y_{1}) = <x>$. \\
+Llamamos $y_{2} = xx_{3} = Tx_{3} \Rightarrow ann_{K[X]}(y_{2}) = <x+1>$. \\
+$\Rightarrow _{K[X]}V = K[X]x_{2} \dotplus K[X]y_{1} \dotplus K[X]y_{2}$. \\
+(recordando que $carK = 2$).
+
+En la base $\{x_{2}, y_{1}, y_{2}\}$ la matriz de $T$ es (por filas):
+$$\begin{pmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 1
+\end{pmatrix}$$
+Esto es una ilustración básica de la teoría que sustenta las técnicas de diagonalización de endormorfismos. El procedimiento no tiene por qué ser el mejor (más rápido). Si por ejemplo sabemos que la matriz es diagonalizable, hay algoritmos más rápidos.
+\end{example}
+
+\begin{proposition}
+Si $A$ es un DE con función eucídea $0$ y $B$ es una matriz con coeficientes en $A$, existen $P, Q$ invertibles (de tamaños adecuados) y $D$ cuasi-diagonal tales que $PB = DQ$.
+\end{proposition}
+
+\begin{proof}
+Necesitamos demostrar que $PBQ^{-1}=D$. \\
+Supongamos que $B \neq 0$ (en caso contrario, el resultado es trivial). Veamos que, mediante operaciones elementales por filas u columnas, podemos reducir $B$ a una matriz del tipo
+$$\begin{pmatrix}
+b & 0 & \dots & 0 \\
+0 &  \\
+\vdots & & B' \\
+0 
+\end{pmatrix}$$
+Llamamos $0(B) = \min(b_{ij} \mid b_{ij} \neq 0) \neq 0$ por ser $B \neq 0$. Intercambiando filas y columnas, colocamos $0(B)$ en la esquina superior izquierda. Tenemos dos casos:
+\begin{itemize}
+\item Si $b_{11} \mid b_{i1}$ y $b_{11} \mid b_{ij}, \forall i, j \Rightarrow$ hemos acabado (esto pasa siempre que $b_{11}$ es una unidad).
+\item Si $b_{11} \nmid b_{i1} ($ó $b_{11} \nmid b_{1j})$ para algún $i, j$, consideramos $b_{i1} = qb_{11} + r$, con $0(r) < 0(b_{11})$. \\
+Haciendo operaciones por filas (columnas si $b_{11} \nmid b_{1j}$) hacemos que en la posición $(i, 1)$ haya un $r$. Colocamos $r$ en la esquina superior izquierda. Reiterando, tenemos el resultado.
+\end{itemize}
+\end{proof}
+
+% 21/04/2022
+
+\newpage
+
+\section{Módulos semisimples de cualquier longitud}
+
+\begin{proposition}
+Sea $\{M_{i}: i \in I\}$ una familia no vacía de submódulos simples de un módulo $M$. Pongo $M' = \sum\limits_{i \in I} M_{i}$, y tomo $N \subseteq M'$ un submódulo con $N \neq M'$.
+
+Existe $J \subseteq I$ tal que $\{M_{i}: i \in J\}$ es independiente, $N \cap (\dotplus_{i \in J} M_{i}) = \{0\}$ y $M' = N \dotplus (\dotplus_{i \in J} M_{i})$.
+\end{proposition}
+
+\begin{proof}
+Sea $\Gamma$ el conjunto de los subconjuntos $J$ de $I$ tales que $\{M_{j}: j \in J\}$ es independiente y $N \cap (\dotplus_{j \in J} M_{j}) = \{0\}$.
+
+Veamos que $\Gamma \neq \emptyset$.
+\begin{enumerate}
+\item Si $N = \{0\}$, tomo $i \in I$ cualquiera, y tengo que $\{i\} \in \Gamma$.
+\item Si $N \neq \{0\}$, pero $N \cap M_{i} = \{0\}$ para algún $i$, entonces $\{i\} \in \Gamma$.
+\item Si $N \neq \{0\}$ y $N \cap M_{i} \neq \{0\}, \forall i \in I$. Entonces, como cada $M_{i}$ es simple, $N \cap M_{i} = M_{i}, \forall i \in I \Rightarrow N = M'$.
+
+Ordeno $\Gamma$ por inclusión. Tomo una cadena $\chi$ en $\Gamma$. Pongo:
+$$J = \bigcup_{C \in \chi} C$$
+Quiero ver que $J \in \Gamma$. Veamos que $\{M_{i}: i \in J\}$ es independiente. Para ello, basta con comprobar que $\{M_{i}: i \in F\}$ es independiente para cualquier $F \subseteq J$ finito. Pero $\exists C \in \chi$ tal que $F \subseteq C$, y $C \in \Gamma$, luego $\{M_{i}: i \in C\}$ es independiente y, por tanto, $\{M_{i}: i \in F\}$ es independiente.
+
+Tomo $m \in N \cap (\dotplus_{j \in J} M_{j}) \Rightarrow \exists F \subseteq J$ finito tal que $m \in N \cap (\dotplus_{j \in F} M_{j})$ \\ $\Rightarrow \exists C \in \chi$ tal que $F \subseteq C \Rightarrow m \in N \cap (\dotplus_{j \in C} M_{j}) = \{0\}$.
+
+El Lema de Zorn nos dice que $\exists J \in \Gamma$ maximal. Veamos que $M' = N \dotplus(\dotplus_{j \in J} M_{j})$ (sólo queda ver eso). \\
+Para $i \notin J \Rightarrow M_{i} \cap (N + \dotplus_{j \in J} M_{j}) \neq \{0\}$. De lo contrario, $J \cup \{i\} \in \Gamma$ y $J$ no es maximal. Como $M_{i}$ es simple $\Rightarrow M_{i} \subseteq (N + \dotplus_{j \in J} M_{j})$ \\ $\Rightarrow M_{i} \subseteq (N + \dotplus_{j \in J} M_{j}), \forall i \in I \Rightarrow M' = N \dotplus (\dotplus_{j \in J} M_{j})$.
+\end{enumerate}
+\end{proof}
+
+\begin{corollary}
+Sea $D$ un anillo de división ($\forall d \in D, d \neq 0, \exists d^{-1} \in D$ tal que $dd^{-1} = d^{-1}d = 1$), y $_{D}V$ un $D-$espacio vectorial no nulo. Si $\{v_{i}: i \in I\}$ es un conjunto de generadores no nulos de $V$, existe $J \subseteq I$ tal que $\{v_{j}: j \in J\}$ es una base de $_{D}V$.
+\end{corollary}
+
+\begin{proof}
+Tomo la familia $\{Dv_{i}: i \in I\}$. Cada $Dv_{i} \cong \frac{D}{ann_{D}(v_{i})} \cong$ \\ $ \underset{ann_{D}(v_{i}) = \{0\}}{\cong} ._{D}D$. $V = \sum_{i \in I} Dv_{i}$. Tomo $N = \{0\}$ en la proposición $\Rightarrow \exists J \subseteq I$ tal que $V = \dotplus_{j \in J} D v_{j} \Rightarrow \{v_{j}: j \in J\}$ es base de $V$.
+\end{proof}
+
+\underline{Observación}: $V \cong D^{(J)}$.
+
+\begin{definition}
+Dados homomorfismos de módulos:
+$$N \overset{g}{\to} M \overset{f}{\to} N$$
+tales que $f_{o}g = id_{N}$, diré que $f$ es un epimorfismo escindido (o roto) (``split'' en inglés), y que $g$ es un monomorfismo escindido (o roto).
+\end{definition}
+
+\begin{lemma}
+Todo módulo f.g. no nulo contiene un submódulo propio maximal.
+\end{lemma}
+
+\begin{proof}
+Sea $M$ el módulo. Sea $\Gamma$ el conjunto de los submódulos propios de $M$, esto es, 
+$$\Gamma = \{N \mid N \in \mathcal{L}(M), N \neq M\} \neq \upphi$$
+pues $\{0\} \in \Gamma$.
+
+Tomamos $\chi$ cadena en $\Gamma, N = \bigcap\limits_{C \in \chi} C$.
+
+Sean $m_{1}, \dots, m_{t}$ generadores de $M$. Si $N = M \Rightarrow m_{1}, \dots, m_{t} \in N \Rightarrow \exists c \in \chi$ tal que $m_{1}, \dots, m_{t} \in C \Rightarrow M \subseteq C \subseteq M \Rightarrow M = C \Rightarrow C \notin \Gamma$. \\
+Podemos aplicar Zorn $\Rightarrow \Gamma$ tiene elementos maximales.
+\end{proof}
+
+\underline{Observación}: $M$ f.g. $\Rightarrow \exists N \in \mathcal{L}(M) \mid \frac{M}{N}$ simple.
+
+\begin{theorem}
+Las siguientes condiciones son equivalentes para un módulo $M$:
+\begin{enumerate}
+\item Todo submódulo de $M$ es un sumando directo.
+\item Todo monomorfismo $L \to M$ es escindido.
+\item Todo epimorfismo $M \to N$ es escindido.
+\item $Soc(M) = M$. ($Soc(M) \equiv$ suma de todos los submódulos simples).
+\item $M$ es suma de una familia de submódulos simples.
+\item $M$ es suma directa interna de una familia de submódulos simples.
+\end{enumerate}
+\end{theorem}
+
+%25/04/2022
+
+\begin{proof}
+Si $M = \{0\}$ obvio. Supongamos $M \neq \{0\}$.
+\begin{enumerate}
+\item [\circled{1} $\Rightarrow$ \circled{3}] Sea $M \overset{\upphi}{\to} N$ epimorfismo. Sea $L = ker \upphi$. Por hipótesis $M = L \dotplus X$ para cierto $X \in \mathcal{L}(M)$. Tenemos $N \cong \frac{M}{L}$ por le primer teorema de isomorfia, luego
+$$N \cong \frac{L \dotplus X}{L} \overset{\text{2º isomorfia}}{\cong} \frac{X}{L \cap X} \overset{M = L \dotplus X}{=} \frac{X}{\{0\}} \cong X$$
+Consideramos entonces
+$$\begin{aligned}
+X & \cong & \frac{L \dotplus X}{L} & \cong & N \\
+x & \mapsto & x + L & \mapsto & \upphi(x)
+\end{aligned}$$
+$\Rightarrow \upphi_{\mid_{X}}: X \to N \Rightarrow (\upphi_{\mid_{X}})^{-1}: N \to X$ isomorfismo $(X \subseteq M)$.
+
+Considerando $\upphi_{o}(\upphi_{\mid_{X}})^{-1} = id_{N} \Rightarrow \upphi$ escindido.
+\item [\circled{3} $\Rightarrow$ \circled{2}] Sea $\varphi: L \to M$ un monomorfismo. Tomamos la SEC
+$$0 \to L \overset{\varphi}{\to} M \overset{K}{\to} C \to 0$$
+con $C = \frac{M}{Im \varphi}$. Como $K$ es epimorfismo $\overset{\circled{3}}{\Rightarrow} K$ escinde, esto es, $\exists g: C \to M$ tal que $k_{o}g = id_{C}$. Definimos $h = id_{M} - g_{o}K: M \to M$. Entonces $K_{o}h = K - K_{o}g_{o}K = K - K = 0_{M}: M \to M$. \\
+En consecuencia, $Im h \subseteq Ker K \equiv Im \varphi \cong L$. \\
+Tomamos entonces $f: M \to L \geq \varphi_{o}f = h$ (ejercicio). \\
+En consecuencia, $\varphi_{o}f_{o}\varphi = h_{o}\varphi = \varphi - \underset{=0}{\underline{g_{o}K_{o}\varphi}} = \varphi$. \\
+Como $\varphi$ es inyectiva $\Rightarrow f_{o}\varphi = id_{L} \Rightarrow \varphi$ es escindido.
+\item [\circled{2} $\Rightarrow$ \circled{1}] Tomamos $X \in \mathcal{L}(M), X \subseteq M$ y la inclusión $i: X \hookrightarrow M$ es monomorfismo $\overset{\circled{2}}{\Rightarrow} \exists p: M \to X \mid p_{o}i = p_{\mid_{X}} = id_{X} \Rightarrow M = X \dotplus Ker p$ (ejercicio).
+
+\underline{Nota}: Ya tenemos \circled{1} $\iff$ \circled{2} $\iff$ \circled{3} $\iff$ \circled{1}.
+\item [\circled{4} $\Rightarrow$ \circled{5}] Es evidente: tómese la familia de todos los submódulos simples de $M$.
+\item[\circled{5} $\Rightarrow$ \circled{6}] Consecuencia de una proposición anterior, con $N = \{0\}$.
+\item[\circled{6} $\Rightarrow$ \circled{1}] Consecuencia de la proposición anterior, con $N \neq \{0\}$.
+\item[\circled{1} $\Rightarrow$ \circled{4}] Emplearemos el lema. Por hipótesis, $M = Soc(M) \dotplus X$ para cierto $X \in \mathcal{L}(M)$. Veamos que $X = \{0\}$.
+
+Si fuese $X \neq \{0\}$, tomamos $0 \neq m \in X$. Por el lema, tenemos que hay un epimorfismo $Rm \overset{p}{\to} S$ para $S$ simple. Como $Rm \in \mathcal{L}(M) \Rightarrow M = Rm \dotplus Y$ (es sumando directo) $\Rightarrow$ existe un epimorfismo $M \overset{\pi}{Rm}$. \\
+Consideramos el homorfismo $p_{o}\pi: m \to S$ sobreyectivo $\Rightarrow$ \\ $\Rightarrow \exists \sim: S \to M \mid p_{o}\pi_{o}i = id_{S}$ ($p_{o}\pi$ es escindido.
+
+De este modo, $S \overset{p \text{ sobreyectiva}}{\cong} Im(\pi_{o}i) \subseteq Rm \subseteq \Rightarrow X$ contiene a \\ $Im(\pi_{o}i)$, que es simple, pero $Soc(M)$ contiene a todos los simple $\Rightarrow$ no puede ser $M = Soc(M) \dotplus X$ (contradicción). 
+\end{enumerate}
+\end{proof}
+
+\begin{definition}
+Si $M$ verifica cualquiera de las condiciones anteriores, se dice que $M$ es semisimple.
+\end{definition}
+
+% 26/04/2022
+
+\underline{Nota}: Todos los espacios vectoriales son semisimples $\Rightarrow$ todo subespacio vectorial es sumando directo.
+
+Podemos preguntarnos para qué anillos se tiene que todos los módulos son semisimples.
+
+\begin{corollary}
+Todo cociente y todo submódulo de un módulo semisimple es semisimple.
+\end{corollary}
+
+\begin{proof}
+Sea $M$ semisimple, $N \in \mathcal{L}(M)$ y consideramos $\frac{M}{N}$. Como $M$ semisimple $\Rightarrow M$ es suma de módulos simples.
+$$M = \sum_{i \in I} S_{i} \text{ con } S_{i} \text{ simple}$$
+Consideramos la proyección canónica, $M \overset{p}{\to} \frac{M}{N}, m \mapsto m + N$ y tenemos que $\frac{M}{N} = \sum_{i \in I} p(S_{i})$.
+
+Para cada $i \in I$, se tiene o bien $p(S_{i}) = \{0\}$, o bien $p(S_{i}) \neq \{0\}$. Eliminamos de la suma los índices $i \in I$ tales que $p(S_{i}) = \{0\}$. Entonces los restantes sumandos son simples (pues $S_{i} \overset{p}{\to} p(S_{i})$ es un isomorfismo) $\Rightarrow \frac{M}{N}$ es suma de simples $\Rightarrow \frac{M}{N}$ semisimple. Veamos ahora que $N$ es semisimple. Como $M$ semisimple, tenemos que $M = N \dotplus X$. Consideramos $M = N \dotplus X \overset{\pi}{\to} N, n+x \mapsto n \Rightarrow \pi$ epimorfismo $\Rightarrow N \cong \frac{M}{Ker \pi}$, que es un cociente de $M \Rightarrow N$ semisimple.
+\end{proof}
+
+\begin{corollary}
+$M$ es un módulo semisimple finitamente generado $\iff M = S_{1} \dotplus \dots \dotplus S_{n}$, con $S_{i}$ simple.
+\end{corollary}
+
+\begin{proof}
+\circled{$\Leftarrow$} Teorema.
+
+\circled{$\Rightarrow$} $M = \underset{i \in I}{\dotplus} S_{i}$, con $S_{i}$ simple. Tenemos que ver que $I$ es finito. Tomamos $m_{1}, \dots, m_{t}$ conjunto de generadores de $M \Rightarrow m_{j} \in \underset{\text{finita}}{\dotplus} S_{i}, \forall j \in \{1, \dots, t\} \Rightarrow M \subseteq \underset{\text{finita}}{\dotplus} S_{i} \subseteq M \Rightarrow M = \underset{\text{finita}}{\dotplus} S_{i}$.
+\end{proof}
+
+\newpage
+
+\section{Anillos semisimples}
+
+\begin{definition}
+Un anillo $R$ es semisimple si todo $R-$módulo es semisimple.
+\end{definition}
+
+\begin{example}
+Todo anillo de división es semisimple (hay muchos anillos de división).
+\end{example}
+
+\begin{theorem}
+$R$ es semisimple $\iff _{R}R$ es semisimple.
+\end{theorem}
+
+\begin{proof}
+\circled{$\Rightarrow$} Se sigue de la definición.
+\circled{$\Leftarrow$} Sea $_{R}R$ módulo. Escribimos $M = \sum\limits_{m \in M}Rm$. Veremos que cada sumando no nulo es semisimple $\overset{\text{teorema}}{\Rightarrow}$ cada sumando es suma de simples $\Rightarrow M$ es suma de semisimples $\overset{\text{teorema}}{\Rightarrow} M$ es semisimple. Tenemos que $Rm \cong \frac{R}{ann_{R}(m)}$ que es un cociente $\Rightarrow Rm$ semisimple.
+\end{proof}
+
+\underline{Nota}: Esta es otra forma de ver que todo anillo de división es semisimple, pues $_{R}R$ es simple, y por tanto semisimple.
+
+\begin{definition}
+Sea $_{R}M$. Definimos:
+$$End_{R}(M) = \{f: M \to M \mid f \text{ homomorfismo de } R-\text{módulos}\} \subseteq End(M)$$
+
+Puede verse que $End_{R}(M)$ es subanillo de $End(M)$.
+
+Llamo $S = End_{R}(M)$. Tenemos $i: S \hookrightarrow End(M)$ homomorfismo de anillos $\Rightarrow M$ es también un $S-$módulo.
+
+Se llama a $End_{R}(M)$ ``anillo de endomorfismos de $M$''.
+\end{definition}
+
+\underline{Nota}: Nosotros hablamos de módulos, y no de módulos ``a izquierda'' o ``a derecha''.
+
+Como el homomorfismo es la inclusión, si $f \in S, m \in M \Rightarrow fm = f(m)$. Nos preguntamos ahora quién es $End_{S}(M) = End_{End_{R}(M)}(M)$. \\
+Obviamente, $End_{S}(M) \subseteq End(M)$ subanillo. \\
+Dado $g \in End(M)$
+$$g \in End_{S}(M) \iff g(fm) = fg(m), \forall f \in S, m \in M \iff$$
+Los ``escalares'' (que ahora son endomorfismos $f \in End_{R}(M)$) salen fuera.
+$$\iff g(f(m)) = f(g(m)), \forall f \in End_{R}(M), \forall m \in M \iff$$
+$$\iff f_{o}g = g_{o}f, \forall f \in S \Rightarrow$$
+$$\Rightarrow End_{S}(M) = \{g \in End(M) \mid g_{o}f = f_{o}g, \forall f \in End_{R}(M)\} \subseteq End(M)$$
+Esto se suele llamara ``centralizador de $End_{R}(M)$''.
+
+\begin{lemma}
+$R \overset{\lambda}{\to} End_{S}(M)$ dado por $\lambda(r): M \to M, m \mapsto rm, \forall r \in R$ es un homormofismo de anillos.
+\end{lemma}
+
+\begin{proof}
+$$\begin{aligned}
+R & \overset{\lambda}{\to} & End(M) & & \\
+r & \mapsto & \lambda(r): & M & \to & M \\
+ & & & m & \mapsto & rm
+\end{aligned} \text{homomorfismo de anillos}$$
+Basta probar que $Im(\lambda) \subseteq End_{S}(M)$, esto es, que $\forall r \in R$ se tiene $\lambda(r)_{o}f = f_{o}\lambda(r), \forall f \in End_{R}(M)$, lo cual es cierto pues
+$$(\lambda(r)_{o}f)(m) = \lambda(r)(fm) = r(fm) \overset{f \in End_{R}(M)}{=}$$
+$$= f(rm) = f(\lambda(r)(m)) = (f_{o}\lambda(r))(m) \Rightarrow$$
+$$\Rightarrow \lambda(r)_{o}f = f_{o}\lambda(r)$$
+Se suele llamar también anillo de biendomorfismos.
+
+Denotamos $T = End_{S}(M)$. Podríamos considerar $End_{T}(M)$ pero hay un teorema que dice que en algún momento volvemos al inicio (como $E \to E^{*} \to E^{**} \cong E \dots$)
+\end{proof}
+
+\begin{proposition}
+Los $R-$ sumandos directos de $M$ son los mismos que los $T-$sumandos directos de $M$. Como consecuencia, si $_{R}M$ es semisimple $\Rightarrow _{T}M$ es semisimple.
+\end{proposition}
+
+\begin{proof}
+Tenemos el homomorfismo de anillos $\lambda: R \to T$. Si $N$ es un $T-$sumando directo de $M \Rightarrow M = N \dotplus X$, con $X \in \mathcal{L}(_{T}M) \Rightarrow M = N \dotplus X$, con $X \in \mathcal{L}(_{R}M)$.
+
+Recíprocamente, si tenemos $_{R}M = X \dotplus Y, X, Y \in \mathcal{L}(_{R}M)$, debemos demostrar que $X, Y \in \mathcal{L}(_{T}M)$. Basta probarlo para uno de ellos, por ejemplo, $X$. Tomamos $p: M \to M, x+y \mapsto x$ y vemos que $p \in S = End_{R}(M)$.
+
+Además, $X = Im p$. Tomamos $g \in T$ y tenemos que, $\forall x \in X$
+$$g(x) = gx = g(p(x)) = (g_{o}p)(x) = (p_{o}g)(x) = p(g(x)) \in X$$
+$\Rightarrow gx \in X, \forall x \in X \Rightarrow X$ es un $T-$submódulo de $M$.
+\end{proof}
+
+\underline{Observación}: Como consecuencia de esta proposición:
+$$_{R}M \text{ semisimple} \iff _{t}M \text{ semisimple}$$
+Sea $N \in \mathcal{L}(_{T}M)$. Entonces $N \in \mathcal{L}(_{R}M)$ (restricción escalares) $\Rightarrow N$ es $R-$sumando directo de $M \Rightarrow N$ es $T-$sumando directo de $M \Rightarrow _{T}M$ es semisimple.
+
+El recíproco no puede demostrar así porque la restricción de escalares ``solo va en un sentido''.
+
+% 27/04/2022
+
+\begin{task}
+Demostrar que $S = End_{T}(M)$, donde $T = End_{S}(M), S = End_{R}(M)$.
+\end{task}
+
+\begin{corollary}
+Si $_{R}M$ es semisimple, $l(_{R}M) < \infty \Rightarrow _{T}M$ es semisimple y $l(_{T}M) = l(_{R}M)$.
+\end{corollary}
+
+\begin{proof}
+Que $_{T}M$ es semisimple ya lo sabemos.
+
+Si $_{R}M = S_{1} \dotplus \dots \dotplus S_{n}$ con $S_{i}$ $R-$submódulos simples $\Rightarrow$ Si es un $T-$submódulo de $M$ para todo $i$, y $S_{i}$ es $T-$simple, pues al ser $T$ semisimple, si no fuese $S_{i}$ simple $\Rightarrow S_{i} = X \dotplus Y \Rightarrow S_{i} = X \dotplus Y$ como $R-$módulo, lo cuál no es posible.
+
+Dado un $R-$módulo $_{R}M$ y $n \in \mathbb{N}$, podemos considerar $_{R}M^{n} = M \oplus M \oplus \overset{(n)}{\dots} \oplus M$. \\
+Teníamos $S = End_{R}(M)$ y consideramos $S' = End_{R}(M^{n})$. \\
+Tomamos, para cada $i \in \{1, \dots, n\}$ un homomorfismo de $R-$módulos dado por $L_{i}: M \to M^{n}, m \mapsto (0, 0, \dots, 0, \overset{(i)}{m}, 0, \dots, 0)$. \\
+Recíprocamente, las proyecciones $\pi_{j}: M^{n} \to M, (m_{i}) \mapsto m_{j}$ homomorfismos de $R-$módulo.
+
+Es claro entonces que $id_{M^{n}} = \sum_{i=1}^{n} L_{i} \pi_{i} \in S'$, pues $\forall i, L_{i}\pi_{i} \in S'$. Dado ahora $f \in T = End_{S}(M)$, definimos $\bar{f} = \sum_{i=1}{n} L_{i}f\pi_{i} \in End(M^{n})$. \\
+Claramente, $\bar{f}(m_{1}, \dots, m_{n}) = (f(m_{1}), \dots, f(m_{n}))$.
+
+Tomando $g \in S'$, tenemos $$g\bar{f} = \sum_{i, j=1}^{n} L_{i}\pi_{i}gL_{j}f\pi_{j} \overset{\bigstar}{=} \sum_{i, j=1}^{n} L_{i}f\pi_{i}gL_{j}\pi_{j}$$
+$\Rightarrow g$ conmuta con $\bar{f} \Rightarrow \bar{f} \in End_{S'}(M)$.
+
+$\bigstar L_{i}, \pi_{i} \in S, f \in T, g \in S' \Rightarrow f$ conmuta con todos.
+\end{proof}
+
+\begin{theorem}[de densidad de Jacobson]
+Sea $_{R}M$ semisimple, y $m_{1}, \dots, m_{n} \in M$. Para cada $f \in End_{S}(M)$ existe $r \in R$ tal que $f(m_{i}) = rm_{i}, \forall i \in \{1, \dots, n\}$.
+\end{theorem}
+
+\begin{proof}
+$m = (m_{1}, \dots, m_{n}) \in M^{n}$. \\
+Sabemos que $M^{n}$ es $R-$semisimple, luego $Rm$ es un $R-$sumando directo de $M^{n} \Rightarrow Rm$ es un $S-$sumando directo de $M^{n}$ y, en particular, $Rm$ es un $End_{S'}(M^{n})-$submódulo de $M^{n}$.
+
+Como $\bar{f} \in End_{S'}(M^{n}) \Rightarrow \bar{f}m \in Rm \Rightarrow (f(m_{1}), \dots, f(m_{n})) \in Rm \Rightarrow$ \\ $\Rightarrow \exists r \in R \mid (f(m_{1}), \dots, f(m_{n})) = rm$.
+\end{proof}
+
+\begin{lemma}[de Schur]
+Si $_{R}N$ es simple y $f: M \to N$ es un $R-$homomorfiosmo 
+$$\Rightarrow \begin{cases}
+f = 0 \\
+\text{ó} \\
+f \text{ es ismomorfismo}
+\end{cases}$$
+$\Rightarrow End_{R}(M)$ es anillo de división.
+
+Básicamente dice que el anillo de endomorfismos de un módulo simple es un anillo de división.
+\end{lemma}
+
+\begin{proof}
+Si $f \neq 0 \Rightarrow Im f$ $R-$submódulo de $N \Rightarrow Imf = N$ (pues no puede ser $Im f = \{0\}) \Rightarrow Ker f \in \{M, \{0\}\}$ y no puede ser $Ker f = \{M\} \Rightarrow Ker f = \{0\} \Rightarrow f$ isomorfismo.
+\end{proof}
+
+% 28/04/2022
+
+\begin{proposition}
+$_{R}M$ simple fiel. Suponemos que $_{R}R$ artiniano. Sea $D = End_{R}(M)$. Entonces $_{D}M$ es un $D$-e.v. de dimensión finita y:
+$$\lambda: R \to End_{D}(M)$$
+es un isomorfismo de anillos.
+\end{proposition}
+
+\begin{proof}
+Supongamos que $_{D}M$ no fuera de dimensión finita $\Rightarrow M$ admite una base $B$ infinita. Tomo $\{x_{i}: i \in \mathbb{N}\} \subseteq B$ linealmente independiente.
+
+Dado $i \in \mathbb{N}$, tomo $f_{i}: M \to M$ la aplicación $D-$lineal que vale 0 sobre todo elemento de $B$ y $f_{i}(x_{i}) = x_{i}$.
+
+Cada $f_{i} \in End_{D}(M)$. Teorema de densidad, $\exists r_{i} \in R$ tal que:
+$$f_{i}(x_{j}) = r_{i}x_{j} \hspace{0.5cm} \text{ para } j \in \{0, \dots, i\}$$
+$r_{i} \in ann_{R}(x_{0}) \cap \dots \cap ann_{R}(x_{i-1})$, pero $r_{i} \notin ann_{R}(x_{0}) \cap \dots \cap ann_{R}(x_{i-1}) \cap ann_{R}(x_{i}) \Rightarrow ann_{R}(x_{0}) \cap \dots \cap ann_{R}(x_{i-1}) \supsetneq ann_{R}(x_{0}) \cap \dots \cap ann_{R}(x_{i}) \Rightarrow _{R}R$ no es artinitano.
+
+Tomo $\{m_{1}, \dots, m_{n}\} D-$base de $M$. Dado $f \in End_{D}(M)$, el teorema de densidad nos dice que $\exists r \in R$ tal que $f(m_{i}) = rm_{i}, \forall i \in \{1, \dots, n\} \Rightarrow f = \lambda(r) \Rightarrow \lambda $ es sobreyectivo $\Rightarrow \lambda$ isomorfismo.
+\end{proof}
+
+\begin{definition}
+Un elemento $e \in R$ se dice idempotente si $e^{2} = e$.
+
+Un conjunto $e_{1}, \dots, e_{n} \in R$ de idempotentes se dice un conjunto completo de idempotentes ortogonales (CCIO) si:
+\begin{enumerate}
+\item $e_{i}e_{j} = 0$ para $i \neq j$.
+\item $1 = e_{1} + \dots + e_{n}$.
+\end{enumerate}
+
+Si $\{e_{i}, \dots, e_{n}\}$ CCIO de $R \Rightarrow R = Re_{1} \dotplus \dots \dotplus Re_{n}$. En efecto, $r \in R \Rightarrow r = r \cdot 1 = r e_{1} + \dots + re_{n} \Rightarrow R = Re_{1} + \dots + Re_{n}$.
+
+Además, si $0 = r_{1}e_{1} + \dots + r_{n}e_{n}$, para $r_{i} \in R \Rightarrow 0 = r_{i}e_{i}$ (multiplicando por $e_{i}$) para cada $i \in \{i, \dots, n\}$
+\end{definition}
+
+\begin{theorem}
+Para un anillo no trivial son equivalentes:
+\begin{enumerate}
+\item $_{R}R$ semisimple y todos los $R-$módulos simples son isomorfos entre sí.
+\item $R$ es isomorfo, como anillo, a $End_{D}(M)$ con $D$ de división y $_{D}M$ de dimensión finita.
+\item $_{R}R$ artiniano y existe un $R-$módulo simple fiel.
+\item $_{R}R$ artiniano y los únicos ideales de $R$ son $\{0\}$ y $R$ (un anillo que cumple esto es un anillo simple).
+\end{enumerate}
+Además, por 2., necesariamente, $D \cong End_{R}(\Sigma)$, para $_{R}\Sigma$ cualquier simple y $dim_{D}(M) = l(_{R}R)$.
+\end{theorem}
+
+\begin{proof} \
+\begin{enumerate}
+\item [$1. \Rightarrow 4.$] Sabemos que $_{R}R$ tiene longitud finita. Sea $I$ un ideal de $R$ propio ($I \neq R$), y vamos a ver que $I = \{0\}$. $\frac{R}{I}$ es seimisimple como $R-$módulo. Como es finitamente generado $\Rightarrow \frac{R}{I} =$ suma directa finita de simples $\Rightarrow \frac{R}{I} \overset{R-\text{módulo}}{\cong} \Sigma^{n}$, para $_{R}\Sigma$ simple.
+
+Como $I$ es ideal (no sólo a la izquierda), $I = Ann_{R}(\frac{R}{I}) = Ann_{R}(\Sigma^{n}) = Ann_{R}(\Sigma)$.
+
+$R \cong \Sigma^{m}, m = l(_{R}R)$. Entonces $I = Ann_{R}(\Sigma) = Ann_{R}(\Sigma^{m}) =$ \\ $= Ann_{R}(R) = \{0\}$.
+\item [$4. \Rightarrow 3.$] Tomo $_{R}\Sigma$ simple. $R \neq Ann_{R}(\Sigma) \Rightarrow Ann_{R}(\Sigma) = \{0\} \Rightarrow _{R}\Sigma$ fiel.
+\item [$3. \Rightarrow 2.$] Proposición previa.
+\item [$4. \Rightarrow 1.$] Tomo $S = End_{D}(M)$. Si $m, m' \in M$ con $m \neq 0 \Rightarrow \exists f \in S$ tal que $f(m) = m'$. Así, $Sm = M \Rightarrow _{S}M$ simple.
+
+Sea $\{m_{1}, \dots, m_{n}\} D-$ base de $M$. Para $i \in \{i, \dots, n\}$, defino $e_{i} \in S$ tal que $e_{i}(m_{j}) = \begin{cases}
+0 & \text{si } j \neq i \\
+m_{i} & \text{si } j = i
+\end{cases}$ \\
+$\{e_{1}, \dots, e_{n}\}$ es CCIO de $S \Rightarrow S = Se_{1} \dotplus \dots \dotplus Se_{n}$.
+
+Veamos que $Se_{i}$ es simple. Basta con demostrar que, si $f \in S$ tal que $fe_{i} \neq 0 \Rightarrow Sfe_{i} = Se_{i}$. \\
+$fe_{i} = f(e_{i}) = \sum\limits_{j=1}^{n} a_{j}m_{j}, a_{j} \in D$. Tomo $k \in \{1, \dots, k\}$ tal que $a_{k} \neq 0$ (tiene que haber alguno porque si no $f(e_{i})$ sería 0) y defino $s: M \to M$ tal que $s(m_{r}) = a_{k}^{-1}m_{i}$ y $s(m_{j}) = 0$ si $j \neq k$.
+$$sfe_{i}(m_{i}) = s(\sum\limits_{j}a_{j}m_{j}) = a_{k}^{-1}a_{k}m_{i}=m_{i}$$
+Entonces, $sfe_{i} = e_{i} \Rightarrow Se_{i} = Sfe_{i}$. Por tanto, $_{S}S$ semisimple.
+
+% 03/05/2022
+
+Construimos la aplicación $Se_{i} \overset{F}{\to}M, f \mapsto f(m_{i}) = fm_{i}$ no nula. \\
+Es fácil ver que $F$ es un homomorfismo de $S-$módulos. Además, $F$ no es nula pues $F(e_{i}) = e_{i}(m_{i}) = m_{i} \neq 0$ (pues $m_{i}$ son los elementos de una base $\Rightarrow F \neq 0 \overset{Schur}{Rightarrow} F$ isomorfismo. En particular, todos los $Se_{i}$ son isomorfos entre sí.
+
+Si $_{s}\Sigma$ es simple $\Rightarrow \exists p: S \to \Sigma$ epimorfismo de $S-$módulos (teorema isomorfismo). \\
+En consecuencia, $p$ no se anula en todos los $Se_{i}$, esto es, $\exists i \in \{1, \dots, n\}$ tal que $p_{\mid_{Se_{i}}} \neq 0 \overset{Schur}{\Rightarrow} p_{\mid_{Se_{i}}}$ isomorfismo.
+
+Tomamos ahora $\upphi: S \to R$ isomorfismo de anillos y consideramos $\{\upphi(e_{1}, \dots, \upphi(e_{n})\}$, que es un CCIO de $R \Rightarrow R = R\upphi(e_{1}) \dotplus \dots \dotplus R\upphi(e_{n})$.
+
+Veamos que cada $R\upphi(e_{i})$ es simple (como $R-$módulo): se comprueba (mediante restricción de escalares con $\upphi$ y $\upphi^{-1}$) que $\mathcal{L}(_{S}X) = \mathcal{L}(_{R}X)$. En consecuencia, $_{R}M$ es simple (pues lo es $_{S}M$). Vamos a comparar $\mathcal{L}(R\upphi(e_{i}))$ con $\mathcal{L}(Se_{i})$: Como $\upphi$ isomorfismo, tenemos:
+$$\begin{aligned}
+\upphi(I) & \to & I \\
+J & \gets & \upphi^{-1}(J)
+\end{aligned}$$
+con $I, J$ ideales, y esta aplicación es biyectiva.
+
+En consecuencia, cada $R\upphi(e_{i})$ es simple como $R-$módulo y, por tanto, $_{R}R$ es semisimple. \\
+Además, tenemos que $dim_{D}(M) = n = l(_{S}S) = l(_{R}R)$.
+
+Sólo nos queda ver que todos los $R-$módulos simples son isomorfos entre si, y que $D \cong End_{R}(\Sigma)$. \\
+Sea $_{R}\Sigma$ simple $\overset{\upphi}{\Rightarrow} _{S}\Sigma$ simple $\Rightarrow _{S}\Sigma \cong _{S}M \overset{\upphi^{-1}}{\Rightarrow} _{R}\Sigma \cong _{R}M$.
+
+Por último, veamos que $D \cong End_{R}(\Sigma)$: por el teorema de densidad, tenemos un isomorfismo $D \overset{\lambda}{\underset{\cong}{\to}} End_{S}(M) = End_{R}(M)$.
+\end{enumerate}
+
+Este resultado nos va a servir para clasificar, salvo isomorfismos, todos los anillos semisimples.
+\end{proof}
+
+\newpage
+
+\section{Componentes homogéneas}
+
+\begin{lemma}
+Sea $R$ un anillo. Existe un conjunto $\Omega_{R}$ de $R-$módulos simples, no isomorfos entre si, tal que cualquier $R-$módulo simple es isomorfo a uno (y sólo a uno) de los de $\Omega_{R}$.
+
+$\Omega_{R}$ puede ser finito o infinito. Se suele llamar a $\Omega_{R}$ conjunto de representantes de los tipos de $R-$módulos simples.
+
+Podríamos decir ``basta con tomar $\Omega_{R}$ el conjunto de todos los $R-$módulos simples y quitar los isomorfos'', pero si tomamos todos los $R-$módulos simples, el resultado no tiene por qué ser un conjunto (paradojas teorías conjuntos).
+\end{lemma}
+
+\begin{proof}
+Sea $_{R}\Sigma$ simple. Tomamos $s \in \Sigma$ con $s \neq 0$ y tenemos $_{R}\sigma \cong \frac{R}{ann_{R}(s)}$. Tomamos $\Sigma_{R}$ un conjunto de representantes de los $R-$módulos $\frac{R}{I}$ para $I$ ideal, representante maximal bajo la relación de equivalencia $I \sim J \iff \frac{R}{I} \cong \frac{R}{J}$.
+
+Esto si es un conjunto, pues el cardinal debe al ser menor o igual que el conjunto de ideales de $R$.
+\end{proof}
+
+\begin{proposition}
+$_{R}M$ módulo. Para $\Sigma \in \Omega_{R}$ definimos $Soc_{\Sigma}(M)$ como la suma de todos los submódulos simples de $M$ isomorfos a $\Sigma$
+$$\Rightarrow Soc(M) = \underset{\Sigma \in \Omega_{R}}{\dotplus} Soc_{\Sigma}(M)$$
+
+El lema anterior era para poder decir ``$\Sigma \in \Omega_{R}$'' y hacer de suma.
+\end{proposition}
+
+\begin{proof}
+Sabemos que $Soc(M) = \sum\limits_{\Sigma \in \Omega_{R}} Soc_{\Sigma}(M)$. Llamamos $N = Soc_{\Sigma'}(M) \cap \sum\limits{\Sigma \neq \Sigma'} Soc_{\Sigma}(M)$, para $\Sigma' \in \Omega_{R}$ fijo.
+
+Tomamos, suponiendo $N \neq \{0\}, m \in N$, con $m \neq 0$. Entones $Rm$ es semisimple y finitamente generado $\Rightarrow Rm$ es de longitud finita $\Rightarrow$ existe un $R-$submódulo simple $S$ de $Rm$.
+
+Tenemos que $S \subseteq Soc_{\Sigma'}(M) \Rightarrow$ escinde: $\exists g: Soc_{\Sigma'}(M) \to S$ epimorfismo. \\
+Entonces $\exists S' \subseteq Soc_{\Sigma'}(M)$ con $S' \cong \Sigma'$ tal que $g_{\mid_{S'}} \neq 0 \overset{Schur}{\Rightarrow} \Sigma' \cong S' \cong S$.
+
+Análogamente, $\exists S'' \cong \Sigma \neq \Sigma'$ tal que $S'' \cong S$ (mismo argumento) $\Rightarrow \Sigma' \cong S \cong \Sigma$.
+
+Pero habíamos tomado $\Sigma \neq \Sigma'$ y en $\Omega_{R}$ sólo hay un ejemplar (representante) salvo isomorfismo $\Rightarrow$ absurdo, luego $N = \{0\}$, y la suma es directa.
+\end{proof}
+
+\underline{Nota}: A los $Soc_{\Sigma}(M)$ e le llama ``componentes homogéneas'' del zócalo $Soc(M)$.
+
+% 04/05/2022
+
+\underline{Observación}: Sea $f \in End_{R}(M)$. Se tiene entonces:
+$$f(Soc_{\Sigma}(M)) = f(\sum\limits_{\underset{S \in \mathcal{L}(M)}{S \cong \Sigma}} S) = \sum\limits_{\underset{S \in \mathcal{L}(M)}{S \cong \Sigma}} f(S)$$
+Por el lema de Schur, cada sumando o bien es 0, o bien es isomorfo a $\Sigma$, luego $f(Soc_{\Sigma}(M)) \subseteq Soc_{\Sigma}(M)$. En otras palabras, $Soc_{\Sigma}(M)$ es invariante bajo todas las $f \in End_{R}(M)$.
+
+Si $M = R$ y tomamos $f = \rho_{r}$ con $r \in R$ dada por $\rho_{r}: R \to R, r' \mapsto r'r \Rightarrow \rho_{r}(Soc_{\Sigma}(R)) \subseteq Soc_{\Sigma}(R) \Rightarrow Soc_{\Sigma}(R)$ es un ideal de $R \Rightarrow Soc(R)$ es un ideal de $R$.
+
+\underline{Nota}: Puede darse que el zócalo sea el 0 o el total.
+
+\begin{theorem}
+Sea $R$ un anillo semisimple. Entonces $\Omega_{R}$ es finito.
+
+Eso no es cierto si $R$ no es semisimple. Basta tomar $R = \mathbb{Z}$ y $\Omega_{\mathbb{Z}}$ es infinito (hay un simple por cada primo).
+
+Llamamos $\Omega_{R} = \{\Sigma_{1}, \dots, \Sigma_{t}\}$ y $D_{i} = End_{R}(\Sigma_{i})$ (lo llamamos $D_{i}$ porque, por Schur, es un anillo de división). \\
+Entonces $R \cong End_{D_{1}}(\Sigma_{1}) \times \dots \times End_{D_{t}}(\Sigma_{t})$, y $dim_{D_{i}}(\Sigma_{i}) < \infty$.
+\end{theorem}
+
+\begin{proof}
+Ya sabemos que $_{R}R = S_{1} \dotplus \dots \dotplus S_{n}$, con $_{R}S_{i}$ simple. \\
+Así, si $_{R}\Sigma$ es simple, tenemos un epimorfismo $R \overset{p}{\to} \Sigma \Rightarrow p_{\mid_{\S_{i}}}: S_{i} \to \Sigma$ es no nulo para algún $i \in \{1, \dots, n\} \overset{Schur}{\Rightarrow} S_{i} \cong \Sigma \Rightarrow \Omega_{R}$ es finito.
+
+Si $I, J$ ideales, se define $IJ = \{\sum\limits_{i} x_{i}y_{i} \mid x_{i} \in I, y_{i} \in J\}$, que vuelve a ser un ideal y $IJ \subset I \cap J$.
+
+Consideramos $Soc_{\Sigma_{i}}(R) Soc_{\Sigma_{j}}(R) \subseteq Soc_{\Sigma_{i}}(R) \cap Soc_{\Sigma_{j}}(R) = \{0\}$ \\
+$(i \neq j) \Rightarrow Soc_{\Sigma_{i}}(R) \overset{\bigstar}{\subseteq} Ann_{R}(\Sigma_{j}), \forall i \neq j$.
+
+$\bigstar$ Se tiene que $Ann_{R}(\Sigma_{j}) = Ann_{R}(Soc_{\Sigma_{j}}(R))$. La inclusión $\supseteq$ es clara, y la otra ($subseteq$) se comprueba facilmente.
+
+Queremos utilizar el Teorema Chino del Resto. Llamamos $I_{i} = \sum\limits_{j \neq i} Soc_{\Sigma_{j}}(R)$, que es un ideal, $\forall i$. \\
+Se tiene claramente que $I_{i} + I_{j} = R, \forall i \neq j$. \\
+En consecuencia, $Ann_{R}(\Sigma_{i}) + Ann_{R}(\Sigma_{j}) = R, \forall i \neq j$.
+
+Definimos $R \to \frac{R}{Ann_{R}(\Sigma_{1})} \times \dots \times \frac{R}{Ann_{R}(\Sigma_{t})}, r \mapsto (r + Ann_{R}(\Sigma_{1}), \dots, r + Ann_{R}(\Sigma_{t}))$, que es un homomorfismo sobreyectivo. El núcleo es $Ann_{R}(\Sigma_{1}) \cap \dots \cap Ann_{R}(\Sigma_{t}) = \{0\}$ (pues $Ann_{R}(R) = \{0\} = Ann_{R}(S_{1}) \cap \dots \cap Ann_{R}(S_{n})$ y los $\Sigma_{i}$ son isomorfos a los $S_{j}$, a lo sumo ``hay $\Sigma_{j}'s$ repeditos'') $\Rightarrow$ es un isomorfismo.
+
+Consideramos $\frac{R}{Ann_{R}(\Sigma_{i})}$, que es artiniano $\forall i$, y además, $\Sigma_{i}$ es un \\ $\frac{R}{Ann_{R}(\Sigma_{i})}-$módulo simple fiel $\overset{\bigstar}{\Rightarrow} \frac{R}{Ann_{R}(\Sigma_{i})} \cong End_{D_{i}}(\Sigma_{i})$, para \\ $D_{i} = End_{\frac{R}{Ann_{R}(\Sigma_{i})}}(\Sigma_{i}) = End_{R}(\Sigma_{i})$.
+
+$\bigstar$ Teorema sobre módulos artinianos.
+
+\underline{Nota}: Podemos preguntarnos si el número $t$ es el mismo independientemente de los representantes $\Sigma_{i}$ escogidos. La respuesta es sí, pues es el número de tipos de isomorfía (el cardinal de $\Omega_{R}$).
+
+\underline{Nota}: ¿Se pueden poner otros $D_{i}'$ y $\Sigma_{i}'$? Sí, pero los $D_{i}'$ tiene que ser isomorfos a los $D_{i}$ originales y los $\Sigma_{i}'$ tienen que tener las mismas dimensiones que los $\Sigma_{i}$.
+\end{proof}
+
+\begin{example}
+$R, S$ anillos. Consideramos $T = R \times S$ y la aplicación $\pi: R \times S \to R, (r, s) \mapsto r$. Llamando $e = (1, 0) \in T$, consideramos la aplicación:
+$$\begin{aligned}
+\mathcal{L}(_{T}Te) & \overset{\hat{\pi}}{\to} & \mathcal{L}(_{R}R) \\
+I & \mapsto & \pi(I)
+\end{aligned}$$
+Demostrar que $\hat{\pi}$ es una biyección que preserva la inclusión.
+
+Como consecuencia, $_{T}Te$ es semisimple $\iff _{R}R$ es semisimple.
+
+Análogamente sucede con $S$, luego se tiene
+$$_{T}T \text{ es semisimple} \iff _{R}R \text{ y } _{S}S \text{ son semisimples}$$
+($_{T}T = Te \dotplus T(1-e) \leadsto e$ es idempotente).
+\end{example}
+
+% 05/05/2022
+
+\begin{task}
+$D, E$ anillos de división, $_{D}M, _{E}N$ espacio vectorial. Demostrar que
+$$End_{D}(M) \cong End_{E}(N) \iff \begin{cases}
+D \cong E \\
+dim_{D}(M) = dim_{E}(N)
+\end{cases}$$
+\end{task}
+
+\begin{definition}
+$R$ anillo, $Z(R) = \{r \in R \mid rs = sr, \forall s \in R\}$ es un subanillo conmutativo de $R$, que se llama centro de $R$.
+
+Si $e \in Z(R)$ verifica $e^{2}=e$, diremos que $e$ es un idempotente central de $R$.
+
+Si $e$ es un ideal central, $Re$ es un ideal de $R$.
+
+Además, $Re$ es un anillo con la suma y el producto ``heredados'' de $R$ cuyo 1 es $e$.
+\end{definition}
+
+\begin{example}
+Dados $R_{1}, R_{2}$ anillos, $R = R_{1} \times R_{2}, e = (1, 0) \Rightarrow Re = R_{1} \times \{0\}$ es un anillo isomorfo a $R_{1}$.
+
+$e$ idempotente central.
+\end{example}
+
+\underline{Observación}: $e$ idempotente central de $R \Rightarrow 1 - e$ es idempotente central.
+
+$\{e, 1-e\}$ CCIO (conjunto completo de idempotentes ortogonales) centrales.
+$$R = Re \dotplus R(1-e) \cong Re \times R(1-e)$$
+
+Al revés, si $R = I \dotplus J$ con $I, J$ ideales $\Rightarrow 1 = e + (1-e), e \in I, 1-e \in J$. \\
+$e, 1-e$ central, $I = Re, J = R(1-e)$.
+
+\begin{example}
+$R = \begin{pmatrix}
+k & k \\
+k & k
+\end{pmatrix} = \{\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}: a, b, c, d \in K\}, K$ cuerpo, $e = \begin{pmatrix}
+1 & 0 \\
+0 & 0
+\end{pmatrix}$ es idempotente no central.
+
+$$Re = \begin{pmatrix}
+k & 0 \\
+k & 0
+\end{pmatrix} = \{\begin{pmatrix}
+a & 0 \\
+b & 0
+\end{pmatrix}: a, b \in K\}, eR = \begin{pmatrix}
+k & k \\
+0 & 0
+\end{pmatrix}$$
+
+$e$ NO central.
+\end{example}
+
+\begin{definition}
+Un ideal $I$ de $R$ se dice indescomponible si $I = I_{1} \dotplus I_{2}$, con $I_{1}, I_{2}$ ideales $\Rightarrow I_{1} = \{0\}$ ó $I_{2} = \{0\}$.
+
+$R$ indescomponible si lo es como ideal.
+
+\underline{Con idempotentes}: $e$ idempotente central de $R$. $e$ indescomponible si $Re$ es indescomponible, equivalentemente, si $e = e' + e''$, $e', e''$ idempotentes centrales y ortogonales ($e' e'' = 0$), entonces $e' = 0$ ó $e'' = 0$.
+
+$$e = e' + e''$$
+$$e^{2} = e'^{2} + e''^{2} + 2e'e'' = e' + e'' + 2e'e'' = e + 2e'e'' \Rightarrow e'e'' = 0$$
+\end{definition}
+
+\begin{task}
+$R$ indescompible $\iff$ no es isomorfo a ningún anillo de la forma $R_{1} \times R_{2}$ con $R_{1}, R_{2}$ anillos no triviales.
+\end{task}
+
+\begin{proposition}
+Si un anillo tienen un CCIO centrales indescomponibles, entonces este es único. Si $l(_{R}R) < \infty$, entonces $R$ admite un CCIO centrales indescomponibles.
+\end{proposition}
+
+\begin{proof}
+Sean $\{e_{1}, \dots, e_{n}\}, \{f_{1}, \dots, f_{m}\}$ CCIO centrales indescomponibles. Vamos a ver que ambos conjuntos son iguales por doble inclusión.
+
+$e_{i}f_{j}$ es un idempotente central.
+$$(e_{i}f_{j})^{2} = e_{i}f_{j}e_{i}f_{j} = e_{i}e_{i}f_{j}f_{j} = e_{i}^{2}f_{j}^{2} = e_{i}f_{j}$$
+$e_{i} = e_{i}f_{j} + e_{i}(1-f_{j})$, donde $e_{1}f_{j}$ y $e_{i}(1-f_{j})$ son idempotentes centrales, y además son ortogonales.
+
+$\Rightarrow$ como $e_{i}$ es indesomponible, uno de los dos es $0$.
+$$\Rightarrow \begin{cases}
+e_{i}f_{j} = 0 \\
+\text{ó} \\
+e_{i}(1-f_{j}) = 0
+\end{cases}$$
+Si $e_{i}f_{j} \neq 0 \Rightarrow e_{i} = e_{i}f_{j}$.
+
+Análogamente, tenemos $f_{j} = e_{i}f_{j}$. \\
+$\Rightarrow e_{i} = e_{i}f_{j} = f_{j}$.
+
+Dado $e_{i}, 0 \neq e_{i} = e_{i}1 = e_{i}(f_{1} + \dots + f_{m}) = e_{i}f_{1} + \dots + e_{i}f_{m} \Rightarrow e_{i}f_{j} \neq 0$ para algún $j \Rightarrow e_{i} = f_{j}$.
+
+Para la segunda parte, hacemos inducción sobre $l(_{R}R)$: \\
+Si $R$ es indescomponible $\Rightarrow$ no hay nada que demostrar. \\
+Si no, $R = Re + R(1-e), 0 \neq e \neq 1$ idempotente central.
+$$l(_{Re}Re) < l(_{R}R) \Rightarrow \text{ aplico inducción}$$
+\end{proof}
+
+[...] $\to$ 03 y 04/05/2022
+
+% 11/05/2022
+
+\begin{definition}[Funciones sobre un grupo]
+$\mathbb{C}$ cuerpo de los nº complejos. \\
+$G$ grupo con elemento neutro $e$. \\
+$\mathbb{C}G$ $\mathbb{C}-$espacio vectorial con base $G$.
+
+$$\mathbb{C}G \times \mathbb{C}G \overset{\mu}{\to} \mathbb{C}G$$
+aplicación bilineal determinada por $\mu(g, h) = g \cdot h, \forall (g, h) \in G \times G$ ($\cdot$ multiplicación de $G$).
+
+Si para $r, s \in \mathbb{C}G$ denoto $rs = \mu(r, s)$, tengo $r = \sum\limits_{g \in G} r_{g}g, s = \sum\limits_{g \in G} s_{g}g; r_{g}, s_{g} \in \mathbb{C}$.
+$$rs = \mu(r, s) = \mu(\sum_{g \in G}r_{g}g, \sum_{h \in G} s_{h}h) = \sum_{g, h \in G} r_{g}s_{h} \mu(g, h) = \sum_{g, h \in G} r_{g}s_{h}gh$$
+
+Tengo que $\mu$ da una multiplicación en $\mathbb{C}G$.
+$$\begin{aligned}
+\mathbb{C}G \times \mathbb{C}G \times \mathbb{C}G & & \overset{\mu \times id_{\mathbb{C}G}}{\longrightarrow} & & \mathbb{C}G \times \mathbb{C}G \\
+id_{\mathbb{C}G} \times \mu \downarrow & & & & \downarrow \mu \\
+\mathbb{C}G \times \mathbb{C}G & & \underset{\mu}{\longrightarrow} & & \mathbb{C}G
+\end{aligned}$$
+conmuta, ya que lo hace:
+$$\begin{aligned}
+G \times G \times G & & \overset{m \times id_{G}}{\longrightarrow} & & G \times G \\
+id_{G} \times m \downarrow & & & & \downarrow m \\
+G \times G & & \underset{m}{\longrightarrow} & & G
+\end{aligned}$$
+Además, $\mu$ es distributiva, y el ``uno'' de $\mathbb{C}G$ es $1e$.
+
+La aplicación $\mathbb{C} \overset{\eta}{\to} \mathbb{C}G, z \mapsto ze$ es homomorfismos de anillos inyectivo.
+
+$Im \eta$ subanillo de $\mathbb{C}G$ y $Im \eta \cong \mathbb{C}$, y $\mathbb{C} \subseteq Z(\mathbb{C}G)$.
+$$g \in G, z \in \mathbb{C} \hspace{0.5cm} gz = g \eta(z) = gze = zge = zg$$
+
+En la práctica, esto nos permite escribir $1e = 1 = e$.
+
+$\mathbb{C}G$ se llama $\mathbb{C}-$álgebra del grupo $G$.
+
+\vspace{0.5cm}
+
+Tomo $\mu(G) = \{f : G \to \mathbb{C}, f$ aplicación$\}$, que es un $\mathbb{C}-$espacio vectorial. $\mu(G)$ es un $\mathbb{C}G-$módulo así: \\
+Tomado $g \in G, \upphi \in \mu(G), x \in G$
+$$(g \varphi)(x) = \varphi(xg)$$
+$$g(h \varphi)(x) = (h \varphi)(xg) = \varphi((xg)h) = \varphi(x(gh)) = (gh \cdot \varphi)(x)$$
+$\Rightarrow g \cdot (h \cdot \varphi) = (g h) \cdot \varphi$.
+
+\vspace{0.5cm}
+
+$$G \to End_{\mathbb{C}}(\mu(G), \mu(G))$$
+$$g \mapsto \varphi \mapsto g \varphi$$ 
+
+$g(z \upphi) = z(g \upphi)$ \\
+$g(z \upphi)(x) = (z \upphi)(x g) = z \upphi(x g) = z(g \upphi)(x)$
+
+$$\mathbb{C}G \to End_{\mathbb{C}}(\mu(G), \mu(G))$$
+$$\sum_{g \in G} r_{g}{g} \mapsto \varphi \mapsto \sum_{g \in G} r_{g} g \varphi$$
+homomorfismo de anillos ($\mathbb{C}-$lineal).
+
+\vspace{0.5cm}
+
+$\Rightarrow \mu(G)$ es un $\mathbb{C}G-$módulo.
+\end{definition}
+
+\underline{Objetivo próximo}: Si $G$ es finito $\Rightarrow \mathbb{C}G$ es semisimple. \\
+$\Rightarrow \mu(G)$ semisimple como $\mathcal{C}G-$módulo.
+
+\begin{definition}[Producto Interno]
+Sea $V$ $\mathbb{C}-$espacio de $dim_{\mathbb{C}} < \infty$. \\
+Un producto (interno) Hermítico es una aplicación $<, >: V \times V \to \mathbb{C}$ tal que:
+\begin{enumerate}
+\item $<v, w> = \bar{<w, v>}, \forall v, w \in V$.
+\item $<v+v', w> = <v, w> + <v', w>, \forall v, v', w \in V$.
+\item $<\alpha v, w> = \alpha<v, w>, \forall \alpha \in \mathbb{C}, \forall v, w, \in G$.
+\item Si $v \neq 0 \Rightarrow <v, v> > 0$.
+\end{enumerate}
+
+Podemos definir la norma
+$$||v|| = \sqrt{<v, v>}$$
+\end{definition}
+
+\underline{Nota}:
+$$\begin{aligned}
+Set & \overset{L}{\to} & Vect_{\mathbb{C}} \\
+X & \mapsto & \mathbb{C}X
+\end{aligned}$$
+$Vect_{\mathbb{C}}(\mathbb{C}X, V) \cong Set(X, V) = Set(X, U(V))$.
+
+Si llamamos $Set \overset{U}{\gets} Vect_{C} \Rightarrow L$ es adjunta a izquierda de $U$.
+$$\begin{aligned}
+Set & \overset{U}{\underset{L}{\longleftrightarrow}} & Vect_{C} \\
+\uparrow & & \uparrow \\
+Grupos & \underset{L}{\longrightarrow} & Alg_{\mathbb{C}}
+\end{aligned}$$
+
+% 12/05/2022
+
+\begin{proposition}[Repaso]
+$G$ grupo, $\mathbb{C}G$ álgebra compleja del grupo $G$. \\
+$\mu(G) = \{\varphi: G \to \mathbb{C}\}$ es un $\mathbb{C}G-$módulo. \\
+$\mu(G)$ es el espacio de representación de la representación 
+$$\rho: G \to GL_{\mathbb{C}}(\mu(G))$$
+dada por $\rho(g)(\varphi)(x) = (g\varphi)(x) = \varphi(xg), g, x \in G, \varphi \in \mu(G)$.
+
+$V$ un $\mathbb{C}G-$módulo $\overset{V \text{ restr. escalar}}{\Rightarrow} _{\mathbb{C}}V$ espacio vectorial.
+
+$\mathbb{C} \subseteq \mathbb{C}G$:
+$$\begin{aligned}
+\mathbb{C}G & \overset{\rho}{\to} End_{\mathbb{C}}(V) \\
+\sum_{g \in G}r_{g}g & \mapsto \rho(\sum_{g \in G}r_{g}g)(v) = (\sum_{g \in G}r_{g}g)v = \sum_{g \in G} r_{g}gv
+\end{aligned}$$
+$\rho$ de anillos y de $\mathbb{C}-$e.e v.v.
+
+$$\begin{aligned}
+\mathbb{C}G & & \overset{\rho}{\to} & & End_{\mathbb{C}}(V) \\
+\subseteq & & & & \subseteq \\
+G & & \underset{\underset{\text{hom. de grupos}}{\rho}}{\to} & & GL_{\mathbb{C}}(V)
+\end{aligned}$$
+$G \overset{\rho}{\to} GL_{\mathbb{C}}(V)$ se llama representación lineal de $G$ con espacio de representación $V$.
+
+$W \subseteq V, \mathbb{C}G-$submódulo $\iff W$ $\mathbb{C}-$subespacio vectorial y $W$ es \\ $G-$invariante ($w \in W, g \in G \Rightarrow gw \in W$).
+\end{proposition}
+
+\begin{theorem}
+Si $G$ es finito $\Rightarrow \mathbb{C}G$ es semisimple.
+\end{theorem}
+
+\begin{proof}
+$G$ finito. \\
+$V$ $\mathbb{C}G-$módulo de dimensión finita. \\
+Tomo $<,>$ un producto interno en $V$. \\
+Defino $<,>_{G}$ producto interno (se comprueba) sobre $V$ así:
+$$<v, u>_{G} = \sum_{g \in G} <gv, gu>$$
+$$<hv, hw>_{G} = \sum_{g \in G} <ghv, ghw> = \sum_{g \in G} <gv, gw> = <v, w>_{G}$$
+$W$ es un $\mathbb{C}G-$submódulo de $V$. \\
+$V = W \dotplus W^{\bot}$ (de $\mathbb{C}-$e.e. v.v.). \\
+$W^{\bot} = \{v \in V \mid <v, w>{G} = 0, \forall w \in W\}$ es un $\mathbb{C}G-$submódulo. \\
+O sea, $W^{\bot}$ es $G$-invariante. Es decir, he de ver que si $v \in W^{\bot}, g \in G \Rightarrow gv \in W^{\bot}$. \\
+Dado $w \in W$,
+$$<gv, w>_{G} = <gv, gg^{-1}w> = <v, \underset{\in W}{\underline{g^{-1}w}}> = 0$$
+$\Rightarrow W^{\bot}$ es $G-$invariante.
+\end{proof}
+
+\begin{corollary}
+Si $G$ es finito $\Rightarrow \mu(G)$ $\mathbb{C}G-$módulo semisimple.
+\end{corollary}
+
+\begin{proposition}
+$G$ finito. \\
+Doto a $\mu(G)$ del producto interno:
+$$<\varphi, \uppsi> = \frac{1}{|G|} \sum_{g \in G} \varphi(g)\bar{\uppsi(g)}$$
+Si $G$ fuera infinito, no podríamos realizar la suma, tendríamos que realizar una integral, y el producto interno estaría definido sólo en las funciones integrables.
+\end{proposition}
+
+% 16/05/2022
+
+\begin{definition}
+$G$ grupo. \\
+$V$ $\mathbb{C}G-$módulo, $dim_{\mathbb{C}} V < \infty$. \\
+$\{v_{1}, v_{2}\}$ $\mathbb{C}-$base de $V$. \\
+$x \in G, xv_{i} = \sum_{j} t_{ij}(x) v_{j}, t_{ij}(x) \in \mathbb{C}$.
+
+Podemos ver como funciones $t_{ij} \in \mu(G)$, dadas por $t_{ij}(x)$, y se llaman funciones matriciales de $V$ con respecto de la base $\{v_{1}, \dots, v_{n}\}$.
+
+Definimos $C(V)$ como el subespacio vectorial de $\mu(G)$ generado por $\{t_{ij}: i \leq i, j \leq n\}$. Más adelante veremos que $C(V)$ no depende de la base.
+
+Supongo $V'$ otro $\mathbb{C}G-$módulo con base $\{v_{1}', \dots, v_{m}'\}$. Sea $f: V \to V'$ homomorfismo de $\mathbb{C}G-$módulos. Las funciones matriciales de $V'$ con respecto de $\{v_{1}', \dots, v_{m}'\}$ las denotamos por $\{t_{ij}': 1 \leq i, j \leq m\}$.
+$$f(v_{i}) = \sum_{j} a_{ij}v_{j}', (a_{ij}) = A$$
+con $A$ matriz de $f$ con respecto de las bases consideradas.
+
+$$xf(v_{i}) = x \sum_{j} a_{ij} v_{j}' = \sum_{j} a_{ij} xv_{j}' = \sum_{j} a_{ij} \sum_{k} t_{jk}'(x)v_{k}'$$
+$$f(xv_{i}) = f(\sum_{j} t_{ij}(x) v_{j}) = \sum_{j} t_{ij}(x) f(v_{j}) = \sum_{j} t_{ij}(x) \sum_{k}a_{jk}v_{k}'$$
+Como $xf(v_{i}) = f(xv_{i}) \Rightarrow \sum_{j} a_{ij} \sum_{k} t_{jk}'(x)v_{k}' = \sum_{j} t_{ij}(x) \sum_{k}a_{jk}v_{k}'$. Por lo que:
+$$A(t_{ij}'(x)) = (t_{ij}(x))A$$
+$$A(t_{ij}') = (t_{ij})A$$
+
+\underline{Consecuencia}: Si $f$ es isomorfimo $\Rightarrow A$ es inversible $\Rightarrow t_{ij}' = A^{-1}(t_{ij})A$, $t_{ij} = A(t_{ij}')A^{-1} \Rightarrow C(V)$ no depende de la base elegida $\Rightarrow C(V) = C(V')$.
+\end{definition}
+
+\begin{lemma}
+$C(V)$ es un $\mathbb{C}G-$submódulo de $\mu(G)$.
+\end{lemma}
+
+\begin{proof}
+$x, y \in G$. \\
+$xv_{i} = \sum_{j} t_{ij}(x)v_{j}$.
+$$t_{ij}(xy) = \sum_{k} t_{ik}(y) t_{kj}(x) \hspace{1cm} \text{(ecuación matricial)}$$
+$y t_{ij}(x) = t_{ij}(xy) = \sum_{k} t_{ik}(y) t_{kj}(x)  = (\sum_{k} t_{ik}(y)t_{kj})(x) \Rightarrow$ \\ $\Rightarrow y t_{ij} = \sum_{k} t_{ik}(y) t_{kj} \in C(V)$
+\end{proof}
+
+\begin{lemma}
+Sea $f: V \to \mu(G)$ homorfismo de $\mathcal{C}G-$módulos $\Rightarrow Im f \subseteq C(V)$.
+\end{lemma}
+
+\begin{proof}
+$$f(v_{i})(x) = f(v_{i})(ex) = x f(v_{i})(e) = f(xv_{i})(e) = f(\sum_{j}t_{ij}(x)v_{j})(e) =$$
+$$= \sum_{j} t_{ij}(x)(e) = (\sum_{j} f(v_{j})(e)t_{ij})(x) \Rightarrow$$
+$$\Rightarrow f(v_{i}) = \sum_{j} f(v_{j})(e)t_{ij} \in C(V)$$
+\end{proof}
+
+\begin{lemma}
+$G$ finito. Sean $U, W$ $\mathbb{C}G-$módulos (no necesariamente de dimensión finita) y $f:U \to W$ $\mathbb{C}-$lineal. Defino la aplicación $\bar{f}: U \to W$ dada por:
+$$\bar{f}(u) = \sum_{x \in G} x^{-1} f(xu), u \in U$$
+es un homomorfismo de $\mathbb{C}G-$módulos.
+\end{lemma}
+
+\begin{proof}
+He de ver que $\bar{f}(yu) = y\bar{f}(u), \forall y \in G, \forall u \in U$.
+$$\bar{f}(yu) = \sum_{x \in G} x^{-1} f(xyu) \overset{z = xy}{=} \sum_{z \in G} yz^{-1} f(zu) = y \bar{f}(u)$$
+$z = xy \Rightarrow x = zy^{-1} \Rightarrow x^{-1} = yz^{-1}$.
+\end{proof}
+
+\begin{lemma}
+$G$ finito, $V$ $\mathbb{C}G-$módulo de $dim_{\mathbb{C}}V < \infty$. Existe un producto interno $<, >_{G}$ en $V$ tal que $<xv, xw>_{G} = <v, w>_{G}, \forall v, w \in V, \forall x \in G$.
+
+Esto significa que la representación $G \to U(V)$ (grupo unitario).
+\end{lemma}
+
+\begin{proof}
+Demostrado previamente.
+\end{proof}
+
+[...] $\to$ 17 y 18/05/2022.
+
+% 19/05/2022
+
+$\mathbb{Z}_{n} = \{t^{\Sigma_{j}}: j \in \{0, \dots, n-1\}\}$ base ortonormal de $\mu(\mathbb{Z}_{n})$. \\
+$k \in \mathbb{Z}_{n} \hspace{0.5cm} t^{\Sigma_{j}}(k) = \omega^{jk} \hspace{0.5cm} w = e^{\frac{i2\pi}{n}}$ \\
+$t^{\Sigma_{j}}t^{\Sigma_{j'}} = t^{\Sigma_{j+j'}}$ \\
+$\varphi \in \mu(\mathbb{Z}_{n}), \hspace{1cm} \varphi = \sum_{j=0}^{n-1} <\varphi, t^{\Sigma_{j}}> t^{\Sigma_{j}}$. \\
+$\hat{\varphi}(j) = <\varphi, t^{\Sigma_{j}}> = \frac{1}{n} \sum_{k=0}^{n-1} \varphi(k) \omega^{-kj}$.
+
+$$\varphi \uppsi = (\sum_{j=0}^{n-1} \hat{\varphi}(j) t^{\Sigma_{j}})(\sum_{j'=0}^{n-1} \hat{\uppsi}(j) t^{\Sigma_{j'}}) = \sum_{j, j'} \hat{\varphi}(j) \hat{\uppsi}(j') t^{\Sigma_{j}} t^{\Sigma_{j'}} =$$
+$$= \sum_{l=0}^{n-1} (\sum_{j+j' = k} \hat{\varphi}(j) \hat{\uppsi}(j')) t^{\Sigma_{l}} = \sum_{l=0}^{n-1} (\sum_{j=0}^{n-1} \hat{\varphi}(j) \hat{\uppsi}(l-j)) t^{\Sigma_{l}}$$
+
+\begin{task}
+Para $G = \mathbb{Z}_{n} \times \mathbb{Z}_{m}$, calcular $\Omega_{\mathbb{C}G}$, y deducir la correspondiente base ortonormal de $\mu(\mathbb{Z}_{n} \times \mathbb{Z}_{m})$.
+\end{task}
+
+\begin{example}[Posible examen]
+$D_{n}$ lo doy por generadores $r, s$ con relaciones $r^{n}=s^{2}=1, sr = r^{n-1}s = r^{-1}s$.
+$$D_{n} = \{s^{a} r^{j}: a \in \{0, 1\}, j \in \{0, \dots, n-1\}\}$$
+
+¿$\mu(D_{n})$? \\
+$\alpha \in \mathbb{C}, \alpha^{n} = 1$ \\
+$V_{\alpha}$ $\mathbb{C}-$ espacio vectorial Hermitiano con base ortonormal, $\{v_{1}, v_{2}\}$.
+$$\begin{aligned}
+D_{n} & \to & U(V_{\alpha}) \\
+r & \mapsto & \begin{pmatrix}
+\alpha & 0 \\
+0 & \bar{\alpha}
+\end{pmatrix} \\
+s & \mapsto & \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+\end{aligned}$$
+$$sr = r^{-1}s \Rightarrow \begin{pmatrix}
+\alpha & 0 \\
+0 & \bar{\alpha}
+\end{pmatrix} \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix} = \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix} \begin{pmatrix}
+\bar{\alpha} & 0 \\
+0 & \alpha
+\end{pmatrix}$$
+$\begin{pmatrix}
+\alpha & 0 \\
+0 & \bar{\alpha}
+\end{pmatrix} \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix} = \begin{pmatrix}
+0 & \alpha \\
+\bar{\alpha} & 0
+\end{pmatrix}$ \\
+$\begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix} \begin{pmatrix}
+\bar{\alpha} & 0 \\
+0 & \alpha
+\end{pmatrix} = \begin{pmatrix}
+0 & \alpha \\
+\bar{\alpha} & 0
+\end{pmatrix}$
+
+$V_{\alpha}$ un $\mathbb{C}D_{n}-$módulo. \\
+¿$V_{\alpha}$ irreducible? ¿O sea, simple? \\
+$V_{\alpha}$ no simple $\iff \exists 0 \neq v \in V_{\alpha}$ tal que $\mathbb{C}v$ es submódulo $\iff$ \\ $\iff \exists 0 \neq v \in V_{\alpha} \mid rv, sv \in \mathbb{C}v$.
+
+Pongo todo en coordenadas, $v \equiv (x, y) \in \mathbb{C}^{2}$
+$$(x, y) \begin{pmatrix}
+\alpha & 0 \\
+0 & \bar{\alpha}
+\end{pmatrix} = \beta(x, y)$$
+$$(x, y) \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix} = \gamma(x, y)$$
+para ciertos $\beta, \gamma \in \mathbb{C}$. \\
+$\Rightarrow \alpha^{2} = 1$.
+
+$$\alpha^{2} \neq 1 \Rightarrow V_{\alpha} \text{ simple}$$
+$V_{\alpha} \overset{\mathbb{C}D_{n}-\text{módulo}}{\cong} V_{\alpha'} \Rightarrow \alpha + \bar{\alpha} = \alpha' + \bar{\alpha'}$
+$$\alpha + \bar{\alpha} \neq \alpha' + \bar{\alpha'} \Rightarrow V_{\alpha} \ncong V_{\alpha'}$$
+
+Funciones matriciales de $V_{\alpha}$: $\begin{pmatrix}
+t_{11} & t_{12} \\
+t_{21} & t_{22}
+\end{pmatrix}$
+$$s^{a}r^{j} \mapsto \begin{pmatrix}
+\alpha & 0 \\
+0 & \bar{\alpha}
+\end{pmatrix}^{j} \begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}^{a} = \begin{cases}
+\begin{pmatrix}
+\alpha^{j} & 0 \\
+0 & \bar{\alpha}^{j}
+\end{pmatrix} & \text{ si } a = 0 \\
+\begin{pmatrix}
+0 & \alpha^{j} \\
+\bar{\alpha}^{j} & 0
+\end{pmatrix} & \text{ si } a = 1
+\end{cases}$$
+Entonces:
+$$t_{11}(s^{a}r^{j}) = \begin{cases}
+\alpha^{j} & \text{ si } a = 0 \\
+0 & \text{ si } a = 1
+\end{cases}$$
+$$t_{12}(s^{a}r^{j}) = \begin{cases}
+0 & \text{ si } a = 0 \\
+\alpha^{j} & \text{ si } a = 1
+\end{cases}$$
+$$t_{21}(s^{a}r^{j}) = \begin{cases}
+0 & \text{ si } a = 0 \\
+\bar{\alpha}^{j} & \text{ si } a = 1
+\end{cases}$$
+$$t_{22}(s^{a}r^{j}) = \begin{cases}
+\bar{\alpha}^{j} & \text{ si } a = 0 \\
+0 & \text{ si } a = 1
+\end{cases}$$
+
+% 23/05/2022
+
+Queremos calcular $\Omega_{\mathbb{C}D_{n}}$. Tomo $w = e^{\frac{i2\pi}{n}} \in \mathbb{C}$.
+$$(\omega^{j})^{2} = 1 \iff \omega^{2j} = 1 \iff \frac{2 \pi 2 j}{n} = \text{ múltiplo entero de } 2\pi \iff$$
+$$\iff 2j = \text{ múltiplo entero de } n$$
+Si $2j$ no es múltiplo entero de $n \Rightarrow V_{w^{j}}$ es simple.
+
+\begin{enumerate}
+\item [($n$ impar)] Entonces $n = w \nu + 1, \nu \in \mathbb{N}$. Para $j \in \{1, \dots, \nu\}$, se tiene que $V_{w^{j}}$ es simple.
+
+Si $j' \in \{1, \dots, \nu\}$
+$$\omega^{j} + \omega^{-j} = w^{j'} + w^{-j'}$$
+$\Rightarrow \cos \frac{2 \pi j}{n} = \cos \frac{2 \pi j'}{n} \Rightarrow j = j'$.
+
+$V_{\omega^{j}}$ es simple, y son todos no isomorfos entre sí.
+$$\Omega_{\mathbb{C}D_{n}} \supset \{\Sigma_{1}, \dots, \Sigma_{\nu}\}$$
+Como $|G| = d_{1}^{2} + \dots + d_{t}$, en este caso tenemos que $|G| = |D_{n}| = 2n$ y $d_{1}^{2} + \dots + d_{\nu}^{2} = 2^{2} + \overset{\nu}{\dots} + 2^{2} = 4\nu$, entonces
+$$2n - 4\nu = 4\nu + 2 - 4\nu = 2$$
+Faltan en la lista dos módulos de $dim_{\mathbb{C}}=1$. 
+
+$\Sigma_{0}$ es el $\mathbb{C}D_{n}-$módulo cuya representación es la trivial, $s^{a}r^{k} \mapsto 1 \in \mathbb{C}^{x}$. \\
+$\Sigma_{-1}$ es $s^{a}r^{k} \mapsto \begin{cases}
+1 & \text{ si } a = 0 \\
+-1 & \text{ si } a = -1
+\end{cases}$
+
+Por lo que:
+$$\Omega_{\mathbb{C}D_{n}} = \{\Sigma_{1}, \dots, \Sigma_{\nu}, \Sigma_{-1}, \Sigma_{0}\}$$
+
+$\{t^{\Sigma_{-1}}, t^{\Sigma_{0}}, \sqrt{2} t^{\Sigma_{j}}_{bc}: j \in \{1, \dots, \nu\}; b, c \in \{1, 2\}\}$ base ortonormal.
+
+\underline{Nota}: Como $\Sigma_{-1}$ y $\Sigma_{0}$ son de dimensión 1, no hay que normalizarlos, y $t^{\Sigma_{-1}}$ y $t^{\Sigma_{0}}$ son escalares. \\
+Para los demás $\Sigma_{j}$, como son de dimensión 2, normalizamos añadiendo $\sqrt{2}$.
+
+$$t^{\Sigma_{0}} (s^{a}r^{k}) = 1$$
+$$t^{\Sigma_{-1}} (s^{a}r^{k}) = \begin{cases}
+1 & \text{ si } a = 0,  k \in \{0, \dots, n-1\} \\
+-1 & \text{ si } a = 1, k \in \{0, \dots, n-1\}
+\end{cases}$$
+$$t_{11}^{\Sigma_{j}} (s^{a}r^{k}) = \begin{cases}
+e^{\frac{i 2 \pi k j}{n}} & \text{ si } a = 0,  k \in \{0, \dots, n-1\} \\
+0 & \text{ si } a = 1, k \in \{0, \dots, n-1\}
+\end{cases}$$
+$$t_{12}^{\Sigma_{j}} (s^{a}r^{k}) = \begin{cases}
+0 & \text{ si } a = 0,  k \in \{0, \dots, n-1\} \\
+e^{\frac{i 2 \pi k j}{n}} & \text{ si } a = 1, k \in \{0, \dots, n-1\}
+\end{cases}$$
+$$t_{21}^{\Sigma_{j}} (s^{a}r^{k}) = \begin{cases}
+0 & \text{ si } a = 0,  k \in \{0, \dots, n-1\} \\
+e^{-\frac{i 2 \pi k j}{n}} & \text{ si } a = 1, k \in \{0, \dots, n-1\}
+\end{cases}$$
+$$t_{22}^{\Sigma_{j}} (s^{a}r^{k}) = \begin{cases}
+e^{-\frac{i 2 \pi k j}{n}} & \text{ si } a = 0,  k \in \{0, \dots, n-1\} \\
+0 & \text{ si } a = 1, k \in \{0, \dots, n-1\}
+\end{cases}$$
+\end{enumerate}
+\end{example}
+
+\begin{example}
+¿Y si $G$ no es finito? \\
+Lo más fácil es que sea un grupo de Lie compacto (no hemos visto nada de esto, es sólo para el ejemplo).
+
+Veamos un ejemplo: $S^{1} = \{z \in \mathbb{C}: |z| = 1\}$.
+
+Tengo $\mathbb{C}S^{1}$. Tomo $\mathbb{C}S^{1}-$módulos de dimensión compleja finita que provengan de representaciones continuas de $S^{1}$. Estas son los homomorfismos continuos de grupos $\rho: S^{1} \to GL(V)$, $dim_{\mathbb{C}}V < \infty$.
+
+Dada $\rho$, quiero inventarme un producto directo $<, >_{S^{1}}$ en $V$ tal que 
+$$<\rho(z)(v), \rho(z)(w)>_{S^{1}} = <v, w>_{S^{1}}, \forall v, w \in V, z \in S^{1}$$
+$$\rho(z)(v) = zv$$
+En efecto, tómese $<,>$ producto interno en $V$ y definimos:
+$$<v, w>_{S^{1}} = \int_{S^{1}} <zv, zw> \hspace{0.5cm} \text{ es un producto interno en } V $$
+(Como estamos en dimensión infinita, integramos en vez de sumar. Además, por cómo hemos definido el producto interno es continuo, y $S^{1}$ es compacto, por lo que es integrable y la integral es finita).
+
+Para un $z'$ fijo:
+$$<z'v, z'w>_{S^{1}} = \int_{S^{1}} <z'zv, z'zw> \overset{\bigstar}{=} \int_{S^{1}} <zv, zw> = <v, w>_{S^{1}}$$
+
+$\bigstar$ La medida que uso en $S^{1}$ es invariante por la acción de $z'$.
+\end{example}
+
+% 06/06/2022
+
+\begin{example}
+\itshape
+$x(n), y(n)$ sucesiones de números complejos ($n \in \mathbb{N}$) que verifican:
+$$\begin{cases}
+x(n+1) = \lambda x(n) - y(n) + c \\
+y(n+1) = \lambda y(n) + (1-\lambda)c
+\end{cases} n \geq 0$$
+Discutir el comportamiento de $x(n), y(n)$ en función de los parámetros $\lambda, c$ y $x(0), y(0)$.
+
+\vspace{0.25cm} \normalfont
+Defino $z(n) = c, \forall n \in \mathbb{N}$.
+$$(x(n+1), y(n+1), z(n+1)) = (x(n), y(n), z(n)) \underset{= B }{\begin{pmatrix}
+\lambda & 0 & 0 \\
+-1 & \lambda & 0 \\
+1 & 1-\lambda & 1
+\end{pmatrix}}$$
+
+$$(x(n), y(n), z(n)) = (x(0), y(0), z(0)) B^{n}$$
+
+¿Cómo describo $B^{n}$? Calculamos la forma canónica de Jordan.
+$$XI - B = \begin{pmatrix}
+X - \lambda & 0 & 0 \\
+1 & X-\lambda & 0 \\
+-1 & \lambda-1 & X-1
+\end{pmatrix} \sim \begin{pmatrix}
+1 & X-\lambda & 0 \\
+X - \lambda & 0 & 0 \\
+-1 & \lambda-1 & X-1
+\end{pmatrix} \sim$$
+$$\sim \begin{pmatrix}
+1 & X-\lambda & 0 \\
+0 & -(X-\lambda)^{2} & 0 \\
+0 & X-1 & X-1
+\end{pmatrix} \overset{c_{2} - (X-\lambda)c_{1}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & -(X-\lambda)^{2} & 0 \\
+0 & X-1 & X-1
+\end{pmatrix} \sim$$
+$$\overset{c_{2}-c_{3}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & -(X-\lambda)^{2} & 0 \\
+0 & 0 & X-1
+\end{pmatrix}$$
+
+Tomo $V$ e.v. complejo con base $\{e_{1}, e_{2}, e_{3}\}$. La veo como $\mathbb{C}[X]-$módulo a través de $B$.
+$$V = \mathbb{C}[X]w_{1} \dotplus \mathbb{C}[X]w_{2} \dotplus \mathbb{C}[X]w_{3}$$
+donde
+\begin{itemize}
+\item $ann_{\mathbb{C}[X]}(w_{1}) = <1> (\Rightarrow w_{1} = 0)$.
+\item $ann_{\mathbb{C}[X]}(w_{2}) = <(X-\lambda)^{2}>$.
+\item $ann_{\mathbb{C}[X]}(w_{3}) = <X-1>$.
+\end{itemize}
+
+$$Q = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix} \overset{c_{2}+c_{3}}{\sim} \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\end{pmatrix} \overset{c_{2} + (X-\lambda)c_{1}}{\sim} \begin{pmatrix}
+1 & X-\lambda & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 1
+\end{pmatrix}$$
+
+Entonces:
+\begin{itemize}
+\item $w_{1} = e_{1} + (X-\lambda)e_{2}$.
+\item $w_{2} = e_{2}$.
+\item $w_{3} = e_{2} + e_{3}$.
+\end{itemize}
+$$V = \mathbb{C}[X]w_{1} \dotplus \mathbb{C}[X]w_{2} \dotplus \mathbb{C}[X]w_{3} = \mathbb{C}[X]e_{2} + \mathbb{C}[X](e_{2}+e_{3})$$
+Tomo la base de $V$ formada por $\{e_{2}, (X -\lambda)e_{2}, e_{2} + e_{3}\}$ con respecto de la cual el endomorfismo dado por $B$ está representado por la matriz:
+$$D = \begin{pmatrix}
+\lambda & 1 & 0 \\
+0 & \lambda & 0 \\
+0 & 0 & 1
+\end{pmatrix}$$
+$$B = P^{-1}DP$$
+donde $P$ es la matriz del cambio de base. Como $(X-\lambda)e_{2} = Xe_{2} - \lambda e_{2} = (-1, \lambda, 0) - (0, \lambda, 0) = (-1, 0, 0)$. Entonces:
+$$P = \begin{pmatrix}
+0 & 1 & 0 \\
+-1 & 0 & 0 \\
+0 & 1 & 1
+\end{pmatrix}$$
+
+Tenemos:
+$$B^{n} = P^{-1} D^{n} P = P^{-1} \begin{pmatrix}
+\lambda^{n} & n \lambda^{n-1} & 0 \\
+0 & \lambda^{n} & 0 \\
+0 & 0 & 1
+\end{pmatrix} P$$
+Como teníamos:
+$$(x(n), y(n), z(n)) = (x(0), y(0), z(0)) B^{n}$$
+con $z(n) = c$, entonces:
+$$(x(n), y(n), z(n)) = (x(0), y(0), z(0)) B^{n} = (x(0), y(0), z(0)) P^{-1} D^{n} P \Rightarrow$$
+$$\Rightarrow (x(n), y(n), z(n))P^{-1} = (x(0), y(0), z(0)) P^{-1} D^{n}$$
+
+Como:
+$$P^{-1} = \begin{pmatrix}
+0 & -1 & 0 \\
+1 & 0 & 0 \\
+-1 & 0 & 1
+\end{pmatrix}$$
+Entonces:
+$$(y(n)-c, -x(n), c) = (y(0)-c, -x(0), c) \begin{pmatrix}
+\lambda^{n} & n\lambda^{n-1} & 0 \\
+0 & \lambda^{n} & 0 \\
+0 & 0 & 1
+\end{pmatrix}$$
+\end{example}
+
+\underline{Nota}:
+
+No podemos hacer $e^{A+B} = e^{A}e^{B}$ con $A, B$ matrices porque no conmutan.
+
+En el caso de que si conmuten, si podemos, por ejemplo:
+$$\begin{pmatrix}
+\lambda & 1 \\
+0 & \lambda
+\end{pmatrix} = \lambda I + \underset{= N}{\begin{pmatrix}
+0 & 1 \\
+0 & 1
+\end{pmatrix}}$$
+Entonces:
+$$e^{\begin{pmatrix}
+\lambda & 1 \\
+0 & \lambda
+\end{pmatrix}} = e^{I\lambda}e^{N} = \begin{pmatrix}
+e^{\lambda} & 0 \\
+0 & e^{\lambda}
+\end{pmatrix} \begin{pmatrix}
+1 & 1 \\
+0 & 1
+\end{pmatrix}$$
+
+donde para $e^{N}$ usamos que:
+$$e^{A} = \sum_{m \geq 0} \frac{A^{m}}{m!}$$
+por lo que $e^{N} = \frac{N^{0}}{0!} + \frac{N}{1!} + 0 + 0 + \dots = I + N = \begin{pmatrix}
+1 & 1 \\
+0 & 1
+\end{pmatrix}$.
+
+\end{document}

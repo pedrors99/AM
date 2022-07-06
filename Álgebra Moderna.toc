@@ -1,0 +1,12 @@
+\babel@toc {spanish}{}
+\contentsline {section}{\numberline {0}Información de la asignatura}{2}{section.0}%
+\contentsline {section}{\numberline {1}Repaso}{3}{section.1}%
+\contentsline {section}{\numberline {2}Módulos}{11}{section.2}%
+\contentsline {section}{\numberline {3}Homomorfismos de módulos}{20}{section.3}%
+\contentsline {section}{\numberline {4}Módulos Noetherianos y Artinianos}{25}{section.4}%
+\contentsline {section}{\numberline {5}Módulos de Longitud Finita}{29}{section.5}%
+\contentsline {section}{\numberline {6}Estructura de módulos de longitud finita sobre un DIP}{35}{section.6}%
+\contentsline {section}{\numberline {7}Álgebra lineal básica sobre un anillo}{46}{section.7}%
+\contentsline {section}{\numberline {8}Módulos semisimples de cualquier longitud}{63}{section.8}%
+\contentsline {section}{\numberline {9}Anillos semisimples}{68}{section.9}%
+\contentsline {section}{\numberline {10}Componentes homogéneas}{75}{section.10}%
